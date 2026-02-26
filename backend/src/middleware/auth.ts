@@ -1,5 +1,5 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
-import * as admin from "firebase-admin";
+import admin from "firebase-admin";
 
 /**
  * Fastify preHandler hook that verifies Firebase Auth ID tokens.

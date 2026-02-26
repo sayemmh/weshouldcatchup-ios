@@ -26,7 +26,7 @@ final class PushNotificationService: NSObject {
     // MARK: - Properties
 
     /// The current FCM device token, if available.
-    private(set) var currentFCMToken: String?
+    var currentFCMToken: String?
 
     private let firestore = Firestore.firestore()
 

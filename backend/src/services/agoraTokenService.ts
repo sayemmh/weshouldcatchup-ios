@@ -1,4 +1,5 @@
-import { RtcTokenBuilder, RtcRole } from "agora-token";
+import agoraToken from "agora-token";
+const { RtcTokenBuilder, RtcRole } = agoraToken;
 
 /**
  * Generates an Agora RTC token for a given channel and user.

@@ -85,15 +85,7 @@ final class APIService {
 
     static let shared = APIService()
 
-    // TODO: Move this to a Constants file or read from Info.plist / environment config.
-    private let baseURL: String = {
-        // TODO: Replace with your actual backend URL from Constants.
-        #if DEBUG
-        return "http://localhost:3000"
-        #else
-        return "https://api.weshouldcatchup.app"
-        #endif
-    }()
+    private let baseURL: String = Constants.backendBaseURL
 
     private let session: URLSession
     private let decoder: JSONDecoder
@@ -229,6 +221,15 @@ final class APIService {
         let body: [String: Any] = ["catchupId": catchupId]
         let request = try await authorizedRequest(path: "/remove-catchup", method: "POST", body: body)
         return try await execute(request)
+    }
+
+    // MARK: - Profile
+
+    /// Updates the current user's display name on the backend.
+    func updateDisplayName(_ name: String) async throws {
+        let body: [String: Any] = ["displayName": name]
+        let request = try await authorizedRequest(path: "/update-profile", method: "POST", body: body)
+        let _: [String: String] = try await execute(request)
     }
 
     // MARK: - Queue & History

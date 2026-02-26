@@ -1,64 +1,5 @@
 import SwiftUI
 
-// MARK: - LiveViewModel
-
-/// ViewModel managing the live/waiting state while the backend searches for a catch-up partner.
-final class LiveViewModel: ObservableObject {
-
-    // MARK: - State
-
-    enum LiveState: Equatable {
-        case searching
-        case queueExhausted
-        case expired
-    }
-
-    @Published var state: LiveState = .searching
-    @Published var errorMessage: String?
-    @Published var isCancelling: Bool = false
-
-    private let api = APIService.shared
-
-    // MARK: - Cancel Live
-
-    @MainActor
-    func cancelLive() async {
-        isCancelling = true
-        errorMessage = nil
-        do {
-            _ = try await api.cancelLive()
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-        isCancelling = false
-    }
-
-    // MARK: - Simulated State Transitions
-
-    /// Starts the live session timer. In production, the backend sends push notifications
-    /// to trigger state changes. This provides local TTL-based fallback behavior.
-    @MainActor
-    func startLiveSession() {
-        state = .searching
-
-        // After 2 minutes without a match, show queue exhausted message.
-        Task {
-            try? await Task.sleep(nanoseconds: 120_000_000_000) // 2 minutes
-            if state == .searching {
-                state = .queueExhausted
-            }
-        }
-
-        // After 5 minutes total, expire the session.
-        Task {
-            try? await Task.sleep(nanoseconds: 300_000_000_000) // 5 minutes
-            if state == .searching || state == .queueExhausted {
-                state = .expired
-            }
-        }
-    }
-}
-
 // MARK: - Design Constants
 
 private extension Color {
@@ -75,6 +16,7 @@ struct LiveWaitingView: View {
 
     @State private var pulseScale: CGFloat = 1.0
     @State private var pulseOpacity: Double = 0.6
+    @State private var isCancelling: Bool = false
 
     var body: some View {
         ZStack {
@@ -85,18 +27,18 @@ struct LiveWaitingView: View {
                 Spacer()
 
                 switch viewModel.state {
-                case .searching:
+                case .idle, .goingLive, .searching:
                     searchingContent
-                case .queueExhausted:
+                case .waitingPassively:
                     queueExhaustedContent
-                case .expired:
+                case .noMatch:
                     expiredContent
                 }
 
                 Spacer()
 
                 // MARK: - Cancel Button
-                if viewModel.state != .expired {
+                if viewModel.state != .noMatch {
                     cancelButton
                 }
             }
@@ -105,7 +47,7 @@ struct LiveWaitingView: View {
         }
         .navigationBarBackButtonHidden(true)
         .task {
-            viewModel.startLiveSession()
+            await viewModel.goLive()
         }
     }
 
@@ -223,12 +165,14 @@ struct LiveWaitingView: View {
     private var cancelButton: some View {
         Button {
             Task {
+                isCancelling = true
                 await viewModel.cancelLive()
+                isCancelling = false
                 dismiss()
             }
         } label: {
             HStack(spacing: 8) {
-                if viewModel.isCancelling {
+                if isCancelling {
                     ProgressView()
                         .tint(.secondary)
                 }
@@ -238,7 +182,7 @@ struct LiveWaitingView: View {
             .foregroundColor(.secondary)
             .padding(.vertical, 12)
         }
-        .disabled(viewModel.isCancelling)
+        .disabled(isCancelling)
         .padding(.bottom, 16)
     }
 }

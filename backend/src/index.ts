@@ -1,6 +1,6 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
-import * as admin from "firebase-admin";
+import admin from "firebase-admin";
 
 import liveRoutes from "./routes/live.js";
 import callsRoutes from "./routes/calls.js";

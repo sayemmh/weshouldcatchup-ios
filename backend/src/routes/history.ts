@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import * as admin from "firebase-admin";
+import admin from "firebase-admin";
 import { authMiddleware } from "../middleware/auth.js";
 import { getUser } from "../services/firestoreService.js";
 import type { CallHistoryItemResponse, CallDoc } from "../types/index.js";

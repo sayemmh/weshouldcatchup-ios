@@ -5,6 +5,8 @@ import Combine
 /// Firebase Auth wrapper handling phone number authentication.
 final class AuthService: ObservableObject {
 
+    static let shared = AuthService()
+
     // MARK: - Published Properties
 
     @Published var isAuthenticated: Bool = false

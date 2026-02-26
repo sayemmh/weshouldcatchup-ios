@@ -1,104 +1,5 @@
 import SwiftUI
 
-// MARK: - CallViewModel
-
-/// ViewModel managing the active voice call state.
-final class CallViewModel: ObservableObject {
-
-    // MARK: - Published State
-
-    @Published var isMuted: Bool = false
-    @Published var isSpeakerOn: Bool = false
-    @Published var callDurationSeconds: Int = 0
-    @Published var isCallActive: Bool = true
-    @Published var isEnding: Bool = false
-    @Published var errorMessage: String?
-
-    /// The other participant's display name.
-    let otherPersonName: String
-
-    /// The call ID from the backend.
-    let callId: String
-
-    /// The Agora channel details (would be used by the Agora SDK in production).
-    let agoraChannel: String
-    let agoraToken: String
-
-    private let api = APIService.shared
-    private var timerTask: Task<Void, Never>?
-
-    // MARK: - Init
-
-    init(
-        otherPersonName: String,
-        callId: String,
-        agoraChannel: String,
-        agoraToken: String
-    ) {
-        self.otherPersonName = otherPersonName
-        self.callId = callId
-        self.agoraChannel = agoraChannel
-        self.agoraToken = agoraToken
-    }
-
-    // MARK: - Computed Properties
-
-    /// Formats the call duration as mm:ss.
-    var formattedDuration: String {
-        let minutes = callDurationSeconds / 60
-        let seconds = callDurationSeconds % 60
-        return String(format: "%02d:%02d", minutes, seconds)
-    }
-
-    // MARK: - Timer
-
-    @MainActor
-    func startTimer() {
-        timerTask?.cancel()
-        timerTask = Task {
-            while !Task.isCancelled && isCallActive {
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                if isCallActive {
-                    callDurationSeconds += 1
-                }
-            }
-        }
-    }
-
-    func stopTimer() {
-        timerTask?.cancel()
-        timerTask = nil
-    }
-
-    // MARK: - Actions
-
-    func toggleMute() {
-        isMuted.toggle()
-        // TODO: Toggle Agora local audio mute.
-    }
-
-    func toggleSpeaker() {
-        isSpeakerOn.toggle()
-        // TODO: Toggle Agora speaker/earpiece routing.
-    }
-
-    @MainActor
-    func endCall() async -> Int? {
-        isEnding = true
-        stopTimer()
-        do {
-            let response = try await api.endCall(callId: callId)
-            isCallActive = false
-            isEnding = false
-            return response.duration
-        } catch {
-            errorMessage = error.localizedDescription
-            isEnding = false
-            return nil
-        }
-    }
-}
-
 // MARK: - Design Constants
 
 private extension Color {
@@ -110,9 +11,17 @@ private extension Color {
 struct VoiceCallView: View {
 
     @StateObject var viewModel: CallViewModel
+    @State private var isEnding: Bool = false
 
     /// Called when the call ends, passing the other person's name and the duration in seconds.
     var onCallEnded: ((_ name: String, _ duration: Int) -> Void)?
+
+    /// Formats callDurationSeconds into a mm:ss string.
+    private var formattedDuration: String {
+        let minutes = viewModel.callDurationSeconds / 60
+        let seconds = viewModel.callDurationSeconds % 60
+        return String(format: "%d:%02d", minutes, seconds)
+    }
 
     var body: some View {
         ZStack {
@@ -137,7 +46,7 @@ struct VoiceCallView: View {
         .statusBarHidden(false)
         .preferredColorScheme(.dark)
         .task {
-            viewModel.startTimer()
+            viewModel.startCall()
         }
     }
 
@@ -151,20 +60,20 @@ struct VoiceCallView: View {
                     .fill(Color.warmCoral.opacity(0.25))
                     .frame(width: 90, height: 90)
 
-                Text(String(viewModel.otherPersonName.prefix(1)).uppercased())
+                Text(String(viewModel.otherUserName.prefix(1)).uppercased())
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.warmCoral)
             }
 
             // Name
-            Text(viewModel.otherPersonName)
+            Text(viewModel.otherUserName)
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
 
             // Duration
-            Text(viewModel.formattedDuration)
+            Text(formattedDuration)
                 .font(.title2.monospacedDigit())
                 .foregroundColor(.white.opacity(0.7))
         }
@@ -227,8 +136,10 @@ struct VoiceCallView: View {
     private var endCallButton: some View {
         Button {
             Task {
-                let duration = await viewModel.endCall()
-                onCallEnded?(viewModel.otherPersonName, duration ?? viewModel.callDurationSeconds)
+                isEnding = true
+                viewModel.endCall()
+                onCallEnded?(viewModel.otherUserName, viewModel.finalDuration)
+                isEnding = false
             }
         } label: {
             VStack(spacing: 8) {
@@ -237,7 +148,7 @@ struct VoiceCallView: View {
                         .fill(Color.red)
                         .frame(width: 68, height: 68)
 
-                    if viewModel.isEnding {
+                    if isEnding {
                         ProgressView()
                             .tint(.white)
                     } else {
@@ -252,7 +163,7 @@ struct VoiceCallView: View {
                     .foregroundColor(.white.opacity(0.6))
             }
         }
-        .disabled(viewModel.isEnding)
+        .disabled(isEnding)
     }
 }
 
@@ -261,7 +172,7 @@ struct VoiceCallView: View {
 #Preview {
     VoiceCallView(
         viewModel: CallViewModel(
-            otherPersonName: "Alex",
+            otherUserName: "Alex",
             callId: "preview-call-1",
             agoraChannel: "channel-123",
             agoraToken: "token-abc"

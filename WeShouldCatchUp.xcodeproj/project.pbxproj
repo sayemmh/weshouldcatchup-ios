@@ -1,0 +1,599 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00F2B9BB0947674DE25A2404 /* LiveWaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CE4D6A1D6FA93FF4ECDCC9 /* LiveWaitingView.swift */; };
+		01911ED7E19A79CFC900F0FE /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 35CAB87B3F648E64D06718F2 /* FirebaseMessaging */; };
+		0388D8B72DA8017F18B5ECC8 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D99EA62A6C1A4FA4A824E0A5 /* MainView.swift */; };
+		20863627CC5DC1E8DE029B23 /* CatchUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBA06743134AE7819B38A4A /* CatchUp.swift */; };
+		2AF6C4F6866CA3CFCDB64CD2 /* AgoraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093AD18CEB3BA1A6EF62912F /* AgoraService.swift */; };
+		2E03FAE205F451AD07A2C20D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FAF8549328948DC16B4811 /* User.swift */; };
+		3A9B9BBC469A89A6CE6BAB4F /* QueueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEFDDE9709D7B17667727DF /* QueueViewModel.swift */; };
+		433BC591F0029719DEDCCA04 /* AcceptInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807338292FA26A0644126A70 /* AcceptInviteView.swift */; };
+		4391C9B8DC109970C90C8683 /* CallEndedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB09E5697D49A36D174B9C86 /* CallEndedView.swift */; };
+		4C05E1F138E3C5AF610B3AC5 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278EBFD7CC9A9AB3F0BF73F9 /* AuthViewModel.swift */; };
+		54E49D3EBCAAA25DEE42A8BE /* RtcBasic in Frameworks */ = {isa = PBXBuildFile; productRef = FA25DCC392A4E7FC53C459C2 /* RtcBasic */; };
+		5AFBFE58BCBC92369C6D2321 /* DisplayNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DDA3E7205AD614ABC2B786 /* DisplayNameView.swift */; };
+		5E5CBD407BD0A975EF6FF254 /* LiveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CAFFDB3676CA68DF22FBAA3 /* LiveViewModel.swift */; };
+		7553DBDC5744AB63CB6056AC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF4ABC2A413676F0990AED0 /* Constants.swift */; };
+		7912221C6D5EDE221E5CE8F1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9E4957D7EA3D022294FFFB2 /* GoogleService-Info.plist */; };
+		7ACAA686B5D7BDA4F2CFBC9C /* IncomingPingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F55C6AA5503735F971DA41 /* IncomingPingView.swift */; };
+		8941758FF12F05E0F7AD84C7 /* InviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B25565ACCA5FF612AE9A341 /* InviteView.swift */; };
+		8D1BE946A5A6935C2D1841D8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500AF69205D4FF92F8F15495 /* Extensions.swift */; };
+		944B2EDC7926CE85BFC033C5 /* QueueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5947581024B982AB1BB63CAD /* QueueItem.swift */; };
+		AFE0ACFF143B659739645F95 /* DeepLinkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 984B2A1448C1D98CF85AE86D /* DeepLinkService.swift */; };
+		C1E8B191A70AFCEAAAB3EAF4 /* CallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5308925642CA7E36F4D3A7A /* CallViewModel.swift */; };
+		C2F20FA9CEFF23AE7771512D /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37782C39D09EC088FDD2E7A /* APIService.swift */; };
+		C7D7E2D2C8F5A0323A3873F9 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3762CFB74EC496F2D8998245 /* FirebaseAuth */; };
+		D1DF3EBA5197FA604E491F75 /* CallHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEF4763E244B37C3852A2F3 /* CallHistoryView.swift */; };
+		D7C5AC14F0182FE9D276D574 /* QueueRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDCA8970EA09BE9B68FE9AA /* QueueRowView.swift */; };
+		DC16085F7FD21F70FF7A19AA /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87DA7167CF5DA8CFA3AE0CD /* PushNotificationService.swift */; };
+		E3ADB96843AB50483FB75785 /* VoiceCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4383711F8E65DB06B4CA627E /* VoiceCallView.swift */; };
+		E6EECC9BD5C8DC7F66277BCC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD1D8BAFD8BF7297F2E623A /* AppDelegate.swift */; };
+		E7E8C646FE8362562433EEF7 /* NotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2C12C36928E8A3D030FBDE /* NotificationPermissionView.swift */; };
+		EEC4D73D68FD248F7B0EE228 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 4E899B9DBDB2B89EF6EC5FEB /* FirebaseFirestore */; };
+		EF75722CCFAD1C62BE720BC4 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6487B63AB8A88F20E3A8617D /* AuthService.swift */; };
+		F34B3502088443B73C7A5FAF /* PhoneAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078E5F490917D585444D24B7 /* PhoneAuthView.swift */; };
+		F409B060864BD58C3E802205 /* Call.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816AA934C31185F3D18D3333 /* Call.swift */; };
+		F8EA4F4BF6A87AF6D2FBE592 /* WeShouldCatchUpApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330FADD78836560C111D4967 /* WeShouldCatchUpApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		078E5F490917D585444D24B7 /* PhoneAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAuthView.swift; sourceTree = "<group>"; };
+		093AD18CEB3BA1A6EF62912F /* AgoraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraService.swift; sourceTree = "<group>"; };
+		12F55C6AA5503735F971DA41 /* IncomingPingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomingPingView.swift; sourceTree = "<group>"; };
+		1B25565ACCA5FF612AE9A341 /* InviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteView.swift; sourceTree = "<group>"; };
+		1CAFFDB3676CA68DF22FBAA3 /* LiveViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewModel.swift; sourceTree = "<group>"; };
+		1E378A9E910A6A16D03E8EE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		278EBFD7CC9A9AB3F0BF73F9 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		2EEF4763E244B37C3852A2F3 /* CallHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryView.swift; sourceTree = "<group>"; };
+		330FADD78836560C111D4967 /* WeShouldCatchUpApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeShouldCatchUpApp.swift; sourceTree = "<group>"; };
+		3838552CBF73596F18794A8D /* WeShouldCatchUp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WeShouldCatchUp.entitlements; sourceTree = "<group>"; };
+		3CBA06743134AE7819B38A4A /* CatchUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchUp.swift; sourceTree = "<group>"; };
+		3DEFDDE9709D7B17667727DF /* QueueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueViewModel.swift; sourceTree = "<group>"; };
+		4383711F8E65DB06B4CA627E /* VoiceCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCallView.swift; sourceTree = "<group>"; };
+		4CF4ABC2A413676F0990AED0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		500AF69205D4FF92F8F15495 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		5947581024B982AB1BB63CAD /* QueueItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueItem.swift; sourceTree = "<group>"; };
+		5CD1D8BAFD8BF7297F2E623A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		61CE4D6A1D6FA93FF4ECDCC9 /* LiveWaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWaitingView.swift; sourceTree = "<group>"; };
+		6487B63AB8A88F20E3A8617D /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		70354D7E0CB5EED321C46008 /* WeShouldCatchUp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WeShouldCatchUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		75DDA3E7205AD614ABC2B786 /* DisplayNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayNameView.swift; sourceTree = "<group>"; };
+		807338292FA26A0644126A70 /* AcceptInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptInviteView.swift; sourceTree = "<group>"; };
+		816AA934C31185F3D18D3333 /* Call.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Call.swift; sourceTree = "<group>"; };
+		984B2A1448C1D98CF85AE86D /* DeepLinkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkService.swift; sourceTree = "<group>"; };
+		BDDCA8970EA09BE9B68FE9AA /* QueueRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueRowView.swift; sourceTree = "<group>"; };
+		C5308925642CA7E36F4D3A7A /* CallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallViewModel.swift; sourceTree = "<group>"; };
+		CA2C12C36928E8A3D030FBDE /* NotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionView.swift; sourceTree = "<group>"; };
+		D99EA62A6C1A4FA4A824E0A5 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		F37782C39D09EC088FDD2E7A /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		F87DA7167CF5DA8CFA3AE0CD /* PushNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationService.swift; sourceTree = "<group>"; };
+		F8FAF8549328948DC16B4811 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		F9E4957D7EA3D022294FFFB2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FB09E5697D49A36D174B9C86 /* CallEndedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallEndedView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		45EA728E000FCCEC363AA660 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7D7E2D2C8F5A0323A3873F9 /* FirebaseAuth in Frameworks */,
+				EEC4D73D68FD248F7B0EE228 /* FirebaseFirestore in Frameworks */,
+				01911ED7E19A79CFC900F0FE /* FirebaseMessaging in Frameworks */,
+				54E49D3EBCAAA25DEE42A8BE /* RtcBasic in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		029C0B5AAE85D1B2F2E2E60C /* Invite */ = {
+			isa = PBXGroup;
+			children = (
+				807338292FA26A0644126A70 /* AcceptInviteView.swift */,
+				1B25565ACCA5FF612AE9A341 /* InviteView.swift */,
+			);
+			path = Invite;
+			sourceTree = "<group>";
+		};
+		178741AE36385689AB85BDF6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				816AA934C31185F3D18D3333 /* Call.swift */,
+				3CBA06743134AE7819B38A4A /* CatchUp.swift */,
+				5947581024B982AB1BB63CAD /* QueueItem.swift */,
+				F8FAF8549328948DC16B4811 /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		3BCDA7CD8D0527BE69C29879 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				2EEF4763E244B37C3852A2F3 /* CallHistoryView.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		55988C2D5EE623EEE68DFD12 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				4CF4ABC2A413676F0990AED0 /* Constants.swift */,
+				500AF69205D4FF92F8F15495 /* Extensions.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		625146E70406ADD6C06D25E8 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				75DDA3E7205AD614ABC2B786 /* DisplayNameView.swift */,
+				CA2C12C36928E8A3D030FBDE /* NotificationPermissionView.swift */,
+				078E5F490917D585444D24B7 /* PhoneAuthView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		75479D6DA2B28E626217DA9E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				70354D7E0CB5EED321C46008 /* WeShouldCatchUp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		81B22DA108814018CEC12DFE /* WeShouldCatchUp */ = {
+			isa = PBXGroup;
+			children = (
+				F9E4957D7EA3D022294FFFB2 /* GoogleService-Info.plist */,
+				1E378A9E910A6A16D03E8EE2 /* Info.plist */,
+				3838552CBF73596F18794A8D /* WeShouldCatchUp.entitlements */,
+				F0B51875104460232DD2B174 /* App */,
+				178741AE36385689AB85BDF6 /* Models */,
+				BB98CA8A5A2414DAEFEE6A58 /* Services */,
+				55988C2D5EE623EEE68DFD12 /* Utilities */,
+				F8A217D996C18B7F78D8ACB6 /* ViewModels */,
+				C6BFFE46812F68509DECC0BF /* Views */,
+			);
+			path = WeShouldCatchUp;
+			sourceTree = "<group>";
+		};
+		8A1FB19DD283EB1C660A6729 = {
+			isa = PBXGroup;
+			children = (
+				81B22DA108814018CEC12DFE /* WeShouldCatchUp */,
+				75479D6DA2B28E626217DA9E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A7DD388523804B0AF12ADD85 /* Live */ = {
+			isa = PBXGroup;
+			children = (
+				12F55C6AA5503735F971DA41 /* IncomingPingView.swift */,
+				61CE4D6A1D6FA93FF4ECDCC9 /* LiveWaitingView.swift */,
+			);
+			path = Live;
+			sourceTree = "<group>";
+		};
+		BB98CA8A5A2414DAEFEE6A58 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				093AD18CEB3BA1A6EF62912F /* AgoraService.swift */,
+				F37782C39D09EC088FDD2E7A /* APIService.swift */,
+				6487B63AB8A88F20E3A8617D /* AuthService.swift */,
+				984B2A1448C1D98CF85AE86D /* DeepLinkService.swift */,
+				F87DA7167CF5DA8CFA3AE0CD /* PushNotificationService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		C30425F1C4A1C38A86A0BED5 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				D99EA62A6C1A4FA4A824E0A5 /* MainView.swift */,
+				BDDCA8970EA09BE9B68FE9AA /* QueueRowView.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		C6BFFE46812F68509DECC0BF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DB942FF7EDA6877B527AE340 /* Call */,
+				3BCDA7CD8D0527BE69C29879 /* History */,
+				029C0B5AAE85D1B2F2E2E60C /* Invite */,
+				A7DD388523804B0AF12ADD85 /* Live */,
+				C30425F1C4A1C38A86A0BED5 /* Main */,
+				625146E70406ADD6C06D25E8 /* Onboarding */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		DB942FF7EDA6877B527AE340 /* Call */ = {
+			isa = PBXGroup;
+			children = (
+				FB09E5697D49A36D174B9C86 /* CallEndedView.swift */,
+				4383711F8E65DB06B4CA627E /* VoiceCallView.swift */,
+			);
+			path = Call;
+			sourceTree = "<group>";
+		};
+		F0B51875104460232DD2B174 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				5CD1D8BAFD8BF7297F2E623A /* AppDelegate.swift */,
+				330FADD78836560C111D4967 /* WeShouldCatchUpApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		F8A217D996C18B7F78D8ACB6 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				278EBFD7CC9A9AB3F0BF73F9 /* AuthViewModel.swift */,
+				C5308925642CA7E36F4D3A7A /* CallViewModel.swift */,
+				1CAFFDB3676CA68DF22FBAA3 /* LiveViewModel.swift */,
+				3DEFDDE9709D7B17667727DF /* QueueViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		30FBAEC2041118BED384D27C /* WeShouldCatchUp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7106C74EA34A1C2D3B47C52F /* Build configuration list for PBXNativeTarget "WeShouldCatchUp" */;
+			buildPhases = (
+				395B91DBA2FF37250EF063F0 /* Sources */,
+				E9AAAB14FC952BFF19283DF7 /* Resources */,
+				45EA728E000FCCEC363AA660 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WeShouldCatchUp;
+			packageProductDependencies = (
+				3762CFB74EC496F2D8998245 /* FirebaseAuth */,
+				4E899B9DBDB2B89EF6EC5FEB /* FirebaseFirestore */,
+				35CAB87B3F648E64D06718F2 /* FirebaseMessaging */,
+				FA25DCC392A4E7FC53C459C2 /* RtcBasic */,
+			);
+			productName = WeShouldCatchUp;
+			productReference = 70354D7E0CB5EED321C46008 /* WeShouldCatchUp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		68715B29B395205B1E3BBEE1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					30FBAEC2041118BED384D27C = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 2AD0D64D7C611C87F55E9A29 /* Build configuration list for PBXProject "WeShouldCatchUp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 8A1FB19DD283EB1C660A6729;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				1B6113C6062ECB0872E855AA /* XCRemoteSwiftPackageReference "AgoraRtcEngine_iOS" */,
+				26D65A8CC428150677E83132 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				30FBAEC2041118BED384D27C /* WeShouldCatchUp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E9AAAB14FC952BFF19283DF7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7912221C6D5EDE221E5CE8F1 /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		395B91DBA2FF37250EF063F0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C2F20FA9CEFF23AE7771512D /* APIService.swift in Sources */,
+				433BC591F0029719DEDCCA04 /* AcceptInviteView.swift in Sources */,
+				2AF6C4F6866CA3CFCDB64CD2 /* AgoraService.swift in Sources */,
+				E6EECC9BD5C8DC7F66277BCC /* AppDelegate.swift in Sources */,
+				EF75722CCFAD1C62BE720BC4 /* AuthService.swift in Sources */,
+				4C05E1F138E3C5AF610B3AC5 /* AuthViewModel.swift in Sources */,
+				F409B060864BD58C3E802205 /* Call.swift in Sources */,
+				4391C9B8DC109970C90C8683 /* CallEndedView.swift in Sources */,
+				D1DF3EBA5197FA604E491F75 /* CallHistoryView.swift in Sources */,
+				C1E8B191A70AFCEAAAB3EAF4 /* CallViewModel.swift in Sources */,
+				20863627CC5DC1E8DE029B23 /* CatchUp.swift in Sources */,
+				7553DBDC5744AB63CB6056AC /* Constants.swift in Sources */,
+				AFE0ACFF143B659739645F95 /* DeepLinkService.swift in Sources */,
+				5AFBFE58BCBC92369C6D2321 /* DisplayNameView.swift in Sources */,
+				8D1BE946A5A6935C2D1841D8 /* Extensions.swift in Sources */,
+				7ACAA686B5D7BDA4F2CFBC9C /* IncomingPingView.swift in Sources */,
+				8941758FF12F05E0F7AD84C7 /* InviteView.swift in Sources */,
+				5E5CBD407BD0A975EF6FF254 /* LiveViewModel.swift in Sources */,
+				00F2B9BB0947674DE25A2404 /* LiveWaitingView.swift in Sources */,
+				0388D8B72DA8017F18B5ECC8 /* MainView.swift in Sources */,
+				E7E8C646FE8362562433EEF7 /* NotificationPermissionView.swift in Sources */,
+				F34B3502088443B73C7A5FAF /* PhoneAuthView.swift in Sources */,
+				DC16085F7FD21F70FF7A19AA /* PushNotificationService.swift in Sources */,
+				944B2EDC7926CE85BFC033C5 /* QueueItem.swift in Sources */,
+				D7C5AC14F0182FE9D276D574 /* QueueRowView.swift in Sources */,
+				3A9B9BBC469A89A6CE6BAB4F /* QueueViewModel.swift in Sources */,
+				2E03FAE205F451AD07A2C20D /* User.swift in Sources */,
+				E3ADB96843AB50483FB75785 /* VoiceCallView.swift in Sources */,
+				F8EA4F4BF6A87AF6D2FBE592 /* WeShouldCatchUpApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0FECAA3EC99E8DBA7B1CCFA7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		1112AE6A6575F1E48C821D8B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = WeShouldCatchUp/WeShouldCatchUp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WeShouldCatchUp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "We Should Catch Up";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sayem.WeShouldCatchUp;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A8E910166D2651C0891316BE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = WeShouldCatchUp/WeShouldCatchUp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WeShouldCatchUp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "We Should Catch Up";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sayem.WeShouldCatchUp;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		DC5E6CDD40E80B3C6B1D1D3A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2AD0D64D7C611C87F55E9A29 /* Build configuration list for PBXProject "WeShouldCatchUp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0FECAA3EC99E8DBA7B1CCFA7 /* Debug */,
+				DC5E6CDD40E80B3C6B1D1D3A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7106C74EA34A1C2D3B47C52F /* Build configuration list for PBXNativeTarget "WeShouldCatchUp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1112AE6A6575F1E48C821D8B /* Debug */,
+				A8E910166D2651C0891316BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1B6113C6062ECB0872E855AA /* XCRemoteSwiftPackageReference "AgoraRtcEngine_iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AgoraIO/AgoraRtcEngine_iOS";
+			requirement = {
+				kind = exactVersion;
+				version = 4.5.0;
+			};
+		};
+		26D65A8CC428150677E83132 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = 11.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		35CAB87B3F648E64D06718F2 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26D65A8CC428150677E83132 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		3762CFB74EC496F2D8998245 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26D65A8CC428150677E83132 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		4E899B9DBDB2B89EF6EC5FEB /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26D65A8CC428150677E83132 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		FA25DCC392A4E7FC53C459C2 /* RtcBasic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1B6113C6062ECB0872E855AA /* XCRemoteSwiftPackageReference "AgoraRtcEngine_iOS" */;
+			productName = RtcBasic;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 68715B29B395205B1E3BBEE1 /* Project object */;
+}

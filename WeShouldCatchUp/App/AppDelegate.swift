@@ -81,7 +81,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         completionHandler()
     }
 
-    private func handlePushType(_ type: PushNotificationService.PushNotificationType) {
+    private func handlePushType(_ type: PushNotificationType) {
         switch type {
         case .catchUpPing(let fromUserId, let catchupId, let callId):
             // Post notification so the active view can respond.

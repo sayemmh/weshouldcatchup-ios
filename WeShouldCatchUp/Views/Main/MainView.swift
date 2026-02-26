@@ -1,62 +1,5 @@
 import SwiftUI
 
-// MARK: - QueueViewModel
-
-/// ViewModel for the main screen queue and "I'm Free" action.
-final class QueueViewModel: ObservableObject {
-
-    @Published var queue: [QueueItem] = []
-    @Published var isLoading: Bool = false
-    @Published var isGoingLive: Bool = false
-    @Published var errorMessage: String?
-
-    private let api = APIService.shared
-
-    // MARK: - Fetch Queue
-
-    @MainActor
-    func fetchQueue() async {
-        isLoading = true
-        errorMessage = nil
-        do {
-            queue = try await api.fetchQueue()
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-        isLoading = false
-    }
-
-    // MARK: - Go Live
-
-    @MainActor
-    func goLive() async -> Bool {
-        isGoingLive = true
-        errorMessage = nil
-        do {
-            _ = try await api.goLive()
-            isGoingLive = false
-            return true
-        } catch {
-            errorMessage = error.localizedDescription
-            isGoingLive = false
-            return false
-        }
-    }
-
-    // MARK: - Remove from Queue
-
-    @MainActor
-    func removeCatchup(catchupId: String) async {
-        errorMessage = nil
-        do {
-            _ = try await api.removeCatchup(catchupId: catchupId)
-            queue.removeAll { $0.catchupId == catchupId }
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-    }
-}
-
 // MARK: - Design Constants
 
 private extension Color {
@@ -122,12 +65,7 @@ struct MainView: View {
     private var imFreeSection: some View {
         VStack(spacing: 16) {
             Button {
-                Task {
-                    let success = await viewModel.goLive()
-                    if success {
-                        navigateToLive = true
-                    }
-                }
+                navigateToLive = true
             } label: {
                 ZStack {
                     Circle()
@@ -135,23 +73,16 @@ struct MainView: View {
                         .frame(width: 120, height: 120)
                         .shadow(color: Color.warmCoral.opacity(0.4), radius: 16, x: 0, y: 6)
 
-                    if viewModel.isGoingLive {
-                        ProgressView()
-                            .tint(.white)
-                            .scaleEffect(1.2)
-                    } else {
-                        VStack(spacing: 4) {
-                            Image(systemName: "hand.wave.fill")
-                                .font(.title)
-                            Text("I'm Free")
-                                .font(.body)
-                                .fontWeight(.semibold)
-                        }
-                        .foregroundColor(.white)
+                    VStack(spacing: 4) {
+                        Image(systemName: "hand.wave.fill")
+                            .font(.title)
+                        Text("I'm Free")
+                            .font(.body)
+                            .fontWeight(.semibold)
                     }
+                    .foregroundColor(.white)
                 }
             }
-            .disabled(viewModel.isGoingLive)
             .padding(.top, 24)
 
             Text("Tap when you have a few minutes to chat")
@@ -226,7 +157,7 @@ struct MainView: View {
                             item: $viewModel.queue[index],
                             onRemove: {
                                 Task {
-                                    await viewModel.removeCatchup(
+                                    await viewModel.removeFromQueue(
                                         catchupId: viewModel.queue[index].catchupId
                                     )
                                 }

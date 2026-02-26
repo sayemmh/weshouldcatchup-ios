@@ -1,4 +1,19 @@
 import Foundation
+import SwiftUI
+
+// MARK: - Color Hex Init
+
+extension Color {
+    /// Initialize a Color from a hex integer, e.g. Color(hex: 0xC4604A)
+    init(hex: UInt, opacity: Double = 1.0) {
+        self.init(
+            red: Double((hex >> 16) & 0xFF) / 255.0,
+            green: Double((hex >> 8) & 0xFF) / 255.0,
+            blue: Double(hex & 0xFF) / 255.0,
+            opacity: opacity
+        )
+    }
+}
 
 // MARK: - Date Formatting
 

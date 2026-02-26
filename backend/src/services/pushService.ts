@@ -1,4 +1,4 @@
-import * as admin from "firebase-admin";
+import admin from "firebase-admin";
 
 /**
  * Send a "catch up ping" push notification to a user.

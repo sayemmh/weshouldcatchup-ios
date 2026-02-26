@@ -27,20 +27,20 @@ struct RootView: View {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
 
     var body: some View {
-        Group {
-            if !authService.isAuthenticated || !hasCompletedOnboarding {
-                OnboardingFlow(onComplete: {
-                    hasCompletedOnboarding = true
-                })
-            } else if let catchupId = deepLinkService.pendingInviteCatchupId {
-                AcceptInviteView(catchupId: catchupId, onDone: {
-                    deepLinkService.clearPendingInvite()
-                })
-            } else {
-                MainView()
-            }
+        if !authService.isAuthenticated || !hasCompletedOnboarding {
+            OnboardingFlow(onComplete: {
+                hasCompletedOnboarding = true
+            })
+        } else if let catchupId = deepLinkService.pendingInviteCatchupId {
+            AcceptInviteView(
+                catchupId: catchupId,
+                inviterName: "Someone",
+                onAccepted: { deepLinkService.clearPendingInvite() },
+                onDeclined: { deepLinkService.clearPendingInvite() }
+            )
+        } else {
+            MainView()
         }
-        .preferredColorScheme(.light)
     }
 }
 
@@ -50,23 +50,23 @@ struct OnboardingFlow: View {
     let onComplete: () -> Void
 
     var body: some View {
-        Group {
-            switch viewModel.currentStep {
-            case .phoneEntry, .codeVerification:
-                PhoneAuthView(viewModel: viewModel)
+        switch viewModel.currentStep {
+        case .phoneEntry, .codeVerification:
+            PhoneAuthView(viewModel: viewModel)
 
-            case .notificationPermission:
-                NotificationPermissionView(onEnabled: {
-                    viewModel.notificationsEnabled()
-                })
+        case .notificationPermission:
+            NotificationPermissionView(onPermissionGranted: {
+                viewModel.notificationsEnabled()
+            })
 
-            case .displayNameEntry:
-                DisplayNameView(viewModel: viewModel)
+        case .displayNameEntry:
+            DisplayNameView(onComplete: {
+                Task { await viewModel.saveDisplayName() }
+                onComplete()
+            })
 
-            case .complete:
-                Color.clear.onAppear { onComplete() }
-            }
+        case .complete:
+            Color.clear.onAppear { onComplete() }
         }
-        .background(Constants.Colors.background.ignoresSafeArea())
     }
 }
