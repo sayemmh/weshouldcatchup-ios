@@ -42,13 +42,13 @@ struct CallEndedView: View {
                 // MARK: - Summary Text
                 VStack(spacing: 10) {
                     Text("You caught up with \(otherPersonName)")
-                        .font(.title2)
+                        .font(.fraunces(22, weight: .medium))
                         .fontWeight(.bold)
                         .foregroundColor(.primary)
                         .multilineTextAlignment(.center)
 
                     Text("for \(formattedDuration)")
-                        .font(.title3)
+                        .font(.fraunces(20, weight: .medium))
                         .foregroundColor(.secondary)
                 }
 
@@ -59,7 +59,7 @@ struct CallEndedView: View {
                     onDismiss()
                 } label: {
                     Text("Nice.")
-                        .font(.title3)
+                        .font(.fraunces(20, weight: .medium))
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
                         .padding()

@@ -10,9 +10,12 @@
 		00F2B9BB0947674DE25A2404 /* LiveWaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61CE4D6A1D6FA93FF4ECDCC9 /* LiveWaitingView.swift */; };
 		01911ED7E19A79CFC900F0FE /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 35CAB87B3F648E64D06718F2 /* FirebaseMessaging */; };
 		0388D8B72DA8017F18B5ECC8 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D99EA62A6C1A4FA4A824E0A5 /* MainView.swift */; };
+		0997D7D6A35ADB7192717DFA /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 91ED872DA9749F6D8531A847 /* Inter-SemiBold.ttf */; };
+		159A547AA780BEC894E124AB /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 081959D79FE203126DE86285 /* Inter-Regular.ttf */; };
 		20863627CC5DC1E8DE029B23 /* CatchUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBA06743134AE7819B38A4A /* CatchUp.swift */; };
 		2AF6C4F6866CA3CFCDB64CD2 /* AgoraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093AD18CEB3BA1A6EF62912F /* AgoraService.swift */; };
 		2E03FAE205F451AD07A2C20D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FAF8549328948DC16B4811 /* User.swift */; };
+		33D682DC7D7F49643576F2E6 /* Fraunces-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3632581E07B3174D39A9AE3B /* Fraunces-Medium.ttf */; };
 		3A9B9BBC469A89A6CE6BAB4F /* QueueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEFDDE9709D7B17667727DF /* QueueViewModel.swift */; };
 		433BC591F0029719DEDCCA04 /* AcceptInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807338292FA26A0644126A70 /* AcceptInviteView.swift */; };
 		4391C9B8DC109970C90C8683 /* CallEndedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB09E5697D49A36D174B9C86 /* CallEndedView.swift */; };
@@ -20,13 +23,17 @@
 		54E49D3EBCAAA25DEE42A8BE /* RtcBasic in Frameworks */ = {isa = PBXBuildFile; productRef = FA25DCC392A4E7FC53C459C2 /* RtcBasic */; };
 		5AFBFE58BCBC92369C6D2321 /* DisplayNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DDA3E7205AD614ABC2B786 /* DisplayNameView.swift */; };
 		5E5CBD407BD0A975EF6FF254 /* LiveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CAFFDB3676CA68DF22FBAA3 /* LiveViewModel.swift */; };
+		5E7AA523003D03511E1C9452 /* Fraunces-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E110D204A21DDA1897E9F86 /* Fraunces-Regular.ttf */; };
 		7553DBDC5744AB63CB6056AC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF4ABC2A413676F0990AED0 /* Constants.swift */; };
 		7912221C6D5EDE221E5CE8F1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F9E4957D7EA3D022294FFFB2 /* GoogleService-Info.plist */; };
 		7ACAA686B5D7BDA4F2CFBC9C /* IncomingPingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F55C6AA5503735F971DA41 /* IncomingPingView.swift */; };
 		8941758FF12F05E0F7AD84C7 /* InviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B25565ACCA5FF612AE9A341 /* InviteView.swift */; };
 		8D1BE946A5A6935C2D1841D8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500AF69205D4FF92F8F15495 /* Extensions.swift */; };
 		944B2EDC7926CE85BFC033C5 /* QueueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5947581024B982AB1BB63CAD /* QueueItem.swift */; };
+		94B8904B440322B5C1B98C22 /* Fraunces-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F21B3B18AA595B7988F10823 /* Fraunces-Bold.ttf */; };
+		96F4532DB5C77CB29A4EBF7C /* Fraunces-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 231D7B4EA7721ADED33DFF78 /* Fraunces-SemiBold.ttf */; };
 		AFE0ACFF143B659739645F95 /* DeepLinkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 984B2A1448C1D98CF85AE86D /* DeepLinkService.swift */; };
+		B74699600401045C75CD1C89 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D3EE8BF441DBB0B366D44BF3 /* Inter-Medium.ttf */; };
 		C1E8B191A70AFCEAAAB3EAF4 /* CallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5308925642CA7E36F4D3A7A /* CallViewModel.swift */; };
 		C2F20FA9CEFF23AE7771512D /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37782C39D09EC088FDD2E7A /* APIService.swift */; };
 		C7D7E2D2C8F5A0323A3873F9 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3762CFB74EC496F2D8998245 /* FirebaseAuth */; };
@@ -45,14 +52,17 @@
 
 /* Begin PBXFileReference section */
 		078E5F490917D585444D24B7 /* PhoneAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAuthView.swift; sourceTree = "<group>"; };
+		081959D79FE203126DE86285 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular.ttf"; sourceTree = "<group>"; };
 		093AD18CEB3BA1A6EF62912F /* AgoraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraService.swift; sourceTree = "<group>"; };
 		12F55C6AA5503735F971DA41 /* IncomingPingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomingPingView.swift; sourceTree = "<group>"; };
 		1B25565ACCA5FF612AE9A341 /* InviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteView.swift; sourceTree = "<group>"; };
 		1CAFFDB3676CA68DF22FBAA3 /* LiveViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewModel.swift; sourceTree = "<group>"; };
 		1E378A9E910A6A16D03E8EE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		231D7B4EA7721ADED33DFF78 /* Fraunces-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Fraunces-SemiBold.ttf"; sourceTree = "<group>"; };
 		278EBFD7CC9A9AB3F0BF73F9 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		2EEF4763E244B37C3852A2F3 /* CallHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryView.swift; sourceTree = "<group>"; };
 		330FADD78836560C111D4967 /* WeShouldCatchUpApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeShouldCatchUpApp.swift; sourceTree = "<group>"; };
+		3632581E07B3174D39A9AE3B /* Fraunces-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Fraunces-Medium.ttf"; sourceTree = "<group>"; };
 		3838552CBF73596F18794A8D /* WeShouldCatchUp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WeShouldCatchUp.entitlements; sourceTree = "<group>"; };
 		3CBA06743134AE7819B38A4A /* CatchUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchUp.swift; sourceTree = "<group>"; };
 		3DEFDDE9709D7B17667727DF /* QueueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueViewModel.swift; sourceTree = "<group>"; };
@@ -67,11 +77,15 @@
 		75DDA3E7205AD614ABC2B786 /* DisplayNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayNameView.swift; sourceTree = "<group>"; };
 		807338292FA26A0644126A70 /* AcceptInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptInviteView.swift; sourceTree = "<group>"; };
 		816AA934C31185F3D18D3333 /* Call.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Call.swift; sourceTree = "<group>"; };
+		91ED872DA9749F6D8531A847 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		984B2A1448C1D98CF85AE86D /* DeepLinkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkService.swift; sourceTree = "<group>"; };
+		9E110D204A21DDA1897E9F86 /* Fraunces-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Fraunces-Regular.ttf"; sourceTree = "<group>"; };
 		BDDCA8970EA09BE9B68FE9AA /* QueueRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueRowView.swift; sourceTree = "<group>"; };
 		C5308925642CA7E36F4D3A7A /* CallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallViewModel.swift; sourceTree = "<group>"; };
 		CA2C12C36928E8A3D030FBDE /* NotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionView.swift; sourceTree = "<group>"; };
+		D3EE8BF441DBB0B366D44BF3 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Medium.ttf"; sourceTree = "<group>"; };
 		D99EA62A6C1A4FA4A824E0A5 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		F21B3B18AA595B7988F10823 /* Fraunces-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Fraunces-Bold.ttf"; sourceTree = "<group>"; };
 		F37782C39D09EC088FDD2E7A /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		F87DA7167CF5DA8CFA3AE0CD /* PushNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationService.swift; sourceTree = "<group>"; };
 		F8FAF8549328948DC16B4811 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -101,6 +115,14 @@
 				1B25565ACCA5FF612AE9A341 /* InviteView.swift */,
 			);
 			path = Invite;
+			sourceTree = "<group>";
+		};
+		0651A883754462E1CFEBF9C2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				99E0838DB63FB08097366A1C /* Fonts */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		178741AE36385689AB85BDF6 /* Models */ = {
@@ -157,6 +179,7 @@
 				3838552CBF73596F18794A8D /* WeShouldCatchUp.entitlements */,
 				F0B51875104460232DD2B174 /* App */,
 				178741AE36385689AB85BDF6 /* Models */,
+				0651A883754462E1CFEBF9C2 /* Resources */,
 				BB98CA8A5A2414DAEFEE6A58 /* Services */,
 				55988C2D5EE623EEE68DFD12 /* Utilities */,
 				F8A217D996C18B7F78D8ACB6 /* ViewModels */,
@@ -171,6 +194,20 @@
 				81B22DA108814018CEC12DFE /* WeShouldCatchUp */,
 				75479D6DA2B28E626217DA9E /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		99E0838DB63FB08097366A1C /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				F21B3B18AA595B7988F10823 /* Fraunces-Bold.ttf */,
+				3632581E07B3174D39A9AE3B /* Fraunces-Medium.ttf */,
+				9E110D204A21DDA1897E9F86 /* Fraunces-Regular.ttf */,
+				231D7B4EA7721ADED33DFF78 /* Fraunces-SemiBold.ttf */,
+				D3EE8BF441DBB0B366D44BF3 /* Inter-Medium.ttf */,
+				081959D79FE203126DE86285 /* Inter-Regular.ttf */,
+				91ED872DA9749F6D8531A847 /* Inter-SemiBold.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		A7DD388523804B0AF12ADD85 /* Live */ = {
@@ -313,7 +350,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94B8904B440322B5C1B98C22 /* Fraunces-Bold.ttf in Resources */,
+				33D682DC7D7F49643576F2E6 /* Fraunces-Medium.ttf in Resources */,
+				5E7AA523003D03511E1C9452 /* Fraunces-Regular.ttf in Resources */,
+				96F4532DB5C77CB29A4EBF7C /* Fraunces-SemiBold.ttf in Resources */,
 				7912221C6D5EDE221E5CE8F1 /* GoogleService-Info.plist in Resources */,
+				B74699600401045C75CD1C89 /* Inter-Medium.ttf in Resources */,
+				159A547AA780BEC894E124AB /* Inter-Regular.ttf in Resources */,
+				0997D7D6A35ADB7192717DFA /* Inter-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -567,7 +611,7 @@
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
 				kind = exactVersion;
-				version = 11.0.0;
+				version = 11.6.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

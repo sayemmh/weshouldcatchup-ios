@@ -64,13 +64,13 @@ struct AcceptInviteView: View {
             // MARK: - Headline
             VStack(spacing: 12) {
                 Text("\(inviterName) wants to catch up with you")
-                    .font(.title2)
+                    .font(.fraunces(22, weight: .medium))
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
                     .multilineTextAlignment(.center)
 
                 Text("whenever you're both free")
-                    .font(.body)
+                    .font(.inter(16))
                     .foregroundColor(.secondary)
             }
 
@@ -79,7 +79,7 @@ struct AcceptInviteView: View {
             // MARK: - Error
             if let errorMessage = errorMessage {
                 Text(errorMessage)
-                    .font(.caption)
+                    .font(.inter(12))
                     .foregroundColor(.red)
                     .multilineTextAlignment(.center)
             }
@@ -111,7 +111,7 @@ struct AcceptInviteView: View {
                     onDeclined()
                 } label: {
                     Text("Nah")
-                        .font(.body)
+                        .font(.inter(16))
                         .foregroundColor(.secondary)
                         .padding(.vertical, 8)
                 }
@@ -139,12 +139,12 @@ struct AcceptInviteView: View {
             }
 
             Text("Added to your queue!")
-                .font(.title2)
+                .font(.fraunces(22, weight: .medium))
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
 
             Text("Next time either of you taps \"I'm Free,\" we'll connect you.")
-                .font(.body)
+                .font(.inter(16))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
 

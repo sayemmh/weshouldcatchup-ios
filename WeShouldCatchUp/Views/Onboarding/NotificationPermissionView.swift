@@ -69,12 +69,12 @@ struct NotificationPermissionView: View {
     private var textSection: some View {
         VStack(spacing: 14) {
             Text("Turn on notifications")
-                .font(.title)
+                .font(.fraunces(28, weight: .semiBold))
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
 
             Text("This is how you'll know when a friend is free. Without notifications, the app can't work.")
-                .font(.body)
+                .font(.inter(16))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
@@ -92,10 +92,10 @@ struct NotificationPermissionView: View {
             } label: {
                 HStack(spacing: 6) {
                     Text("Why?")
-                        .font(.caption)
+                        .font(.inter(12))
                         .fontWeight(.medium)
                     Image(systemName: showWhySection ? "chevron.up" : "chevron.down")
-                        .font(.caption2)
+                        .font(.inter(11))
                 }
                 .foregroundColor(.warmCoral)
             }
@@ -129,7 +129,7 @@ struct NotificationPermissionView: View {
                 .foregroundColor(.warmCoral)
                 .frame(width: 20)
             Text(text)
-                .font(.caption)
+                .font(.inter(12))
                 .foregroundColor(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -156,7 +156,7 @@ struct NotificationPermissionView: View {
     private var deniedMessage: some View {
         VStack(spacing: 8) {
             Text("Notifications were denied. Please enable them in Settings for the app to work properly.")
-                .font(.caption)
+                .font(.inter(12))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
 
@@ -166,7 +166,7 @@ struct NotificationPermissionView: View {
                 }
             } label: {
                 Text("Open Settings")
-                    .font(.caption)
+                    .font(.inter(12))
                     .fontWeight(.medium)
                     .foregroundColor(.warmCoral)
             }

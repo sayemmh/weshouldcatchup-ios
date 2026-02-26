@@ -15,6 +15,45 @@ extension Color {
     }
 }
 
+// MARK: - Custom Fonts
+
+extension Font {
+    /// Fraunces serif — used for headlines and display text.
+    static func fraunces(_ size: CGFloat, weight: FrauncesWeight = .regular) -> Font {
+        .custom(weight.fontName, size: size)
+    }
+
+    /// Inter sans-serif — used for body and UI text.
+    static func inter(_ size: CGFloat, weight: InterWeight = .regular) -> Font {
+        .custom(weight.fontName, size: size)
+    }
+
+    enum FrauncesWeight {
+        case regular, medium, semiBold, bold
+
+        var fontName: String {
+            switch self {
+            case .regular:  return "Fraunces-Regular"
+            case .medium:   return "Fraunces-Medium"
+            case .semiBold: return "Fraunces-SemiBold"
+            case .bold:     return "Fraunces-Bold"
+            }
+        }
+    }
+
+    enum InterWeight {
+        case regular, medium, semiBold
+
+        var fontName: String {
+            switch self {
+            case .regular:  return "Inter-Regular"
+            case .medium:   return "Inter-Medium"
+            case .semiBold: return "Inter-SemiBold"
+            }
+        }
+    }
+}
+
 // MARK: - Date Formatting
 
 extension Date {

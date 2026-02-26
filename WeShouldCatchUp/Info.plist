@@ -20,6 +20,16 @@
 	<string>1</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need microphone access for voice calls with your catch-up connections.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Fraunces-Regular.ttf</string>
+		<string>Fraunces-Medium.ttf</string>
+		<string>Fraunces-SemiBold.ttf</string>
+		<string>Fraunces-Bold.ttf</string>
+		<string>Inter-Regular.ttf</string>
+		<string>Inter-Medium.ttf</string>
+		<string>Inter-SemiBold.ttf</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

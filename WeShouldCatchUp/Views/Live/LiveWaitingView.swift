@@ -85,7 +85,7 @@ struct LiveWaitingView: View {
                     .frame(width: 70, height: 70)
 
                 Image(systemName: "hand.wave.fill")
-                    .font(.title)
+                    .font(.fraunces(28, weight: .semiBold))
                     .foregroundColor(.white)
             }
             .onAppear {
@@ -94,13 +94,13 @@ struct LiveWaitingView: View {
             }
 
             Text("Finding someone to catch up with...")
-                .font(.title2)
+                .font(.fraunces(22, weight: .medium))
                 .fontWeight(.semibold)
                 .foregroundColor(.primary)
                 .multilineTextAlignment(.center)
 
             Text("Sit tight. We're checking your queue.")
-                .font(.body)
+                .font(.inter(16))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
         }
@@ -115,13 +115,13 @@ struct LiveWaitingView: View {
                 .foregroundColor(.secondary.opacity(0.5))
 
             Text("No one's free right now.")
-                .font(.title2)
+                .font(.fraunces(22, weight: .medium))
                 .fontWeight(.semibold)
                 .foregroundColor(.primary)
                 .multilineTextAlignment(.center)
 
             Text("We'll keep you live for a few more minutes in case someone pops in.")
-                .font(.body)
+                .font(.inter(16))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
@@ -137,12 +137,12 @@ struct LiveWaitingView: View {
                 .foregroundColor(.secondary.opacity(0.5))
 
             Text("No luck this time.")
-                .font(.title2)
+                .font(.fraunces(22, weight: .medium))
                 .fontWeight(.semibold)
                 .foregroundColor(.primary)
 
             Text("Try again later!")
-                .font(.body)
+                .font(.inter(16))
                 .foregroundColor(.secondary)
 
             Button {

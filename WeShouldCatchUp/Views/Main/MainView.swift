@@ -33,15 +33,19 @@ struct MainView: View {
                     queueSection
                 }
             }
-            .navigationTitle("We Should Catch Up")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("We Should Catch Up")
+                        .font(.fraunces(22, weight: .semiBold))
+                        .foregroundColor(Constants.Colors.textPrimary)
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         showInviteView = true
                     } label: {
                         Image(systemName: "plus.circle")
-                            .foregroundColor(.warmCoral)
+                            .foregroundColor(Constants.Colors.primary)
                     }
                 }
             }
@@ -75,9 +79,9 @@ struct MainView: View {
 
                     VStack(spacing: 4) {
                         Image(systemName: "hand.wave.fill")
-                            .font(.title)
+                            .font(.fraunces(28, weight: .semiBold))
                         Text("I'm Free")
-                            .font(.body)
+                            .font(.inter(16))
                             .fontWeight(.semibold)
                     }
                     .foregroundColor(.white)
@@ -86,7 +90,7 @@ struct MainView: View {
             .padding(.top, 24)
 
             Text("Tap when you have a few minutes to chat")
-                .font(.caption)
+                .font(.inter(12))
                 .foregroundColor(.secondary)
                 .padding(.bottom, 20)
         }
@@ -120,18 +124,18 @@ struct MainView: View {
                 .foregroundColor(.secondary.opacity(0.5))
 
             Text("No one in your queue yet.")
-                .font(.body)
+                .font(.inter(16))
                 .foregroundColor(.secondary)
 
             Text("Invite someone to catch up.")
-                .font(.caption)
+                .font(.inter(12))
                 .foregroundColor(.secondary)
 
             Button {
                 showInviteView = true
             } label: {
                 Label("Invite a friend", systemImage: "paperplane.fill")
-                    .font(.body)
+                    .font(.inter(16))
                     .fontWeight(.medium)
                     .foregroundColor(.white)
                     .padding(.horizontal, 24)
@@ -177,7 +181,7 @@ struct MainView: View {
                     Image(systemName: "clock.arrow.circlepath")
                     Text("Call History")
                 }
-                .font(.caption)
+                .font(.inter(12))
                 .foregroundColor(.warmCoral)
                 .padding(.vertical, 12)
             }
@@ -190,7 +194,7 @@ struct MainView: View {
     private var errorSection: some View {
         if let errorMessage = viewModel.errorMessage {
             Text(errorMessage)
-                .font(.caption)
+                .font(.inter(12))
                 .foregroundColor(.red)
                 .padding(.horizontal, 24)
         }

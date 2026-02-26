@@ -75,19 +75,19 @@ struct IncomingPingView: View {
                     .frame(width: 80, height: 80)
 
                 Text(String(callerName.prefix(1)).uppercased())
-                    .font(.title)
+                    .font(.fraunces(28, weight: .semiBold))
                     .fontWeight(.bold)
                     .foregroundColor(.warmCoral)
             }
 
             HStack(spacing: 4) {
                 Text(callerName)
-                    .font(.title)
+                    .font(.fraunces(28, weight: .semiBold))
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
 
                 Text("is free to catch up")
-                    .font(.title2)
+                    .font(.fraunces(22, weight: .medium))
                     .foregroundColor(.primary)
             }
             .multilineTextAlignment(.center)
@@ -144,7 +144,7 @@ struct IncomingPingView: View {
                 onAccept()
             } label: {
                 Text("Join")
-                    .font(.title3)
+                    .font(.fraunces(20, weight: .medium))
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
@@ -160,7 +160,7 @@ struct IncomingPingView: View {
                 onDecline()
             } label: {
                 Text("Not now")
-                    .font(.body)
+                    .font(.inter(16))
                     .foregroundColor(.secondary)
                     .padding(.vertical, 10)
             }

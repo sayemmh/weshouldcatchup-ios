@@ -61,14 +61,14 @@ struct VoiceCallView: View {
                     .frame(width: 90, height: 90)
 
                 Text(String(viewModel.otherUserName.prefix(1)).uppercased())
-                    .font(.largeTitle)
+                    .font(.fraunces(34, weight: .bold))
                     .fontWeight(.bold)
                     .foregroundColor(.warmCoral)
             }
 
             // Name
             Text(viewModel.otherUserName)
-                .font(.title)
+                .font(.fraunces(28, weight: .semiBold))
                 .fontWeight(.bold)
                 .foregroundColor(.white)
 
@@ -120,12 +120,12 @@ struct VoiceCallView: View {
                         .frame(width: 60, height: 60)
 
                     Image(systemName: icon)
-                        .font(.title2)
+                        .font(.fraunces(22, weight: .medium))
                         .foregroundColor(.white)
                 }
 
                 Text(label)
-                    .font(.caption2)
+                    .font(.inter(11))
                     .foregroundColor(.white.opacity(0.6))
             }
         }
@@ -153,13 +153,13 @@ struct VoiceCallView: View {
                             .tint(.white)
                     } else {
                         Image(systemName: "phone.down.fill")
-                            .font(.title2)
+                            .font(.fraunces(22, weight: .medium))
                             .foregroundColor(.white)
                     }
                 }
 
                 Text("End")
-                    .font(.caption2)
+                    .font(.inter(11))
                     .foregroundColor(.white.opacity(0.6))
             }
         }

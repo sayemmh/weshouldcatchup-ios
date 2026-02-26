@@ -87,12 +87,12 @@ struct DisplayNameView: View {
                 .foregroundColor(.warmCoral)
 
             Text("What should we call you?")
-                .font(.title)
+                .font(.fraunces(28, weight: .semiBold))
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
 
             Text("Just your first name is fine")
-                .font(.body)
+                .font(.inter(16))
                 .foregroundColor(.secondary)
         }
     }
@@ -101,7 +101,7 @@ struct DisplayNameView: View {
 
     private var nameInputSection: some View {
         TextField("Your first name", text: $viewModel.displayName)
-            .font(.title2)
+            .font(.fraunces(22, weight: .medium))
             .multilineTextAlignment(.center)
             .padding()
             .background(Color.white)
@@ -120,7 +120,7 @@ struct DisplayNameView: View {
     private var errorSection: some View {
         if let errorMessage = viewModel.errorMessage {
             Text(errorMessage)
-                .font(.caption)
+                .font(.inter(12))
                 .foregroundColor(.red)
                 .multilineTextAlignment(.center)
         }

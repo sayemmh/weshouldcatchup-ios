@@ -43,12 +43,12 @@ struct PhoneAuthView: View {
                 .foregroundColor(.warmCoral)
 
             Text("Let's get you set up")
-                .font(.title)
+                .font(.fraunces(28, weight: .semiBold))
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
 
             Text("We'll send you a code to verify your number.")
-                .font(.body)
+                .font(.inter(16))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
         }
@@ -95,7 +95,7 @@ struct PhoneAuthView: View {
     private var verificationSection: some View {
         VStack(spacing: 20) {
             Text("Enter the 6-digit code we sent to \(viewModel.phoneNumber)")
-                .font(.body)
+                .font(.inter(16))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
 
@@ -142,7 +142,7 @@ struct PhoneAuthView: View {
                 viewModel.errorMessage = nil
             } label: {
                 Text("Use a different number")
-                    .font(.caption)
+                    .font(.inter(12))
                     .foregroundColor(.warmCoral)
             }
         }
@@ -154,7 +154,7 @@ struct PhoneAuthView: View {
     private var errorSection: some View {
         if let errorMessage = viewModel.errorMessage {
             Text(errorMessage)
-                .font(.caption)
+                .font(.inter(12))
                 .foregroundColor(.red)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)

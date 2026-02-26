@@ -31,7 +31,6 @@ final class AuthService: ObservableObject {
 
     // MARK: - Auth State Listener
 
-    /// Listens for Firebase Auth state changes and updates published properties accordingly.
     private func listenForAuthChanges() {
         authStateHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
             DispatchQueue.main.async {
@@ -43,9 +42,19 @@ final class AuthService: ObservableObject {
 
     // MARK: - Phone Auth
 
-    /// Sends a verification code to the provided phone number via Firebase Phone Auth.
-    /// - Parameter phoneNumber: The phone number in E.164 format (e.g. "+14155551234").
     func sendVerificationCode(phoneNumber: String) async throws {
+        #if targetEnvironment(simulator)
+        // Firebase Phone Auth crashes on simulator due to missing APNs.
+        // Sign in anonymously instead so we can test the rest of the app.
+        let result = try await Auth.auth().signInAnonymously()
+        await MainActor.run {
+            self.isAuthenticated = true
+            self.currentUserId = result.user.uid
+            self.verificationId = "simulator-bypass"
+        }
+        return
+        #else
+        Auth.auth().settings?.isAppVerificationDisabledForTesting = false
         let id = try await PhoneAuthProvider.provider().verifyPhoneNumber(
             phoneNumber,
             uiDelegate: nil
@@ -53,11 +62,14 @@ final class AuthService: ObservableObject {
         await MainActor.run {
             self.verificationId = id
         }
+        #endif
     }
 
-    /// Verifies the SMS code the user entered and signs them in.
-    /// - Parameter code: The 6-digit verification code from SMS.
     func verifyCode(code: String) async throws {
+        #if targetEnvironment(simulator)
+        // Already signed in via anonymous auth in sendVerificationCode.
+        return
+        #else
         guard let verificationId = verificationId else {
             throw AuthServiceError.missingVerificationId
         }
@@ -74,9 +86,9 @@ final class AuthService: ObservableObject {
             self.currentUserId = result.user.uid
             self.verificationId = nil
         }
+        #endif
     }
 
-    /// Signs the current user out of Firebase Auth.
     func signOut() throws {
         try Auth.auth().signOut()
         DispatchQueue.main.async {
@@ -88,7 +100,6 @@ final class AuthService: ObservableObject {
 
     // MARK: - Token Helper
 
-    /// Returns the current user's Firebase ID token for authenticating backend requests.
     func getIDToken() async throws -> String {
         guard let user = Auth.auth().currentUser else {
             throw AuthServiceError.notAuthenticated

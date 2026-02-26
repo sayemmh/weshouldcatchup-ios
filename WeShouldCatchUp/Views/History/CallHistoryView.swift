@@ -57,7 +57,7 @@ struct CallHistoryView: View {
         VStack(spacing: 12) {
             ProgressView()
             Text("Loading call history...")
-                .font(.caption)
+                .font(.inter(12))
                 .foregroundColor(.secondary)
         }
     }
@@ -71,12 +71,12 @@ struct CallHistoryView: View {
                 .foregroundColor(.secondary.opacity(0.4))
 
             Text("No calls yet.")
-                .font(.title3)
+                .font(.fraunces(20, weight: .medium))
                 .fontWeight(.medium)
                 .foregroundColor(.primary)
 
             Text("Tap I'm Free to get started.")
-                .font(.body)
+                .font(.inter(16))
                 .foregroundColor(.secondary)
         }
         .padding(.horizontal, 24)
@@ -107,7 +107,7 @@ struct CallHistoryView: View {
                     .frame(width: 42, height: 42)
 
                 Text(String(call.otherUser.name.prefix(1)).uppercased())
-                    .font(.body)
+                    .font(.inter(16))
                     .fontWeight(.semibold)
                     .foregroundColor(.warmCoral)
             }
@@ -115,18 +115,18 @@ struct CallHistoryView: View {
             // Details
             VStack(alignment: .leading, spacing: 4) {
                 Text(call.otherUser.name)
-                    .font(.body)
+                    .font(.inter(16))
                     .fontWeight(.medium)
                     .foregroundColor(.primary)
 
                 HStack(spacing: 8) {
                     Text(formattedDate(call.startedAt))
-                        .font(.caption)
+                        .font(.inter(12))
                         .foregroundColor(.secondary)
 
                     if let duration = call.duration {
                         Text(formattedCallDuration(duration))
-                            .font(.caption)
+                            .font(.inter(12))
                             .foregroundColor(.secondary)
                     }
                 }
@@ -135,7 +135,7 @@ struct CallHistoryView: View {
             Spacer()
 
             Image(systemName: "phone.fill")
-                .font(.caption)
+                .font(.inter(12))
                 .foregroundColor(.warmCoral.opacity(0.5))
         }
         .padding(.vertical, 10)

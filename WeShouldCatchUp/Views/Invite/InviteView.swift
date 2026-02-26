@@ -85,13 +85,13 @@ struct InviteView: View {
     private var textSection: some View {
         VStack(spacing: 12) {
             Text("Invite someone to catch up")
-                .font(.title2)
+                .font(.fraunces(22, weight: .medium))
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
                 .multilineTextAlignment(.center)
 
             Text("Send them a link. When you both have a free moment, the app connects you.")
-                .font(.body)
+                .font(.inter(16))
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
@@ -127,7 +127,7 @@ struct InviteView: View {
     private var errorSection: some View {
         if let errorMessage = errorMessage {
             Text(errorMessage)
-                .font(.caption)
+                .font(.inter(12))
                 .foregroundColor(.red)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)

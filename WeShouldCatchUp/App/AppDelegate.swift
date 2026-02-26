@@ -1,5 +1,6 @@
 import UIKit
 import FirebaseCore
+import FirebaseAuth
 import FirebaseMessaging
 import UserNotifications
 
@@ -10,6 +11,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         FirebaseApp.configure()
+
+        #if targetEnvironment(simulator)
+        Auth.auth().settings?.isAppVerificationDisabledForTesting = true
+        #endif
+
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         return true
