@@ -1,0 +1,24 @@
+{
+  "name": "we-should-catch-up-backend",
+  "version": "1.0.0",
+  "description": "Backend for We Should Catch Up - rotation engine, Agora tokens, push notifications",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "fastify": "^5.0.0",
+    "@fastify/cors": "^10.0.0",
+    "firebase-admin": "^12.0.0",
+    "agora-token": "^2.0.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "tsx": "^4.7.0",
+    "@types/node": "^20.0.0",
+    "eslint": "^9.0.0"
+  }
+}
