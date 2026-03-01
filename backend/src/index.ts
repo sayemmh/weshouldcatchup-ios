@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { readFileSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 import { resolve } from "path";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
@@ -16,15 +16,23 @@ import profileRoutes from "./routes/profile.js";
 // Firebase Admin Initialization
 // ---------------------------------------------------------------------------
 
+// On Cloud Run, use Application Default Credentials (no key file needed).
+// Locally, load the service-account.json key file.
 const serviceAccountPath = resolve(
   process.env.GOOGLE_APPLICATION_CREDENTIALS || "./service-account.json",
 );
-const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, "utf-8"));
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  projectId: process.env.FIREBASE_PROJECT_ID,
-});
+if (existsSync(serviceAccountPath)) {
+  const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, "utf-8"));
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    projectId: process.env.FIREBASE_PROJECT_ID,
+  });
+} else {
+  admin.initializeApp({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Fastify Server

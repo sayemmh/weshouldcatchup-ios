@@ -3,7 +3,7 @@ import SwiftUI
 enum Constants {
     // MARK: - API
     /// Base URL for the backend. Update this with your Cloud Run URL.
-    static let backendBaseURL = "http://10.0.0.11:8080" // Local dev — update to Cloud Run URL for production
+    static let backendBaseURL = "https://weshouldcatchup-api-395053466295.us-east1.run.app" // Local dev — update to Cloud Run URL for production
 
     // MARK: - Agora
     /// Agora App ID from the Agora Console.
