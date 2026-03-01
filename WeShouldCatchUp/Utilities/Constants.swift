@@ -3,7 +3,7 @@ import SwiftUI
 enum Constants {
     // MARK: - API
     /// Base URL for the backend. Update this with your Cloud Run URL.
-    static let backendBaseURL = "http://192.168.0.104:8080" // Local dev — update to Cloud Run URL for production
+    static let backendBaseURL = "http://10.0.0.11:8080" // Local dev — update to Cloud Run URL for production
 
     // MARK: - Agora
     /// Agora App ID from the Agora Console.
@@ -20,9 +20,9 @@ enum Constants {
 
     // MARK: - Design (matches weshouldcatchup.vercel.app)
     enum Colors {
-        // Terracotta accent — primary brand color
-        static let primary = Color(hex: 0xC4604A)             // --color-terracotta
-        static let primaryDark = Color(hex: 0xA84E3B)         // --color-terracotta-dark
+        // Muted terracotta accent — primary brand color
+        static let primary = Color(hex: 0xB5695A)             // muted terracotta
+        static let primaryDark = Color(hex: 0x96524A)         // darker muted
         static let primaryLight = Color(hex: 0xF0DDD7)        // --color-terracotta-light
 
         // Backgrounds

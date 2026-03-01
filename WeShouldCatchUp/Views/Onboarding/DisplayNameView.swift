@@ -21,10 +21,8 @@ final class DisplayNameViewModel: ObservableObject {
         isSaving = true
         errorMessage = nil
 
-        // TODO: Call an API endpoint to save the display name (e.g., POST /set-display-name).
-        // For now, we simulate a brief network call.
         do {
-            try await Task.sleep(nanoseconds: 500_000_000) // 0.5s simulated delay
+            try await APIService.shared.updateDisplayName(displayName.trimmingCharacters(in: .whitespacesAndNewlines))
             completion()
         } catch {
             errorMessage = error.localizedDescription
@@ -32,13 +30,6 @@ final class DisplayNameViewModel: ObservableObject {
 
         isSaving = false
     }
-}
-
-// MARK: - Design Constants
-
-private extension Color {
-    static let warmCoral = Color(red: 0.90, green: 0.45, blue: 0.35)
-    static let warmCream = Color(red: 0.99, green: 0.97, blue: 0.94)
 }
 
 // MARK: - DisplayNameView
@@ -52,7 +43,7 @@ struct DisplayNameView: View {
 
     var body: some View {
         ZStack {
-            Color.warmCream
+            Constants.Colors.background
                 .ignoresSafeArea()
 
             VStack(spacing: 32) {
@@ -84,16 +75,16 @@ struct DisplayNameView: View {
         VStack(spacing: 12) {
             Image(systemName: "person.crop.circle.badge.plus")
                 .font(.system(size: 52))
-                .foregroundColor(.warmCoral)
+                .foregroundColor(Constants.Colors.primary)
 
             Text("What should we call you?")
                 .font(.fraunces(28, weight: .semiBold))
                 .fontWeight(.bold)
-                .foregroundColor(.primary)
+                .foregroundColor(Constants.Colors.textPrimary)
 
             Text("Just your first name is fine")
                 .font(.inter(16))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
         }
     }
 
@@ -102,6 +93,7 @@ struct DisplayNameView: View {
     private var nameInputSection: some View {
         TextField("Your first name", text: $viewModel.displayName)
             .font(.fraunces(22, weight: .medium))
+            .foregroundColor(Constants.Colors.textPrimary)
             .multilineTextAlignment(.center)
             .padding()
             .background(Color.white)
@@ -146,7 +138,7 @@ struct DisplayNameView: View {
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(viewModel.canSubmit ? Color.warmCoral : Color.gray.opacity(0.3))
+            .background(viewModel.canSubmit ? Constants.Colors.primary : Color.gray.opacity(0.3))
             .foregroundColor(.white)
             .cornerRadius(14)
         }

@@ -1,12 +1,5 @@
 import SwiftUI
 
-// MARK: - Design Constants
-
-private extension Color {
-    static let warmCoral = Color(red: 0.90, green: 0.45, blue: 0.35)
-    static let warmCream = Color(red: 0.99, green: 0.97, blue: 0.94)
-}
-
 // MARK: - IncomingPingView
 
 struct IncomingPingView: View {
@@ -39,7 +32,7 @@ struct IncomingPingView: View {
 
     var body: some View {
         ZStack {
-            Color.warmCream
+            Constants.Colors.background
                 .ignoresSafeArea()
 
             VStack(spacing: 32) {
@@ -71,24 +64,24 @@ struct IncomingPingView: View {
             // Avatar
             ZStack {
                 Circle()
-                    .fill(Color.warmCoral.opacity(0.15))
+                    .fill(Constants.Colors.primary.opacity(0.15))
                     .frame(width: 80, height: 80)
 
                 Text(String(callerName.prefix(1)).uppercased())
                     .font(.fraunces(28, weight: .semiBold))
                     .fontWeight(.bold)
-                    .foregroundColor(.warmCoral)
+                    .foregroundColor(Constants.Colors.primary)
             }
 
             HStack(spacing: 4) {
                 Text(callerName)
                     .font(.fraunces(28, weight: .semiBold))
                     .fontWeight(.bold)
-                    .foregroundColor(.primary)
+                    .foregroundColor(Constants.Colors.textPrimary)
 
                 Text("is free to catch up")
                     .font(.fraunces(22, weight: .medium))
-                    .foregroundColor(.primary)
+                    .foregroundColor(Constants.Colors.textPrimary)
             }
             .multilineTextAlignment(.center)
 
@@ -119,7 +112,7 @@ struct IncomingPingView: View {
             Circle()
                 .trim(from: 0, to: countdownProgress)
                 .stroke(
-                    countdownProgress > 0.3 ? Color.warmCoral : Color.red,
+                    countdownProgress > 0.3 ? Constants.Colors.primary : Color.red,
                     style: StrokeStyle(lineWidth: 6, lineCap: .round)
                 )
                 .frame(width: 80, height: 80)
@@ -130,7 +123,7 @@ struct IncomingPingView: View {
             Text("\(secondsRemaining)s")
                 .font(.title2.monospacedDigit())
                 .fontWeight(.medium)
-                .foregroundColor(countdownProgress > 0.3 ? .primary : .red)
+                .foregroundColor(countdownProgress > 0.3 ? Constants.Colors.textPrimary : .red)
         }
     }
 
@@ -148,10 +141,10 @@ struct IncomingPingView: View {
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
-                    .background(Color.warmCoral)
+                    .background(Constants.Colors.primary)
                     .foregroundColor(.white)
                     .cornerRadius(16)
-                    .shadow(color: Color.warmCoral.opacity(0.3), radius: 10, x: 0, y: 4)
+                    .shadow(color: Constants.Colors.primary.opacity(0.3), radius: 10, x: 0, y: 4)
             }
 
             // Not now button
@@ -161,7 +154,7 @@ struct IncomingPingView: View {
             } label: {
                 Text("Not now")
                     .font(.inter(16))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Constants.Colors.textSecondary)
                     .padding(.vertical, 10)
             }
         }

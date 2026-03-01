@@ -1,11 +1,5 @@
 import SwiftUI
 
-// MARK: - Design Constants
-
-private extension Color {
-    static let warmCoral = Color(red: 0.90, green: 0.45, blue: 0.35)
-}
-
 // MARK: - VoiceCallView
 
 struct VoiceCallView: View {
@@ -57,13 +51,13 @@ struct VoiceCallView: View {
             // Avatar
             ZStack {
                 Circle()
-                    .fill(Color.warmCoral.opacity(0.25))
+                    .fill(Constants.Colors.primary.opacity(0.25))
                     .frame(width: 90, height: 90)
 
                 Text(String(viewModel.otherUserName.prefix(1)).uppercased())
                     .font(.fraunces(34, weight: .bold))
                     .fontWeight(.bold)
-                    .foregroundColor(.warmCoral)
+                    .foregroundColor(Constants.Colors.primary)
             }
 
             // Name

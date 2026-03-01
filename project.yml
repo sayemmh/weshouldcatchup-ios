@@ -32,6 +32,7 @@ targets:
         MARKETING_VERSION: "1.0"
         PRODUCT_BUNDLE_IDENTIFIER: com.sayem.WeShouldCatchUp
         CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: 345UAJF999
     dependencies:
       - package: FirebaseSDK
         product: FirebaseAuth
@@ -54,6 +55,9 @@ targets:
           - remote-notification
           - voip
         NSMicrophoneUsageDescription: "We need microphone access for voice calls with your catch-up connections."
+        CFBundleURLTypes:
+          - CFBundleURLSchemes:
+              - "app-1-395053466295-ios-ff7c07b4d0594750418332"
         UIAppFonts:
           - Fraunces-Regular.ttf
           - Fraunces-Medium.ttf

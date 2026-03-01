@@ -1,12 +1,5 @@
 import SwiftUI
 
-// MARK: - Design Constants
-
-private extension Color {
-    static let warmCoral = Color(red: 0.90, green: 0.45, blue: 0.35)
-    static let warmCream = Color(red: 0.99, green: 0.97, blue: 0.94)
-}
-
 // MARK: - AcceptInviteView
 
 struct AcceptInviteView: View {
@@ -33,7 +26,7 @@ struct AcceptInviteView: View {
 
     var body: some View {
         ZStack {
-            Color.warmCream
+            Constants.Colors.background
                 .ignoresSafeArea()
 
             if showSuccess {
@@ -53,12 +46,12 @@ struct AcceptInviteView: View {
             // MARK: - Illustration
             ZStack {
                 Circle()
-                    .fill(Color.warmCoral.opacity(0.12))
+                    .fill(Constants.Colors.primary.opacity(0.12))
                     .frame(width: 110, height: 110)
 
                 Image(systemName: "person.crop.circle.badge.plus")
                     .font(.system(size: 50))
-                    .foregroundColor(.warmCoral)
+                    .foregroundColor(Constants.Colors.primary)
             }
 
             // MARK: - Headline
@@ -66,12 +59,12 @@ struct AcceptInviteView: View {
                 Text("\(inviterName) wants to catch up with you")
                     .font(.fraunces(22, weight: .medium))
                     .fontWeight(.bold)
-                    .foregroundColor(.primary)
+                    .foregroundColor(Constants.Colors.textPrimary)
                     .multilineTextAlignment(.center)
 
                 Text("whenever you're both free")
                     .font(.inter(16))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Constants.Colors.textSecondary)
             }
 
             Spacer()
@@ -100,7 +93,7 @@ struct AcceptInviteView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(isAccepting ? Color.gray.opacity(0.3) : Color.warmCoral)
+                    .background(isAccepting ? Color.gray.opacity(0.3) : Constants.Colors.primary)
                     .foregroundColor(.white)
                     .cornerRadius(14)
                 }
@@ -112,7 +105,7 @@ struct AcceptInviteView: View {
                 } label: {
                     Text("Nah")
                         .font(.inter(16))
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Constants.Colors.textSecondary)
                         .padding(.vertical, 8)
                 }
                 .disabled(isAccepting)
@@ -130,22 +123,22 @@ struct AcceptInviteView: View {
 
             ZStack {
                 Circle()
-                    .fill(Color.warmCoral.opacity(0.12))
+                    .fill(Constants.Colors.primary.opacity(0.12))
                     .frame(width: 100, height: 100)
 
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 52))
-                    .foregroundColor(.warmCoral)
+                    .foregroundColor(Constants.Colors.primary)
             }
 
             Text("Added to your queue!")
                 .font(.fraunces(22, weight: .medium))
                 .fontWeight(.bold)
-                .foregroundColor(.primary)
+                .foregroundColor(Constants.Colors.textPrimary)
 
             Text("Next time either of you taps \"I'm Free,\" we'll connect you.")
                 .font(.inter(16))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
 
             Spacer()

@@ -1,12 +1,5 @@
 import SwiftUI
 
-// MARK: - Design Constants
-
-private extension Color {
-    static let warmCoral = Color(red: 0.90, green: 0.45, blue: 0.35)
-    static let warmCream = Color(red: 0.99, green: 0.97, blue: 0.94)
-}
-
 // MARK: - LiveWaitingView
 
 struct LiveWaitingView: View {
@@ -20,7 +13,7 @@ struct LiveWaitingView: View {
 
     var body: some View {
         ZStack {
-            Color.warmCream
+            Constants.Colors.background
                 .ignoresSafeArea()
 
             VStack(spacing: 32) {
@@ -58,7 +51,7 @@ struct LiveWaitingView: View {
             // Pulsing circle animation
             ZStack {
                 Circle()
-                    .fill(Color.warmCoral.opacity(0.1))
+                    .fill(Constants.Colors.primary.opacity(0.1))
                     .frame(width: 160, height: 160)
                     .scaleEffect(pulseScale)
                     .opacity(pulseOpacity)
@@ -69,7 +62,7 @@ struct LiveWaitingView: View {
                     )
 
                 Circle()
-                    .fill(Color.warmCoral.opacity(0.2))
+                    .fill(Constants.Colors.primary.opacity(0.2))
                     .frame(width: 110, height: 110)
                     .scaleEffect(pulseScale * 0.95)
                     .opacity(pulseOpacity + 0.15)
@@ -81,7 +74,7 @@ struct LiveWaitingView: View {
                     )
 
                 Circle()
-                    .fill(Color.warmCoral)
+                    .fill(Constants.Colors.primary)
                     .frame(width: 70, height: 70)
 
                 Image(systemName: "hand.wave.fill")
@@ -96,12 +89,12 @@ struct LiveWaitingView: View {
             Text("Finding someone to catch up with...")
                 .font(.fraunces(22, weight: .medium))
                 .fontWeight(.semibold)
-                .foregroundColor(.primary)
+                .foregroundColor(Constants.Colors.textPrimary)
                 .multilineTextAlignment(.center)
 
             Text("Sit tight. We're checking your queue.")
                 .font(.inter(16))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
         }
     }
@@ -112,17 +105,17 @@ struct LiveWaitingView: View {
         VStack(spacing: 24) {
             Image(systemName: "moon.zzz.fill")
                 .font(.system(size: 56))
-                .foregroundColor(.secondary.opacity(0.5))
+                .foregroundColor(Constants.Colors.textSecondary.opacity(0.5))
 
             Text("No one's free right now.")
                 .font(.fraunces(22, weight: .medium))
                 .fontWeight(.semibold)
-                .foregroundColor(.primary)
+                .foregroundColor(Constants.Colors.textPrimary)
                 .multilineTextAlignment(.center)
 
             Text("We'll keep you live for a few more minutes in case someone pops in.")
                 .font(.inter(16))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -134,16 +127,16 @@ struct LiveWaitingView: View {
         VStack(spacing: 24) {
             Image(systemName: "clock.badge.xmark")
                 .font(.system(size: 56))
-                .foregroundColor(.secondary.opacity(0.5))
+                .foregroundColor(Constants.Colors.textSecondary.opacity(0.5))
 
             Text("No luck this time.")
                 .font(.fraunces(22, weight: .medium))
                 .fontWeight(.semibold)
-                .foregroundColor(.primary)
+                .foregroundColor(Constants.Colors.textPrimary)
 
             Text("Try again later!")
                 .font(.inter(16))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
 
             Button {
                 dismiss()
@@ -152,7 +145,7 @@ struct LiveWaitingView: View {
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.warmCoral)
+                    .background(Constants.Colors.primary)
                     .foregroundColor(.white)
                     .cornerRadius(14)
             }
@@ -179,7 +172,7 @@ struct LiveWaitingView: View {
                 Text("Never mind")
                     .fontWeight(.medium)
             }
-            .foregroundColor(.secondary)
+            .foregroundColor(Constants.Colors.textSecondary)
             .padding(.vertical, 12)
         }
         .disabled(isCancelling)

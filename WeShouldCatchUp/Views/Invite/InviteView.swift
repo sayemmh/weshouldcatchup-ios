@@ -1,13 +1,6 @@
 import SwiftUI
 import UIKit
 
-// MARK: - Design Constants
-
-private extension Color {
-    static let warmCoral = Color(red: 0.90, green: 0.45, blue: 0.35)
-    static let warmCream = Color(red: 0.99, green: 0.97, blue: 0.94)
-}
-
 // MARK: - InviteView
 
 struct InviteView: View {
@@ -24,7 +17,7 @@ struct InviteView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.warmCream
+                Constants.Colors.background
                     .ignoresSafeArea()
 
                 VStack(spacing: 32) {
@@ -53,7 +46,7 @@ struct InviteView: View {
                     Button("Close") {
                         dismiss()
                     }
-                    .foregroundColor(.warmCoral)
+                    .foregroundColor(Constants.Colors.primary)
                 }
             }
             .sheet(isPresented: $showShareSheet) {
@@ -71,12 +64,12 @@ struct InviteView: View {
     private var illustrationSection: some View {
         ZStack {
             Circle()
-                .fill(Color.warmCoral.opacity(0.12))
+                .fill(Constants.Colors.primary.opacity(0.12))
                 .frame(width: 120, height: 120)
 
             Image(systemName: "paperplane.fill")
                 .font(.system(size: 48))
-                .foregroundColor(.warmCoral)
+                .foregroundColor(Constants.Colors.primary)
         }
     }
 
@@ -87,12 +80,12 @@ struct InviteView: View {
             Text("Invite someone to catch up")
                 .font(.fraunces(22, weight: .medium))
                 .fontWeight(.bold)
-                .foregroundColor(.primary)
+                .foregroundColor(Constants.Colors.textPrimary)
                 .multilineTextAlignment(.center)
 
             Text("Send them a link. When you both have a free moment, the app connects you.")
                 .font(.inter(16))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -114,7 +107,7 @@ struct InviteView: View {
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(isCreatingLink ? Color.gray.opacity(0.3) : Color.warmCoral)
+            .background(isCreatingLink ? Color.gray.opacity(0.3) : Constants.Colors.primary)
             .foregroundColor(.white)
             .cornerRadius(14)
         }

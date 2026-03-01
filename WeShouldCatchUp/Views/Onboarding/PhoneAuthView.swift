@@ -1,12 +1,5 @@
 import SwiftUI
 
-// MARK: - Design Constants
-
-private extension Color {
-    static let warmCoral = Color(red: 0.90, green: 0.45, blue: 0.35)
-    static let warmCream = Color(red: 0.99, green: 0.97, blue: 0.94)
-}
-
 // MARK: - PhoneAuthView
 
 struct PhoneAuthView: View {
@@ -15,7 +8,7 @@ struct PhoneAuthView: View {
 
     var body: some View {
         ZStack {
-            Color.warmCream
+            Constants.Colors.background
                 .ignoresSafeArea()
 
             ScrollView {
@@ -40,16 +33,16 @@ struct PhoneAuthView: View {
         VStack(spacing: 12) {
             Image(systemName: "phone.bubble.fill")
                 .font(.system(size: 56))
-                .foregroundColor(.warmCoral)
+                .foregroundColor(Constants.Colors.primary)
 
             Text("Let's get you set up")
                 .font(.fraunces(28, weight: .semiBold))
                 .fontWeight(.bold)
-                .foregroundColor(.primary)
+                .foregroundColor(Constants.Colors.textPrimary)
 
             Text("We'll send you a code to verify your number.")
                 .font(.inter(16))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
         }
     }
@@ -61,6 +54,8 @@ struct PhoneAuthView: View {
             // Phone number (includes country code, e.g. "+1")
             TextField("Phone number", text: $viewModel.phoneNumber)
                 .keyboardType(.phonePad)
+                .foregroundColor(Constants.Colors.textPrimary)
+                .font(.inter(18))
                 .padding()
                 .background(Color.white)
                 .cornerRadius(12)
@@ -82,7 +77,7 @@ struct PhoneAuthView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(!viewModel.isLoading ? Color.warmCoral : Color.gray.opacity(0.3))
+                .background(!viewModel.isLoading ? Constants.Colors.primary : Color.gray.opacity(0.3))
                 .foregroundColor(.white)
                 .cornerRadius(14)
             }
@@ -96,13 +91,14 @@ struct PhoneAuthView: View {
         VStack(spacing: 20) {
             Text("Enter the 6-digit code we sent to \(viewModel.phoneNumber)")
                 .font(.inter(16))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
 
             TextField("000000", text: $viewModel.verificationCode)
                 .keyboardType(.numberPad)
                 .multilineTextAlignment(.center)
                 .font(.title2.monospacedDigit())
+                .foregroundColor(Constants.Colors.textPrimary)
                 .padding()
                 .background(Color.white)
                 .cornerRadius(12)
@@ -130,7 +126,7 @@ struct PhoneAuthView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(!viewModel.isLoading ? Color.warmCoral : Color.gray.opacity(0.3))
+                .background(!viewModel.isLoading ? Constants.Colors.primary : Color.gray.opacity(0.3))
                 .foregroundColor(.white)
                 .cornerRadius(14)
             }
@@ -143,7 +139,7 @@ struct PhoneAuthView: View {
             } label: {
                 Text("Use a different number")
                     .font(.inter(12))
-                    .foregroundColor(.warmCoral)
+                    .foregroundColor(Constants.Colors.primary)
             }
         }
     }

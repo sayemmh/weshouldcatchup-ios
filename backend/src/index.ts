@@ -1,3 +1,6 @@
+import "dotenv/config";
+import { readFileSync } from "fs";
+import { resolve } from "path";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import admin from "firebase-admin";
@@ -7,13 +10,19 @@ import callsRoutes from "./routes/calls.js";
 import catchupsRoutes from "./routes/catchups.js";
 import queueRoutes from "./routes/queue.js";
 import historyRoutes from "./routes/history.js";
+import profileRoutes from "./routes/profile.js";
 
 // ---------------------------------------------------------------------------
 // Firebase Admin Initialization
 // ---------------------------------------------------------------------------
 
+const serviceAccountPath = resolve(
+  process.env.GOOGLE_APPLICATION_CREDENTIALS || "./service-account.json",
+);
+const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, "utf-8"));
+
 admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
+  credential: admin.credential.cert(serviceAccount),
   projectId: process.env.FIREBASE_PROJECT_ID,
 });
 
@@ -39,6 +48,7 @@ await server.register(callsRoutes);
 await server.register(catchupsRoutes);
 await server.register(queueRoutes);
 await server.register(historyRoutes);
+await server.register(profileRoutes);
 
 // ---------------------------------------------------------------------------
 // Health check

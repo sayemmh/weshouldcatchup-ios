@@ -1,12 +1,5 @@
 import SwiftUI
 
-// MARK: - Design Constants
-
-private extension Color {
-    static let warmCoral = Color(red: 0.90, green: 0.45, blue: 0.35)
-    static let warmCream = Color(red: 0.99, green: 0.97, blue: 0.94)
-}
-
 // MARK: - CallEndedView
 
 struct CallEndedView: View {
@@ -22,7 +15,7 @@ struct CallEndedView: View {
 
     var body: some View {
         ZStack {
-            Color.warmCream
+            Constants.Colors.background
                 .ignoresSafeArea()
 
             VStack(spacing: 28) {
@@ -31,12 +24,12 @@ struct CallEndedView: View {
                 // MARK: - Check Icon
                 ZStack {
                     Circle()
-                        .fill(Color.warmCoral.opacity(0.12))
+                        .fill(Constants.Colors.primary.opacity(0.12))
                         .frame(width: 100, height: 100)
 
                     Image(systemName: "checkmark.circle.fill")
                         .font(.system(size: 52))
-                        .foregroundColor(.warmCoral)
+                        .foregroundColor(Constants.Colors.primary)
                 }
 
                 // MARK: - Summary Text
@@ -44,12 +37,12 @@ struct CallEndedView: View {
                     Text("You caught up with \(otherPersonName)")
                         .font(.fraunces(22, weight: .medium))
                         .fontWeight(.bold)
-                        .foregroundColor(.primary)
+                        .foregroundColor(Constants.Colors.textPrimary)
                         .multilineTextAlignment(.center)
 
                     Text("for \(formattedDuration)")
                         .font(.fraunces(20, weight: .medium))
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Constants.Colors.textSecondary)
                 }
 
                 Spacer()
@@ -63,7 +56,7 @@ struct CallEndedView: View {
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.warmCoral)
+                        .background(Constants.Colors.primary)
                         .foregroundColor(.white)
                         .cornerRadius(14)
                 }

@@ -1,12 +1,5 @@
 import SwiftUI
 
-// MARK: - Design Constants
-
-private extension Color {
-    static let warmCoral = Color(red: 0.90, green: 0.45, blue: 0.35)
-    static let warmCream = Color(red: 0.99, green: 0.97, blue: 0.94)
-}
-
 // MARK: - CallHistoryView
 
 struct CallHistoryView: View {
@@ -22,7 +15,7 @@ struct CallHistoryView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.warmCream
+                Constants.Colors.background
                     .ignoresSafeArea()
 
                 Group {
@@ -42,7 +35,7 @@ struct CallHistoryView: View {
                     Button("Close") {
                         dismiss()
                     }
-                    .foregroundColor(.warmCoral)
+                    .foregroundColor(Constants.Colors.primary)
                 }
             }
             .task {
@@ -58,7 +51,7 @@ struct CallHistoryView: View {
             ProgressView()
             Text("Loading call history...")
                 .font(.inter(12))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
         }
     }
 
@@ -68,16 +61,16 @@ struct CallHistoryView: View {
         VStack(spacing: 16) {
             Image(systemName: "phone.badge.waveform")
                 .font(.system(size: 48))
-                .foregroundColor(.secondary.opacity(0.4))
+                .foregroundColor(Constants.Colors.textSecondary.opacity(0.4))
 
             Text("No calls yet.")
                 .font(.fraunces(20, weight: .medium))
                 .fontWeight(.medium)
-                .foregroundColor(.primary)
+                .foregroundColor(Constants.Colors.textPrimary)
 
             Text("Tap I'm Free to get started.")
                 .font(.inter(16))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
         }
         .padding(.horizontal, 24)
     }
@@ -103,13 +96,13 @@ struct CallHistoryView: View {
             // Avatar
             ZStack {
                 Circle()
-                    .fill(Color.warmCoral.opacity(0.12))
+                    .fill(Constants.Colors.primary.opacity(0.12))
                     .frame(width: 42, height: 42)
 
                 Text(String(call.otherUser.name.prefix(1)).uppercased())
                     .font(.inter(16))
                     .fontWeight(.semibold)
-                    .foregroundColor(.warmCoral)
+                    .foregroundColor(Constants.Colors.primary)
             }
 
             // Details
@@ -117,17 +110,17 @@ struct CallHistoryView: View {
                 Text(call.otherUser.name)
                     .font(.inter(16))
                     .fontWeight(.medium)
-                    .foregroundColor(.primary)
+                    .foregroundColor(Constants.Colors.textPrimary)
 
                 HStack(spacing: 8) {
                     Text(formattedDate(call.startedAt))
                         .font(.inter(12))
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Constants.Colors.textSecondary)
 
                     if let duration = call.duration {
                         Text(formattedCallDuration(duration))
                             .font(.inter(12))
-                            .foregroundColor(.secondary)
+                            .foregroundColor(Constants.Colors.textSecondary)
                     }
                 }
             }
@@ -136,7 +129,7 @@ struct CallHistoryView: View {
 
             Image(systemName: "phone.fill")
                 .font(.inter(12))
-                .foregroundColor(.warmCoral.opacity(0.5))
+                .foregroundColor(Constants.Colors.primary.opacity(0.5))
         }
         .padding(.vertical, 10)
         .padding(.horizontal, 16)

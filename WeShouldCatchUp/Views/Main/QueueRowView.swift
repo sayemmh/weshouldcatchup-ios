@@ -1,12 +1,5 @@
 import SwiftUI
 
-// MARK: - Design Constants
-
-private extension Color {
-    static let warmCoral = Color(red: 0.90, green: 0.45, blue: 0.35)
-    static let warmCream = Color(red: 0.99, green: 0.97, blue: 0.94)
-}
-
 // MARK: - QueueRowView
 
 struct QueueRowView: View {
@@ -28,16 +21,16 @@ struct QueueRowView: View {
                 Text(item.otherUser.name)
                     .font(.inter(16))
                     .fontWeight(.medium)
-                    .foregroundColor(.primary)
+                    .foregroundColor(Constants.Colors.textPrimary)
 
                 HStack(spacing: 12) {
                     Label(timeSinceLastCall, systemImage: "clock")
                         .font(.inter(12))
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Constants.Colors.textSecondary)
 
                     Label(callCountLabel, systemImage: "phone.fill")
                         .font(.inter(12))
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Constants.Colors.textSecondary)
                 }
             }
 
@@ -45,7 +38,7 @@ struct QueueRowView: View {
 
             Image(systemName: "chevron.right")
                 .font(.inter(12))
-                .foregroundColor(.secondary.opacity(0.5))
+                .foregroundColor(Constants.Colors.textSecondary.opacity(0.5))
         }
         .padding(.vertical, 10)
         .padding(.horizontal, 16)
@@ -73,13 +66,13 @@ struct QueueRowView: View {
     private var avatarView: some View {
         ZStack {
             Circle()
-                .fill(Color.warmCoral.opacity(0.15))
+                .fill(Constants.Colors.primary.opacity(0.15))
                 .frame(width: 44, height: 44)
 
             Text(initials)
                 .font(.inter(16))
                 .fontWeight(.semibold)
-                .foregroundColor(.warmCoral)
+                .foregroundColor(Constants.Colors.primary)
         }
     }
 

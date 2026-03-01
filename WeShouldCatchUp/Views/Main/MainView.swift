@@ -1,12 +1,5 @@
 import SwiftUI
 
-// MARK: - Design Constants
-
-private extension Color {
-    static let warmCoral = Color(red: 0.90, green: 0.45, blue: 0.35)
-    static let warmCream = Color(red: 0.99, green: 0.97, blue: 0.94)
-}
-
 // MARK: - MainView
 
 struct MainView: View {
@@ -19,7 +12,7 @@ struct MainView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.warmCream
+                Constants.Colors.background
                     .ignoresSafeArea()
 
                 VStack(spacing: 0) {
@@ -39,6 +32,14 @@ struct MainView: View {
                     Text("We Should Catch Up")
                         .font(.fraunces(22, weight: .semiBold))
                         .foregroundColor(Constants.Colors.textPrimary)
+                }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        signOut()
+                    } label: {
+                        Image(systemName: "rectangle.portrait.and.arrow.right")
+                            .foregroundColor(Constants.Colors.textSecondary)
+                    }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -73,9 +74,9 @@ struct MainView: View {
             } label: {
                 ZStack {
                     Circle()
-                        .fill(Color.warmCoral)
+                        .fill(Constants.Colors.primary)
                         .frame(width: 120, height: 120)
-                        .shadow(color: Color.warmCoral.opacity(0.4), radius: 16, x: 0, y: 6)
+                        .shadow(color: Constants.Colors.primary.opacity(0.4), radius: 16, x: 0, y: 6)
 
                     VStack(spacing: 4) {
                         Image(systemName: "hand.wave.fill")
@@ -91,7 +92,7 @@ struct MainView: View {
 
             Text("Tap when you have a few minutes to chat")
                 .font(.inter(12))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
                 .padding(.bottom, 20)
         }
     }
@@ -103,7 +104,7 @@ struct MainView: View {
             if viewModel.isLoading {
                 Spacer()
                 ProgressView("Loading your queue...")
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Constants.Colors.textSecondary)
                 Spacer()
             } else if viewModel.queue.isEmpty {
                 emptyQueueView
@@ -121,15 +122,15 @@ struct MainView: View {
 
             Image(systemName: "person.2.slash")
                 .font(.system(size: 40))
-                .foregroundColor(.secondary.opacity(0.5))
+                .foregroundColor(Constants.Colors.textSecondary.opacity(0.5))
 
             Text("No one in your queue yet.")
                 .font(.inter(16))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
 
             Text("Invite someone to catch up.")
                 .font(.inter(12))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
 
             Button {
                 showInviteView = true
@@ -140,7 +141,7 @@ struct MainView: View {
                     .foregroundColor(.white)
                     .padding(.horizontal, 24)
                     .padding(.vertical, 12)
-                    .background(Color.warmCoral)
+                    .background(Constants.Colors.primary)
                     .cornerRadius(12)
             }
             .padding(.top, 8)
@@ -182,10 +183,19 @@ struct MainView: View {
                     Text("Call History")
                 }
                 .font(.inter(12))
-                .foregroundColor(.warmCoral)
+                .foregroundColor(Constants.Colors.primary)
                 .padding(.vertical, 12)
             }
         }
+    }
+
+    // MARK: - Sign Out
+
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+
+    private func signOut() {
+        try? AuthService.shared.signOut()
+        hasCompletedOnboarding = false
     }
 
     // MARK: - Error

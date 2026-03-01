@@ -1,13 +1,6 @@
 import SwiftUI
 import UserNotifications
 
-// MARK: - Design Constants
-
-private extension Color {
-    static let warmCoral = Color(red: 0.90, green: 0.45, blue: 0.35)
-    static let warmCream = Color(red: 0.99, green: 0.97, blue: 0.94)
-}
-
 // MARK: - NotificationPermissionView
 
 struct NotificationPermissionView: View {
@@ -20,7 +13,7 @@ struct NotificationPermissionView: View {
 
     var body: some View {
         ZStack {
-            Color.warmCream
+            Constants.Colors.background
                 .ignoresSafeArea()
 
             VStack(spacing: 36) {
@@ -55,12 +48,12 @@ struct NotificationPermissionView: View {
     private var illustrationSection: some View {
         ZStack {
             Circle()
-                .fill(Color.warmCoral.opacity(0.12))
+                .fill(Constants.Colors.primary.opacity(0.12))
                 .frame(width: 140, height: 140)
 
             Image(systemName: "bell.badge")
                 .font(.system(size: 60))
-                .foregroundColor(.warmCoral)
+                .foregroundColor(Constants.Colors.primary)
         }
     }
 
@@ -71,11 +64,11 @@ struct NotificationPermissionView: View {
             Text("Turn on notifications")
                 .font(.fraunces(28, weight: .semiBold))
                 .fontWeight(.bold)
-                .foregroundColor(.primary)
+                .foregroundColor(Constants.Colors.textPrimary)
 
             Text("This is how you'll know when a friend is free. Without notifications, the app can't work.")
                 .font(.inter(16))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -97,7 +90,7 @@ struct NotificationPermissionView: View {
                     Image(systemName: showWhySection ? "chevron.up" : "chevron.down")
                         .font(.inter(11))
                 }
-                .foregroundColor(.warmCoral)
+                .foregroundColor(Constants.Colors.primary)
             }
 
             if showWhySection {
@@ -126,11 +119,11 @@ struct NotificationPermissionView: View {
     private func whyRow(icon: String, text: String) -> some View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: icon)
-                .foregroundColor(.warmCoral)
+                .foregroundColor(Constants.Colors.primary)
                 .frame(width: 20)
             Text(text)
                 .font(.inter(12))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
@@ -145,7 +138,7 @@ struct NotificationPermissionView: View {
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.warmCoral)
+                .background(Constants.Colors.primary)
                 .foregroundColor(.white)
                 .cornerRadius(14)
         }
@@ -157,7 +150,7 @@ struct NotificationPermissionView: View {
         VStack(spacing: 8) {
             Text("Notifications were denied. Please enable them in Settings for the app to work properly.")
                 .font(.inter(12))
-                .foregroundColor(.secondary)
+                .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
 
             Button {
@@ -168,7 +161,7 @@ struct NotificationPermissionView: View {
                 Text("Open Settings")
                     .font(.inter(12))
                     .fontWeight(.medium)
-                    .foregroundColor(.warmCoral)
+                    .foregroundColor(Constants.Colors.primary)
             }
         }
         .padding(.bottom, 8)

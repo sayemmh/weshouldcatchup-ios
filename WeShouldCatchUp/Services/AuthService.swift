@@ -44,17 +44,15 @@ final class AuthService: ObservableObject {
 
     func sendVerificationCode(phoneNumber: String) async throws {
         #if targetEnvironment(simulator)
-        // Firebase Phone Auth crashes on simulator due to missing APNs.
-        // Sign in anonymously instead so we can test the rest of the app.
+        // Firebase Phone Auth crashes on simulator (no APNs).
+        // Bypass with anonymous auth for dev. Real phone auth works on device.
         let result = try await Auth.auth().signInAnonymously()
         await MainActor.run {
             self.isAuthenticated = true
             self.currentUserId = result.user.uid
             self.verificationId = "simulator-bypass"
         }
-        return
         #else
-        Auth.auth().settings?.isAppVerificationDisabledForTesting = false
         let id = try await PhoneAuthProvider.provider().verifyPhoneNumber(
             phoneNumber,
             uiDelegate: nil
@@ -67,7 +65,7 @@ final class AuthService: ObservableObject {
 
     func verifyCode(code: String) async throws {
         #if targetEnvironment(simulator)
-        // Already signed in via anonymous auth in sendVerificationCode.
+        // Already signed in via anonymous auth.
         return
         #else
         guard let verificationId = verificationId else {

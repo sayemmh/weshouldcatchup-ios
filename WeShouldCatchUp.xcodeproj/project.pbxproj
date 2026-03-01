@@ -318,6 +318,7 @@
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					30FBAEC2041118BED384D27C = {
+						DevelopmentTeam = 345UAJF999;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -474,6 +475,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 345UAJF999;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeShouldCatchUp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "We Should Catch Up";
@@ -500,6 +502,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 345UAJF999;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeShouldCatchUp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "We Should Catch Up";

@@ -18,6 +18,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
+
+        // Register for remote notifications early so the APNs token
+        // is available before Firebase Phone Auth needs it.
+        application.registerForRemoteNotifications()
+
         return true
     }
 
@@ -27,6 +32,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
     ) {
+        // Pass token to Firebase Auth (needed for phone auth silent push verification)
+        Auth.auth().setAPNSToken(deviceToken, type: .unknown)
+        // Pass token to FCM for push notifications
         Messaging.messaging().apnsToken = deviceToken
     }
 
@@ -35,6 +43,21 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         didFailToRegisterForRemoteNotificationsWithError error: Error
     ) {
         print("Failed to register for remote notifications: \(error.localizedDescription)")
+    }
+
+    // MARK: - Silent Push (Firebase Auth phone verification)
+
+    func application(
+        _ application: UIApplication,
+        didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+        fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
+    ) {
+        // Let Firebase Auth handle its silent push verification
+        if Auth.auth().canHandleNotification(userInfo) {
+            completionHandler(.noData)
+            return
+        }
+        completionHandler(.noData)
     }
 }
 
