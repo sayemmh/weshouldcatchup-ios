@@ -95,6 +95,7 @@ struct LiveWaitingView: View {
             let name = viewModel.connectedOtherUserName ?? "Someone"
             activeCallVM = CallViewModel(otherUserName: name, callId: callId, agoraChannel: channel, agoraToken: token)
         }
+    }
 
     // MARK: - Searching Content
 
