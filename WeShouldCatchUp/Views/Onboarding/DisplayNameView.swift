@@ -74,7 +74,7 @@ struct DisplayNameView: View {
     private var headerSection: some View {
         VStack(spacing: 12) {
             Image(systemName: "person.crop.circle.badge.plus")
-                .font(.system(size: 52))
+                .font(.system(size: 52, weight: .thin))
                 .foregroundColor(Constants.Colors.primary)
 
             Text("What should we call you?")
@@ -83,7 +83,7 @@ struct DisplayNameView: View {
                 .foregroundColor(Constants.Colors.textPrimary)
 
             Text("Just your first name is fine")
-                .font(.inter(16))
+                .font(.fraunces(16, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
         }
     }
@@ -112,7 +112,7 @@ struct DisplayNameView: View {
     private var errorSection: some View {
         if let errorMessage = viewModel.errorMessage {
             Text(errorMessage)
-                .font(.inter(12))
+                .font(.fraunces(13, weight: .regular))
                 .foregroundColor(.red)
                 .multilineTextAlignment(.center)
         }
@@ -134,7 +134,7 @@ struct DisplayNameView: View {
                         .tint(.white)
                 }
                 Text(viewModel.isSaving ? "Saving..." : "Let's go")
-                    .fontWeight(.semibold)
+                    .font(.fraunces(16, weight: .semiBold))
             }
             .frame(maxWidth: .infinity)
             .padding()

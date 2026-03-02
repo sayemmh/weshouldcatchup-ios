@@ -50,7 +50,7 @@ struct AcceptInviteView: View {
                     .frame(width: 110, height: 110)
 
                 Image(systemName: "person.crop.circle.badge.plus")
-                    .font(.system(size: 50))
+                    .font(.system(size: 50, weight: .thin))
                     .foregroundColor(Constants.Colors.primary)
             }
 
@@ -63,7 +63,7 @@ struct AcceptInviteView: View {
                     .multilineTextAlignment(.center)
 
                 Text("whenever you're both free")
-                    .font(.inter(16))
+                    .font(.fraunces(16, weight: .regular))
                     .foregroundColor(Constants.Colors.textSecondary)
             }
 
@@ -72,7 +72,7 @@ struct AcceptInviteView: View {
             // MARK: - Error
             if let errorMessage = errorMessage {
                 Text(errorMessage)
-                    .font(.inter(12))
+                    .font(.fraunces(13, weight: .regular))
                     .foregroundColor(.red)
                     .multilineTextAlignment(.center)
             }
@@ -89,7 +89,7 @@ struct AcceptInviteView: View {
                                 .tint(.white)
                         }
                         Text(isAccepting ? "Joining..." : "I'm down")
-                            .fontWeight(.semibold)
+                            .font(.fraunces(16, weight: .semiBold))
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -104,7 +104,7 @@ struct AcceptInviteView: View {
                     onDeclined()
                 } label: {
                     Text("Nah")
-                        .font(.inter(16))
+                        .font(.fraunces(16, weight: .regular))
                         .foregroundColor(Constants.Colors.textSecondary)
                         .padding(.vertical, 8)
                 }
@@ -126,8 +126,8 @@ struct AcceptInviteView: View {
                     .fill(Constants.Colors.primary.opacity(0.12))
                     .frame(width: 100, height: 100)
 
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 52))
+                Image(systemName: "checkmark.circle")
+                    .font(.system(size: 52, weight: .thin))
                     .foregroundColor(Constants.Colors.primary)
             }
 
@@ -137,7 +137,7 @@ struct AcceptInviteView: View {
                 .foregroundColor(Constants.Colors.textPrimary)
 
             Text("Next time either of you taps \"I'm Free,\" we'll connect you.")
-                .font(.inter(16))
+                .font(.fraunces(16, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
 

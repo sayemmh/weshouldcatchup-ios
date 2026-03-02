@@ -31,8 +31,8 @@ struct PhoneAuthView: View {
 
     private var headerSection: some View {
         VStack(spacing: 12) {
-            Image(systemName: "phone.bubble.fill")
-                .font(.system(size: 56))
+            Image(systemName: "phone.bubble")
+                .font(.system(size: 56, weight: .thin))
                 .foregroundColor(Constants.Colors.primary)
 
             Text("Let's get you set up")
@@ -41,7 +41,7 @@ struct PhoneAuthView: View {
                 .foregroundColor(Constants.Colors.textPrimary)
 
             Text("We'll send you a code to verify your number.")
-                .font(.inter(16))
+                .font(.fraunces(16, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
         }
@@ -55,7 +55,7 @@ struct PhoneAuthView: View {
             TextField("Phone number", text: $viewModel.phoneNumber)
                 .keyboardType(.phonePad)
                 .foregroundColor(Constants.Colors.textPrimary)
-                .font(.inter(18))
+                .font(.fraunces(18, weight: .regular))
                 .padding()
                 .background(Color.white)
                 .cornerRadius(12)
@@ -73,7 +73,7 @@ struct PhoneAuthView: View {
                             .tint(.white)
                     }
                     Text(viewModel.isLoading ? "Sending..." : "Send Code")
-                        .fontWeight(.semibold)
+                        .font(.fraunces(16, weight: .semiBold))
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
@@ -90,7 +90,7 @@ struct PhoneAuthView: View {
     private var verificationSection: some View {
         VStack(spacing: 20) {
             Text("Enter the 6-digit code we sent to \(viewModel.phoneNumber)")
-                .font(.inter(16))
+                .font(.fraunces(16, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
 
@@ -122,7 +122,7 @@ struct PhoneAuthView: View {
                             .tint(.white)
                     }
                     Text(viewModel.isLoading ? "Verifying..." : "Verify")
-                        .fontWeight(.semibold)
+                        .font(.fraunces(16, weight: .semiBold))
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
@@ -138,7 +138,7 @@ struct PhoneAuthView: View {
                 viewModel.errorMessage = nil
             } label: {
                 Text("Use a different number")
-                    .font(.inter(12))
+                    .font(.fraunces(13, weight: .regular))
                     .foregroundColor(Constants.Colors.primary)
             }
         }
@@ -150,7 +150,7 @@ struct PhoneAuthView: View {
     private var errorSection: some View {
         if let errorMessage = viewModel.errorMessage {
             Text(errorMessage)
-                .font(.inter(12))
+                .font(.fraunces(13, weight: .regular))
                 .foregroundColor(.red)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)

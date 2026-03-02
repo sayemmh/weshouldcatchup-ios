@@ -27,8 +27,8 @@ struct CallEndedView: View {
                         .fill(Constants.Colors.primary.opacity(0.12))
                         .frame(width: 100, height: 100)
 
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 52))
+                    Image(systemName: "checkmark.circle")
+                        .font(.system(size: 52, weight: .thin))
                         .foregroundColor(Constants.Colors.primary)
                 }
 
@@ -52,8 +52,7 @@ struct CallEndedView: View {
                     onDismiss()
                 } label: {
                     Text("Nice.")
-                        .font(.fraunces(20, weight: .medium))
-                        .fontWeight(.semibold)
+                        .font(.fraunces(20, weight: .semiBold))
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Constants.Colors.primary)

@@ -29,7 +29,7 @@ targets:
         INFOPLIST_KEY_CFBundleDisplayName: "WSCU"
         SWIFT_EMIT_LOC_STRINGS: true
         GENERATE_INFOPLIST_FILE: true
-        CURRENT_PROJECT_VERSION: 2
+        CURRENT_PROJECT_VERSION: 3
         MARKETING_VERSION: "1.0"
         PRODUCT_BUNDLE_IDENTIFIER: com.sayem.WeShouldCatchUp
         CODE_SIGN_STYLE: Automatic

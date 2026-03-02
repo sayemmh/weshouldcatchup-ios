@@ -67,8 +67,8 @@ struct InviteView: View {
                 .fill(Constants.Colors.primary.opacity(0.12))
                 .frame(width: 120, height: 120)
 
-            Image(systemName: "paperplane.fill")
-                .font(.system(size: 48))
+            Image(systemName: "paperplane")
+                .font(.system(size: 48, weight: .thin))
                 .foregroundColor(Constants.Colors.primary)
         }
     }
@@ -84,7 +84,7 @@ struct InviteView: View {
                 .multilineTextAlignment(.center)
 
             Text("Send them a link. When you both have a free moment, the app connects you.")
-                .font(.inter(16))
+                .font(.fraunces(16, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
@@ -103,7 +103,7 @@ struct InviteView: View {
                         .tint(.white)
                 }
                 Text(isCreatingLink ? "Creating link..." : "Share Invite Link")
-                    .fontWeight(.semibold)
+                    .font(.fraunces(16, weight: .semiBold))
             }
             .frame(maxWidth: .infinity)
             .padding()
@@ -120,7 +120,7 @@ struct InviteView: View {
     private var errorSection: some View {
         if let errorMessage = errorMessage {
             Text(errorMessage)
-                .font(.inter(12))
+                .font(.fraunces(13, weight: .regular))
                 .foregroundColor(.red)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)

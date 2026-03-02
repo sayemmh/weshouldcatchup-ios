@@ -19,17 +19,16 @@ struct QueueRowView: View {
             // MARK: - Info
             VStack(alignment: .leading, spacing: 4) {
                 Text(item.otherUser.name)
-                    .font(.inter(16))
-                    .fontWeight(.medium)
+                    .font(.fraunces(16, weight: .medium))
                     .foregroundColor(Constants.Colors.textPrimary)
 
                 HStack(spacing: 12) {
                     Label(timeSinceLastCall, systemImage: "clock")
-                        .font(.inter(12))
+                        .font(.fraunces(12, weight: .regular))
                         .foregroundColor(Constants.Colors.textSecondary)
 
-                    Label(callCountLabel, systemImage: "phone.fill")
-                        .font(.inter(12))
+                    Label(callCountLabel, systemImage: "phone")
+                        .font(.fraunces(12, weight: .regular))
                         .foregroundColor(Constants.Colors.textSecondary)
                 }
             }
@@ -37,7 +36,7 @@ struct QueueRowView: View {
             Spacer()
 
             Image(systemName: "chevron.right")
-                .font(.inter(12))
+                .font(.system(size: 12, weight: .light))
                 .foregroundColor(Constants.Colors.textSecondary.opacity(0.5))
         }
         .padding(.vertical, 10)
@@ -70,8 +69,7 @@ struct QueueRowView: View {
                 .frame(width: 44, height: 44)
 
             Text(initials)
-                .font(.inter(16))
-                .fontWeight(.semibold)
+                .font(.fraunces(16, weight: .semiBold))
                 .foregroundColor(Constants.Colors.primary)
         }
     }

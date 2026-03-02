@@ -130,8 +130,8 @@ struct LiveWaitingView: View {
                     .fill(Constants.Colors.primary)
                     .frame(width: 70, height: 70)
 
-                Image(systemName: "hand.wave.fill")
-                    .font(.fraunces(28, weight: .semiBold))
+                Image(systemName: "hand.wave")
+                    .font(.system(size: 28, weight: .medium))
                     .foregroundColor(.white)
             }
             .onAppear {
@@ -140,13 +140,12 @@ struct LiveWaitingView: View {
             }
 
             Text("Finding someone to catch up with...")
-                .font(.fraunces(22, weight: .medium))
-                .fontWeight(.semibold)
+                .font(.fraunces(22, weight: .semiBold))
                 .foregroundColor(Constants.Colors.textPrimary)
                 .multilineTextAlignment(.center)
 
             Text("Sit tight. We're checking your queue.")
-                .font(.inter(16))
+                .font(.fraunces(16, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
         }
@@ -156,18 +155,17 @@ struct LiveWaitingView: View {
 
     private var queueExhaustedContent: some View {
         VStack(spacing: 24) {
-            Image(systemName: "moon.zzz.fill")
-                .font(.system(size: 56))
+            Image(systemName: "moon.zzz")
+                .font(.system(size: 56, weight: .thin))
                 .foregroundColor(Constants.Colors.textSecondary.opacity(0.5))
 
             Text("No one's free right now.")
-                .font(.fraunces(22, weight: .medium))
-                .fontWeight(.semibold)
+                .font(.fraunces(22, weight: .semiBold))
                 .foregroundColor(Constants.Colors.textPrimary)
                 .multilineTextAlignment(.center)
 
             Text("We'll keep you live for a few more minutes in case someone pops in.")
-                .font(.inter(16))
+                .font(.fraunces(16, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
@@ -178,24 +176,23 @@ struct LiveWaitingView: View {
 
     private var expiredContent: some View {
         VStack(spacing: 24) {
-            Image(systemName: "clock.badge.xmark")
-                .font(.system(size: 56))
+            Image(systemName: "clock")
+                .font(.system(size: 56, weight: .thin))
                 .foregroundColor(Constants.Colors.textSecondary.opacity(0.5))
 
             Text("No luck this time.")
-                .font(.fraunces(22, weight: .medium))
-                .fontWeight(.semibold)
+                .font(.fraunces(22, weight: .semiBold))
                 .foregroundColor(Constants.Colors.textPrimary)
 
             Text("Try again later!")
-                .font(.inter(16))
+                .font(.fraunces(16, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
 
             Button {
                 dismiss()
             } label: {
                 Text("Back to Home")
-                    .fontWeight(.semibold)
+                    .font(.fraunces(16, weight: .semiBold))
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Constants.Colors.primary)
@@ -223,7 +220,7 @@ struct LiveWaitingView: View {
                         .tint(.secondary)
                 }
                 Text("Never mind")
-                    .fontWeight(.medium)
+                    .font(.fraunces(16, weight: .medium))
             }
             .foregroundColor(Constants.Colors.textSecondary)
             .padding(.vertical, 12)

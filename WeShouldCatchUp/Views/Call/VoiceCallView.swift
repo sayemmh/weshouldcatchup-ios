@@ -119,7 +119,7 @@ struct VoiceCallView: View {
                 }
 
                 Text(label)
-                    .font(.inter(11))
+                    .font(.fraunces(11, weight: .regular))
                     .foregroundColor(.white.opacity(0.6))
             }
         }
@@ -153,7 +153,7 @@ struct VoiceCallView: View {
                 }
 
                 Text("End")
-                    .font(.inter(11))
+                    .font(.fraunces(11, weight: .regular))
                     .foregroundColor(.white.opacity(0.6))
             }
         }

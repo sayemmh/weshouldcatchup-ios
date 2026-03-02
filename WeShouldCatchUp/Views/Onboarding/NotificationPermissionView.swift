@@ -51,8 +51,8 @@ struct NotificationPermissionView: View {
                 .fill(Constants.Colors.primary.opacity(0.12))
                 .frame(width: 140, height: 140)
 
-            Image(systemName: "bell.badge")
-                .font(.system(size: 60))
+            Image(systemName: "bell")
+                .font(.system(size: 60, weight: .thin))
                 .foregroundColor(Constants.Colors.primary)
         }
     }
@@ -67,7 +67,7 @@ struct NotificationPermissionView: View {
                 .foregroundColor(Constants.Colors.textPrimary)
 
             Text("This is how you'll know when a friend is free. Without notifications, the app can't work.")
-                .font(.inter(16))
+                .font(.fraunces(16, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
@@ -85,10 +85,9 @@ struct NotificationPermissionView: View {
             } label: {
                 HStack(spacing: 6) {
                     Text("Why?")
-                        .font(.inter(12))
-                        .fontWeight(.medium)
+                        .font(.fraunces(13, weight: .medium))
                     Image(systemName: showWhySection ? "chevron.up" : "chevron.down")
-                        .font(.inter(11))
+                        .font(.system(size: 11, weight: .light))
                 }
                 .foregroundColor(Constants.Colors.primary)
             }
@@ -96,15 +95,15 @@ struct NotificationPermissionView: View {
             if showWhySection {
                 VStack(alignment: .leading, spacing: 10) {
                     whyRow(
-                        icon: "person.2.fill",
+                        icon: "person.2",
                         text: "When a friend taps \"I'm Free,\" we need to let you know right away."
                     )
                     whyRow(
-                        icon: "clock.fill",
+                        icon: "clock",
                         text: "Catch-up windows are short. If you miss the notification, you miss the call."
                     )
                     whyRow(
-                        icon: "hand.wave.fill",
+                        icon: "hand.wave",
                         text: "This is the core of the app. No notifications means no catch-ups."
                     )
                 }
@@ -122,7 +121,7 @@ struct NotificationPermissionView: View {
                 .foregroundColor(Constants.Colors.primary)
                 .frame(width: 20)
             Text(text)
-                .font(.inter(12))
+                .font(.fraunces(13, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -135,7 +134,7 @@ struct NotificationPermissionView: View {
             requestNotificationPermission()
         } label: {
             Text("Enable Notifications")
-                .fontWeight(.semibold)
+                .font(.fraunces(16, weight: .semiBold))
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Constants.Colors.primary)
@@ -149,7 +148,7 @@ struct NotificationPermissionView: View {
     private var deniedMessage: some View {
         VStack(spacing: 8) {
             Text("Notifications were denied. Please enable them in Settings for the app to work properly.")
-                .font(.inter(12))
+                .font(.fraunces(13, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
 
@@ -159,8 +158,7 @@ struct NotificationPermissionView: View {
                 }
             } label: {
                 Text("Open Settings")
-                    .font(.inter(12))
-                    .fontWeight(.medium)
+                    .font(.fraunces(13, weight: .medium))
                     .foregroundColor(Constants.Colors.primary)
             }
         }

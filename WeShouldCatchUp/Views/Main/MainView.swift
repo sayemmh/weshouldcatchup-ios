@@ -79,11 +79,10 @@ struct MainView: View {
                         .shadow(color: Constants.Colors.primary.opacity(0.4), radius: 16, x: 0, y: 6)
 
                     VStack(spacing: 4) {
-                        Image(systemName: "hand.wave.fill")
+                        Image(systemName: "hand.wave")
                             .font(.fraunces(28, weight: .semiBold))
                         Text("I'm Free")
-                            .font(.inter(16))
-                            .fontWeight(.semibold)
+                            .font(.fraunces(16, weight: .semiBold))
                     }
                     .foregroundColor(.white)
                 }
@@ -91,7 +90,7 @@ struct MainView: View {
             .padding(.top, 24)
 
             Text("Tap when you have a few minutes to chat")
-                .font(.inter(12))
+                .font(.fraunces(13, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .padding(.bottom, 20)
         }
@@ -120,24 +119,23 @@ struct MainView: View {
         VStack(spacing: 16) {
             Spacer()
 
-            Image(systemName: "person.2.slash")
-                .font(.system(size: 40))
+            Image(systemName: "person.2")
+                .font(.system(size: 40, weight: .light))
                 .foregroundColor(Constants.Colors.textSecondary.opacity(0.5))
 
             Text("No one in your queue yet.")
-                .font(.inter(16))
+                .font(.fraunces(16, weight: .medium))
                 .foregroundColor(Constants.Colors.textSecondary)
 
             Text("Invite someone to catch up.")
-                .font(.inter(12))
+                .font(.fraunces(13, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
 
             Button {
                 showInviteView = true
             } label: {
-                Label("Invite a friend", systemImage: "paperplane.fill")
-                    .font(.inter(16))
-                    .fontWeight(.medium)
+                Label("Invite a friend", systemImage: "paperplane")
+                    .font(.fraunces(16, weight: .medium))
                     .foregroundColor(.white)
                     .padding(.horizontal, 24)
                     .padding(.vertical, 12)
@@ -182,7 +180,7 @@ struct MainView: View {
                     Image(systemName: "clock.arrow.circlepath")
                     Text("Call History")
                 }
-                .font(.inter(12))
+                .font(.fraunces(13, weight: .regular))
                 .foregroundColor(Constants.Colors.primary)
                 .padding(.vertical, 12)
             }
@@ -204,7 +202,7 @@ struct MainView: View {
     private var errorSection: some View {
         if let errorMessage = viewModel.errorMessage {
             Text(errorMessage)
-                .font(.inter(12))
+                .font(.fraunces(13, weight: .regular))
                 .foregroundColor(.red)
                 .padding(.horizontal, 24)
         }

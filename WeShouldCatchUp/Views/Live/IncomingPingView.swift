@@ -86,7 +86,7 @@ struct IncomingPingView: View {
             .multilineTextAlignment(.center)
 
             Text("\u{1F44B}")
-                .font(.system(size: 40))
+                .font(.system(size: 36))
                 .offset(x: waveOffset)
                 .animation(
                     .easeInOut(duration: 0.4)
@@ -137,8 +137,7 @@ struct IncomingPingView: View {
                 onAccept()
             } label: {
                 Text("Join")
-                    .font(.fraunces(20, weight: .medium))
-                    .fontWeight(.semibold)
+                    .font(.fraunces(20, weight: .semiBold))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
                     .background(Constants.Colors.primary)
@@ -153,7 +152,7 @@ struct IncomingPingView: View {
                 onDecline()
             } label: {
                 Text("Not now")
-                    .font(.inter(16))
+                    .font(.fraunces(16, weight: .regular))
                     .foregroundColor(Constants.Colors.textSecondary)
                     .padding(.vertical, 10)
             }
