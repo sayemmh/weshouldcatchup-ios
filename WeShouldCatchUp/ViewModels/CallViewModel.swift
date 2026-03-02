@@ -3,7 +3,9 @@ import Combine
 
 /// Manages an active voice call session.
 @MainActor
-class CallViewModel: ObservableObject {
+class CallViewModel: ObservableObject, Identifiable {
+
+    let id = UUID()
 
     // MARK: - Published State
 

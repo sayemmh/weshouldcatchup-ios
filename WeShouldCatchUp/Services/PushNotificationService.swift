@@ -10,7 +10,10 @@ import UserNotifications
 /// Represents the different types of push notifications the app can receive.
 enum PushNotificationType {
     /// A catch-up partner has gone live and is pinging the user for a call.
-    case catchUpPing(fromUserId: String, catchupId: String, callId: String)
+    case catchUpPing(fromUserId: String, fromUserName: String, catchupId: String, callId: String)
+
+    /// Someone accepted the ping — User A should join the call.
+    case callReady(fromUserId: String, fromUserName: String, catchupId: String, callId: String)
 
     /// A catch-up invite has been accepted by the other user.
     case inviteAccepted(catchupId: String)
@@ -93,16 +96,29 @@ final class PushNotificationService: NSObject {
         }
 
         switch type {
-        case "catchup_ping":
+        case "catch_up_ping":
             guard
                 let fromUserId = userInfo["fromUserId"] as? String,
                 let catchupId = userInfo["catchupId"] as? String,
                 let callId = userInfo["callId"] as? String
             else {
-                print("[PushNotificationService] catchup_ping payload missing required fields.")
+                print("[PushNotificationService] catch_up_ping payload missing required fields.")
                 return nil
             }
-            return .catchUpPing(fromUserId: fromUserId, catchupId: catchupId, callId: callId)
+            let fromUserName = userInfo["fromUserName"] as? String ?? "Someone"
+            return .catchUpPing(fromUserId: fromUserId, fromUserName: fromUserName, catchupId: catchupId, callId: callId)
+
+        case "call_ready":
+            guard
+                let fromUserId = userInfo["fromUserId"] as? String,
+                let catchupId = userInfo["catchupId"] as? String,
+                let callId = userInfo["callId"] as? String
+            else {
+                print("[PushNotificationService] call_ready payload missing required fields.")
+                return nil
+            }
+            let fromUserName = userInfo["fromUserName"] as? String ?? "Someone"
+            return .callReady(fromUserId: fromUserId, fromUserName: fromUserName, catchupId: catchupId, callId: callId)
 
         case "invite_accepted":
             guard let catchupId = userInfo["catchupId"] as? String else {

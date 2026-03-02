@@ -112,13 +112,25 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
     private func handlePushType(_ type: PushNotificationType) {
         switch type {
-        case .catchUpPing(let fromUserId, let catchupId, let callId):
-            // Post notification so the active view can respond.
+        case .catchUpPing(let fromUserId, let fromUserName, let catchupId, let callId):
             NotificationCenter.default.post(
                 name: .incomingCatchUpPing,
                 object: nil,
                 userInfo: [
                     "fromUserId": fromUserId,
+                    "fromUserName": fromUserName,
+                    "catchupId": catchupId,
+                    "callId": callId
+                ]
+            )
+
+        case .callReady(let fromUserId, let fromUserName, let catchupId, let callId):
+            NotificationCenter.default.post(
+                name: .callReady,
+                object: nil,
+                userInfo: [
+                    "fromUserId": fromUserId,
+                    "fromUserName": fromUserName,
                     "catchupId": catchupId,
                     "callId": callId
                 ]
@@ -138,5 +150,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 extension Notification.Name {
     static let incomingCatchUpPing = Notification.Name("incomingCatchUpPing")
+    static let callReady = Notification.Name("callReady")
     static let catchUpInviteAccepted = Notification.Name("catchUpInviteAccepted")
 }

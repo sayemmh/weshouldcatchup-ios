@@ -10,6 +10,7 @@ struct LiveWaitingView: View {
     @State private var pulseScale: CGFloat = 1.0
     @State private var pulseOpacity: Double = 0.6
     @State private var isCancelling: Bool = false
+    @State private var activeCallVM: CallViewModel?
 
     var body: some View {
         ZStack {
@@ -42,7 +43,58 @@ struct LiveWaitingView: View {
         .task {
             await viewModel.goLive()
         }
-    }
+        .onAppear {
+            LiveViewModel.isActive = true
+        }
+        .onDisappear {
+            LiveViewModel.isActive = false
+        }
+        // Incoming ping (mutual-live: someone pings while we're searching)
+        .fullScreenCover(isPresented: $viewModel.showIncomingPing) {
+            IncomingPingView(
+                callerName: viewModel.incomingPingFromName ?? "Someone",
+                catchupId: viewModel.incomingPingCatchupId ?? "",
+                callId: viewModel.incomingPingCallId ?? "",
+                onAccept: {
+                    Task { await viewModel.acceptPing() }
+                },
+                onDecline: {
+                    viewModel.declinePing()
+                }
+            )
+        }
+        // Voice call (triggered when Agora credentials arrive)
+        .fullScreenCover(item: $activeCallVM) { callVM in
+            VoiceCallView(viewModel: callVM, onCallEnded: { name, duration in
+                activeCallVM = nil
+                viewModel.connectedCallId = nil
+                viewModel.connectedAgoraChannel = nil
+                viewModel.connectedAgoraToken = nil
+                viewModel.connectedOtherUserName = nil
+                viewModel.callEndedName = name
+                viewModel.callEndedDuration = duration
+                viewModel.showCallEnded = true
+            })
+        }
+        // Call ended summary
+        .fullScreenCover(isPresented: $viewModel.showCallEnded) {
+            CallEndedView(
+                otherPersonName: viewModel.callEndedName,
+                durationSeconds: viewModel.callEndedDuration,
+                onDismiss: {
+                    viewModel.showCallEnded = false
+                    dismiss()
+                }
+            )
+        }
+        .onChange(of: viewModel.connectedCallId) { newCallId in
+            guard let callId = newCallId,
+                  let channel = viewModel.connectedAgoraChannel,
+                  let token = viewModel.connectedAgoraToken
+            else { return }
+            let name = viewModel.connectedOtherUserName ?? "Someone"
+            activeCallVM = CallViewModel(otherUserName: name, callId: callId, agoraChannel: channel, agoraToken: token)
+        }
 
     // MARK: - Searching Content
 

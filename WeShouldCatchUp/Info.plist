@@ -29,6 +29,10 @@
 	<string>1</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need microphone access for voice calls with your catch-up connections.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera access is included by the voice SDK but is not used by this app.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Local network access is used to optimize voice call quality.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Fraunces-Regular.ttf</string>

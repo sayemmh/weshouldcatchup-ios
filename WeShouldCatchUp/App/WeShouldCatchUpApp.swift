@@ -26,20 +26,101 @@ struct RootView: View {
 
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
 
+    // MARK: - Global Incoming Ping State
+
+    @State private var showGlobalIncomingPing = false
+    @State private var globalPingFromName: String = ""
+    @State private var globalPingCatchupId: String = ""
+    @State private var globalPingCallId: String = ""
+
+    // MARK: - Global Voice Call State
+
+    @State private var globalCallVM: CallViewModel?
+
+    // MARK: - Global Call Ended State
+
+    @State private var showGlobalCallEnded = false
+    @State private var globalCallEndedName: String = ""
+    @State private var globalCallEndedDuration: Int = 0
+
     var body: some View {
-        if !authService.isAuthenticated || !hasCompletedOnboarding {
-            OnboardingFlow(onComplete: {
-                hasCompletedOnboarding = true
-            })
-        } else if let catchupId = deepLinkService.pendingInviteCatchupId {
-            AcceptInviteView(
-                catchupId: catchupId,
-                inviterName: "Someone",
-                onAccepted: { deepLinkService.clearPendingInvite() },
-                onDeclined: { deepLinkService.clearPendingInvite() }
+        Group {
+            if !authService.isAuthenticated || !hasCompletedOnboarding {
+                OnboardingFlow(onComplete: {
+                    hasCompletedOnboarding = true
+                })
+            } else if let catchupId = deepLinkService.pendingInviteCatchupId {
+                AcceptInviteView(
+                    catchupId: catchupId,
+                    inviterName: "Someone",
+                    onAccepted: { deepLinkService.clearPendingInvite() },
+                    onDeclined: { deepLinkService.clearPendingInvite() }
+                )
+            } else {
+                MainView()
+            }
+        }
+        // Global incoming ping handler — only fires when LiveWaitingView is NOT active
+        .onReceive(NotificationCenter.default.publisher(for: .incomingCatchUpPing)) { notification in
+            guard !LiveViewModel.isActive else { return }
+            guard let info = notification.userInfo,
+                  let fromName = info["fromUserName"] as? String,
+                  let catchupId = info["catchupId"] as? String,
+                  let callId = info["callId"] as? String
+            else { return }
+
+            globalPingFromName = fromName
+            globalPingCatchupId = catchupId
+            globalPingCallId = callId
+            showGlobalIncomingPing = true
+        }
+        .fullScreenCover(isPresented: $showGlobalIncomingPing) {
+            IncomingPingView(
+                callerName: globalPingFromName,
+                catchupId: globalPingCatchupId,
+                callId: globalPingCallId,
+                onAccept: {
+                    showGlobalIncomingPing = false
+                    Task {
+                        do {
+                            let response = try await APIService.shared.acceptPing(
+                                catchupId: globalPingCatchupId,
+                                callId: globalPingCallId
+                            )
+                            await MainActor.run {
+                                globalCallVM = CallViewModel(
+                                    otherUserName: globalPingFromName,
+                                    callId: response.callId,
+                                    agoraChannel: response.agoraChannel,
+                                    agoraToken: response.agoraToken
+                                )
+                            }
+                        } catch {
+                            print("[RootView] Failed to accept ping: \(error)")
+                        }
+                    }
+                },
+                onDecline: {
+                    showGlobalIncomingPing = false
+                }
             )
-        } else {
-            MainView()
+        }
+        .fullScreenCover(item: $globalCallVM) { callVM in
+            VoiceCallView(viewModel: callVM, onCallEnded: { name, duration in
+                globalCallVM = nil
+                globalCallEndedName = name
+                globalCallEndedDuration = duration
+                showGlobalCallEnded = true
+            })
+        }
+        .fullScreenCover(isPresented: $showGlobalCallEnded) {
+            CallEndedView(
+                otherPersonName: globalCallEndedName,
+                durationSeconds: globalCallEndedDuration,
+                onDismiss: {
+                    showGlobalCallEnded = false
+                }
+            )
         }
     }
 }

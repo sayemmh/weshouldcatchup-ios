@@ -20,6 +20,12 @@ struct EndCallResponse: Codable {
     let duration: Int // seconds
 }
 
+struct JoinCallResponse: Codable {
+    let agoraChannel: String
+    let agoraToken: String
+    let callId: String
+}
+
 struct CreateCatchupResponse: Codable {
     let catchupId: String
     let inviteLink: String
@@ -191,6 +197,13 @@ final class APIService {
             "callId": callId
         ]
         let request = try await authorizedRequest(path: "/accept-ping", method: "POST", body: body)
+        return try await execute(request)
+    }
+
+    /// POST /join-call -- User A calls this after receiving call_ready push to get Agora credentials.
+    func joinCall(callId: String) async throws -> JoinCallResponse {
+        let body: [String: Any] = ["callId": callId]
+        let request = try await authorizedRequest(path: "/join-call", method: "POST", body: body)
         return try await execute(request)
     }
 

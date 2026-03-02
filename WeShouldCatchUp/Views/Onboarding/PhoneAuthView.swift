@@ -94,7 +94,7 @@ struct PhoneAuthView: View {
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
 
-            TextField("000000", text: $viewModel.verificationCode)
+            TextField("", text: $viewModel.verificationCode, prompt: Text("000000").foregroundColor(Constants.Colors.textTertiary))
                 .keyboardType(.numberPad)
                 .multilineTextAlignment(.center)
                 .font(.title2.monospacedDigit())

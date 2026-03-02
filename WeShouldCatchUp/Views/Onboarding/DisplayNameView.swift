@@ -91,7 +91,7 @@ struct DisplayNameView: View {
     // MARK: - Name Input
 
     private var nameInputSection: some View {
-        TextField("Your first name", text: $viewModel.displayName)
+        TextField("", text: $viewModel.displayName, prompt: Text("Your first name").foregroundColor(Constants.Colors.textTertiary))
             .font(.fraunces(22, weight: .medium))
             .foregroundColor(Constants.Colors.textPrimary)
             .multilineTextAlignment(.center)

@@ -64,6 +64,17 @@ export interface AcceptPingResponse {
   callId: string;
 }
 
+// POST /join-call
+export interface JoinCallRequest {
+  callId: string;
+}
+
+export interface JoinCallResponse {
+  agoraChannel: string;
+  agoraToken: string;
+  callId: string;
+}
+
 // POST /end-call
 export interface EndCallRequest {
   callId: string;

@@ -5,6 +5,11 @@ import Combine
 @MainActor
 class LiveViewModel: ObservableObject {
 
+    // MARK: - Static Flag
+
+    /// True when LiveWaitingView is active, so RootView doesn't double-handle pings.
+    static var isActive = false
+
     // MARK: - Published State
 
     enum LiveState: Equatable {
@@ -31,6 +36,64 @@ class LiveViewModel: ObservableObject {
     @Published var connectedCallId: String?
     @Published var connectedAgoraChannel: String?
     @Published var connectedAgoraToken: String?
+    @Published var connectedOtherUserName: String?
+
+    // MARK: - Call Ended
+
+    @Published var showCallEnded: Bool = false
+    @Published var callEndedName: String = ""
+    @Published var callEndedDuration: Int = 0
+
+    // MARK: - Observers
+
+    private var cancellables = Set<AnyCancellable>()
+
+    init() {
+        observeNotifications()
+    }
+
+    private func observeNotifications() {
+        // Listen for incoming pings (mutual-live scenario: User B is also on LiveWaitingView)
+        NotificationCenter.default.publisher(for: .incomingCatchUpPing)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] notification in
+                guard let info = notification.userInfo,
+                      let fromName = info["fromUserName"] as? String,
+                      let catchupId = info["catchupId"] as? String,
+                      let callId = info["callId"] as? String
+                else { return }
+                self?.handlePing(fromName: fromName, catchupId: catchupId, callId: callId)
+            }
+            .store(in: &cancellables)
+
+        // Listen for call_ready (User A receives this when User B accepts)
+        NotificationCenter.default.publisher(for: .callReady)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] notification in
+                guard let info = notification.userInfo,
+                      let fromUserName = info["fromUserName"] as? String,
+                      let callId = info["callId"] as? String
+                else { return }
+                Task { [weak self] in
+                    await self?.handleCallReady(callId: callId, otherUserName: fromUserName)
+                }
+            }
+            .store(in: &cancellables)
+    }
+
+    // MARK: - Call Ready (User A flow)
+
+    private func handleCallReady(callId: String, otherUserName: String) async {
+        do {
+            let response = try await APIService.shared.joinCall(callId: callId)
+            connectedCallId = response.callId
+            connectedAgoraChannel = response.agoraChannel
+            connectedAgoraToken = response.agoraToken
+            connectedOtherUserName = otherUserName
+        } catch {
+            errorMessage = "Couldn't join the call. Please try again."
+        }
+    }
 
     // MARK: - Go Live
 
@@ -81,6 +144,7 @@ class LiveViewModel: ObservableObject {
             connectedCallId = response.callId
             connectedAgoraChannel = response.agoraChannel
             connectedAgoraToken = response.agoraToken
+            connectedOtherUserName = incomingPingFromName
             showIncomingPing = false
         } catch {
             errorMessage = "Couldn't connect. They may no longer be free."

@@ -66,6 +66,60 @@ export async function sendCatchUpPing(
 }
 
 /**
+ * Send a "call ready" push to User A when User B accepts the ping.
+ *
+ * This tells User A that someone accepted their catch-up request and
+ * they should call /join-call to get Agora credentials and enter the call.
+ */
+export async function sendCallReady(
+  fcmToken: string,
+  fromUserName: string,
+  fromUserId: string,
+  catchupId: string,
+  callId: string,
+): Promise<void> {
+  const message: admin.messaging.Message = {
+    token: fcmToken,
+    notification: {
+      title: "We Should Catch Up",
+      body: `${fromUserName} is joining your call!`,
+    },
+    data: {
+      type: "call_ready",
+      fromUserId,
+      fromUserName,
+      catchupId,
+      callId,
+    },
+    android: {
+      priority: "high",
+    },
+    apns: {
+      payload: {
+        aps: {
+          sound: "default",
+          contentAvailable: true,
+        },
+      },
+    },
+  };
+
+  try {
+    await admin.messaging().send(message);
+  } catch (err: any) {
+    if (
+      err?.code === "messaging/invalid-registration-token" ||
+      err?.code === "messaging/registration-token-not-registered"
+    ) {
+      console.warn(
+        `Stale FCM token detected for callReady callId=${callId}. Token should be removed.`,
+      );
+    }
+    throw err;
+  }
+}
+
+/**
  * Send a notification when someone accepts a catch-up invite.
  *
  * @param fcmToken - The recipient's (invite creator's) FCM device token.
