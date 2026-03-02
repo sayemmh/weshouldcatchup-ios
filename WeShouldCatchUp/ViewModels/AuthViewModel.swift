@@ -49,7 +49,8 @@ class AuthViewModel: ObservableObject {
             isCodeSent = true
             currentStep = .codeVerification
         } catch {
-            errorMessage = "Couldn't send verification code. Please try again."
+            print("Phone auth error: \(error)")
+            errorMessage = error.localizedDescription
         }
 
         isLoading = false

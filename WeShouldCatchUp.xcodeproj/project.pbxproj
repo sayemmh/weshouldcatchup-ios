@@ -17,6 +17,7 @@
 		2E03FAE205F451AD07A2C20D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FAF8549328948DC16B4811 /* User.swift */; };
 		33D682DC7D7F49643576F2E6 /* Fraunces-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3632581E07B3174D39A9AE3B /* Fraunces-Medium.ttf */; };
 		3A9B9BBC469A89A6CE6BAB4F /* QueueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEFDDE9709D7B17667727DF /* QueueViewModel.swift */; };
+		3ECE29281943400765A62741 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8224E74786608AEE25039C06 /* Assets.xcassets */; };
 		433BC591F0029719DEDCCA04 /* AcceptInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807338292FA26A0644126A70 /* AcceptInviteView.swift */; };
 		4391C9B8DC109970C90C8683 /* CallEndedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB09E5697D49A36D174B9C86 /* CallEndedView.swift */; };
 		4C05E1F138E3C5AF610B3AC5 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278EBFD7CC9A9AB3F0BF73F9 /* AuthViewModel.swift */; };
@@ -77,6 +78,7 @@
 		75DDA3E7205AD614ABC2B786 /* DisplayNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayNameView.swift; sourceTree = "<group>"; };
 		807338292FA26A0644126A70 /* AcceptInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptInviteView.swift; sourceTree = "<group>"; };
 		816AA934C31185F3D18D3333 /* Call.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Call.swift; sourceTree = "<group>"; };
+		8224E74786608AEE25039C06 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91ED872DA9749F6D8531A847 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		984B2A1448C1D98CF85AE86D /* DeepLinkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkService.swift; sourceTree = "<group>"; };
 		9E110D204A21DDA1897E9F86 /* Fraunces-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Fraunces-Regular.ttf"; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 		81B22DA108814018CEC12DFE /* WeShouldCatchUp */ = {
 			isa = PBXGroup;
 			children = (
+				8224E74786608AEE25039C06 /* Assets.xcassets */,
 				F9E4957D7EA3D022294FFFB2 /* GoogleService-Info.plist */,
 				1E378A9E910A6A16D03E8EE2 /* Info.plist */,
 				3838552CBF73596F18794A8D /* WeShouldCatchUp.entitlements */,
@@ -351,6 +354,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3ECE29281943400765A62741 /* Assets.xcassets in Resources */,
 				94B8904B440322B5C1B98C22 /* Fraunces-Bold.ttf in Resources */,
 				33D682DC7D7F49643576F2E6 /* Fraunces-Medium.ttf in Resources */,
 				5E7AA523003D03511E1C9452 /* Fraunces-Regular.ttf in Resources */,
@@ -478,9 +482,10 @@
 				DEVELOPMENT_TEAM = 345UAJF999;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeShouldCatchUp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "We Should Catch Up";
+				INFOPLIST_KEY_CFBundleDisplayName = WSCU;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -505,9 +510,10 @@
 				DEVELOPMENT_TEAM = 345UAJF999;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeShouldCatchUp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "We Should Catch Up";
+				INFOPLIST_KEY_CFBundleDisplayName = WSCU;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
