@@ -35,7 +35,8 @@ struct CallHistoryView: View {
                     Button("Close") {
                         dismiss()
                     }
-                    .foregroundColor(Constants.Colors.primary)
+                    .font(.inter(15, weight: .medium))
+                    .foregroundColor(Constants.Colors.textSecondary)
                 }
             }
             .task {
@@ -49,8 +50,8 @@ struct CallHistoryView: View {
     private var loadingView: some View {
         VStack(spacing: 12) {
             ProgressView()
-            Text("Loading call history...")
-                .font(.fraunces(13, weight: .regular))
+            Text("Loading...")
+                .font(.inter(13, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
         }
     }
@@ -58,17 +59,17 @@ struct CallHistoryView: View {
     // MARK: - Empty State
 
     private var emptyStateView: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 14) {
             Image(systemName: "phone")
-                .font(.system(size: 48, weight: .thin))
-                .foregroundColor(Constants.Colors.textSecondary.opacity(0.4))
+                .font(.system(size: 40, weight: .light))
+                .foregroundColor(Constants.Colors.textTertiary)
 
-            Text("No calls yet.")
+            Text("No calls yet")
                 .font(.fraunces(20, weight: .medium))
                 .foregroundColor(Constants.Colors.textPrimary)
 
             Text("Tap I'm Free to get started.")
-                .font(.fraunces(16, weight: .regular))
+                .font(.inter(15, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
         }
         .padding(.horizontal, 24)
@@ -78,7 +79,7 @@ struct CallHistoryView: View {
 
     private var callListView: some View {
         ScrollView {
-            LazyVStack(spacing: 10) {
+            LazyVStack(spacing: 8) {
                 ForEach(calls) { call in
                     callRow(call)
                 }
@@ -95,7 +96,7 @@ struct CallHistoryView: View {
             // Avatar
             ZStack {
                 Circle()
-                    .fill(Constants.Colors.primary.opacity(0.12))
+                    .fill(Constants.Colors.primary.opacity(0.10))
                     .frame(width: 42, height: 42)
 
                 Text(String(call.otherUser.name.prefix(1)).uppercased())
@@ -111,12 +112,12 @@ struct CallHistoryView: View {
 
                 HStack(spacing: 8) {
                     Text(formattedDate(call.startedAt))
-                        .font(.fraunces(12, weight: .regular))
+                        .font(.inter(12, weight: .regular))
                         .foregroundColor(Constants.Colors.textSecondary)
 
                     if let duration = call.duration {
                         Text(formattedCallDuration(duration))
-                            .font(.fraunces(12, weight: .regular))
+                            .font(.inter(12, weight: .regular))
                             .foregroundColor(Constants.Colors.textSecondary)
                     }
                 }
@@ -125,13 +126,17 @@ struct CallHistoryView: View {
             Spacer()
 
             Image(systemName: "phone")
-                .font(.system(size: 12, weight: .light))
-                .foregroundColor(Constants.Colors.primary.opacity(0.5))
+                .font(.system(size: 12, weight: .regular))
+                .foregroundColor(Constants.Colors.textTertiary)
         }
-        .padding(.vertical, 10)
+        .padding(.vertical, 12)
         .padding(.horizontal, 16)
         .background(Color.white)
         .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Constants.Colors.border, lineWidth: 1)
+        )
     }
 
     // MARK: - Formatting Helpers
@@ -151,7 +156,6 @@ struct CallHistoryView: View {
             return "Yesterday"
         } else {
             let formatter = DateFormatter()
-            // Show "Jan 15" for dates in the current year, "Jan 15, 2025" otherwise.
             if calendar.component(.year, from: date) == calendar.component(.year, from: now) {
                 formatter.dateFormat = "MMM d"
             } else {

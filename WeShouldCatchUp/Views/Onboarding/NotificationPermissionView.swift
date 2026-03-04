@@ -20,7 +20,9 @@ struct NotificationPermissionView: View {
                 Spacer()
 
                 // MARK: - Illustration
-                illustrationSection
+                Image(systemName: "bell")
+                    .font(.system(size: 56, weight: .light))
+                    .foregroundColor(Constants.Colors.primary)
 
                 // MARK: - Headline & Description
                 textSection
@@ -43,31 +45,16 @@ struct NotificationPermissionView: View {
         }
     }
 
-    // MARK: - Illustration
-
-    private var illustrationSection: some View {
-        ZStack {
-            Circle()
-                .fill(Constants.Colors.primary.opacity(0.12))
-                .frame(width: 140, height: 140)
-
-            Image(systemName: "bell")
-                .font(.system(size: 60, weight: .thin))
-                .foregroundColor(Constants.Colors.primary)
-        }
-    }
-
     // MARK: - Text
 
     private var textSection: some View {
         VStack(spacing: 14) {
             Text("Turn on notifications")
                 .font(.fraunces(28, weight: .semiBold))
-                .fontWeight(.bold)
                 .foregroundColor(Constants.Colors.textPrimary)
 
             Text("This is how you'll know when a friend is free. Without notifications, the app can't work.")
-                .font(.fraunces(16, weight: .regular))
+                .font(.inter(15, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
@@ -85,11 +72,11 @@ struct NotificationPermissionView: View {
             } label: {
                 HStack(spacing: 6) {
                     Text("Why?")
-                        .font(.fraunces(13, weight: .medium))
+                        .font(.inter(13, weight: .medium))
                     Image(systemName: showWhySection ? "chevron.up" : "chevron.down")
-                        .font(.system(size: 11, weight: .light))
+                        .font(.system(size: 10, weight: .regular))
                 }
-                .foregroundColor(Constants.Colors.primary)
+                .foregroundColor(Constants.Colors.textSecondary)
             }
 
             if showWhySection {
@@ -109,7 +96,11 @@ struct NotificationPermissionView: View {
                 }
                 .padding()
                 .background(Color.white)
-                .cornerRadius(14)
+                .cornerRadius(12)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Constants.Colors.border, lineWidth: 1)
+                )
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
@@ -118,10 +109,11 @@ struct NotificationPermissionView: View {
     private func whyRow(icon: String, text: String) -> some View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: icon)
-                .foregroundColor(Constants.Colors.primary)
+                .font(.system(size: 14, weight: .regular))
+                .foregroundColor(Constants.Colors.textSecondary)
                 .frame(width: 20)
             Text(text)
-                .font(.fraunces(13, weight: .regular))
+                .font(.inter(13, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -134,12 +126,12 @@ struct NotificationPermissionView: View {
             requestNotificationPermission()
         } label: {
             Text("Enable Notifications")
-                .font(.fraunces(16, weight: .semiBold))
+                .font(.inter(15, weight: .semiBold))
                 .frame(maxWidth: .infinity)
-                .padding()
+                .padding(.vertical, 16)
                 .background(Constants.Colors.primary)
                 .foregroundColor(.white)
-                .cornerRadius(14)
+                .cornerRadius(28)
         }
     }
 
@@ -148,7 +140,7 @@ struct NotificationPermissionView: View {
     private var deniedMessage: some View {
         VStack(spacing: 8) {
             Text("Notifications were denied. Please enable them in Settings for the app to work properly.")
-                .font(.fraunces(13, weight: .regular))
+                .font(.inter(13, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
 
@@ -158,7 +150,7 @@ struct NotificationPermissionView: View {
                 }
             } label: {
                 Text("Open Settings")
-                    .font(.fraunces(13, weight: .medium))
+                    .font(.inter(13, weight: .medium))
                     .foregroundColor(Constants.Colors.primary)
             }
         }

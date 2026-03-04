@@ -70,18 +70,13 @@ export default async function callsRoutes(fastify: FastifyInstance): Promise<voi
         updateUser(otherUserId, { status: "in_call", liveSince: null, liveTTL: null, updatedAt: now }),
       ]);
 
-      // Send call_ready push to User A so they can join via /join-call.
-      if (callee.fcmToken || caller.fcmToken) {
-        // otherUserId is User A (the live user). caller.displayName is User B who accepted.
-        const userAToken = otherUserId === catchup.userA ? callee.fcmToken : caller.fcmToken;
-        const userBName = otherUserId === catchup.userA ? caller.displayName : callee.displayName;
-        if (userAToken) {
-          try {
-            await sendCallReady(userAToken, userBName, userId, catchupId, callId);
-          } catch (err) {
-            console.error("Failed to send call_ready push:", err);
-            // Non-fatal — User A can still poll or re-open the app.
-          }
+      // Send call_ready push to User A (the live user = otherUserId = callee).
+      // caller = User B (acceptor), callee = User A (live user).
+      if (callee.fcmToken) {
+        try {
+          await sendCallReady(callee.fcmToken, caller.displayName, userId, catchupId, callId);
+        } catch (err) {
+          console.error("Failed to send call_ready push:", err);
         }
       }
 

@@ -23,7 +23,6 @@ struct IncomingPingView: View {
 
     @State private var secondsRemaining: Int = 60
     @State private var timerActive: Bool = true
-    @State private var waveOffset: CGFloat = 0
 
     /// Countdown progress from 1.0 (full) to 0.0 (expired).
     private var countdownProgress: Double {
@@ -64,38 +63,24 @@ struct IncomingPingView: View {
             // Avatar
             ZStack {
                 Circle()
-                    .fill(Constants.Colors.primary.opacity(0.15))
+                    .fill(Constants.Colors.primary.opacity(0.10))
                     .frame(width: 80, height: 80)
 
                 Text(String(callerName.prefix(1)).uppercased())
-                    .font(.fraunces(28, weight: .semiBold))
-                    .fontWeight(.bold)
+                    .font(.fraunces(28, weight: .bold))
                     .foregroundColor(Constants.Colors.primary)
             }
 
-            HStack(spacing: 4) {
+            VStack(spacing: 4) {
                 Text(callerName)
-                    .font(.fraunces(28, weight: .semiBold))
-                    .fontWeight(.bold)
+                    .font(.fraunces(26, weight: .semiBold))
                     .foregroundColor(Constants.Colors.textPrimary)
 
                 Text("is free to catch up")
-                    .font(.fraunces(22, weight: .medium))
-                    .foregroundColor(Constants.Colors.textPrimary)
+                    .font(.inter(16, weight: .regular))
+                    .foregroundColor(Constants.Colors.textSecondary)
             }
             .multilineTextAlignment(.center)
-
-            Text("\u{1F44B}")
-                .font(.system(size: 36))
-                .offset(x: waveOffset)
-                .animation(
-                    .easeInOut(duration: 0.4)
-                    .repeatCount(6, autoreverses: true),
-                    value: waveOffset
-                )
-                .onAppear {
-                    waveOffset = 10
-                }
         }
     }
 
@@ -105,17 +90,17 @@ struct IncomingPingView: View {
         ZStack {
             // Background ring
             Circle()
-                .stroke(Color.gray.opacity(0.15), lineWidth: 6)
-                .frame(width: 80, height: 80)
+                .stroke(Constants.Colors.border, lineWidth: 4)
+                .frame(width: 72, height: 72)
 
             // Progress ring
             Circle()
                 .trim(from: 0, to: countdownProgress)
                 .stroke(
                     countdownProgress > 0.3 ? Constants.Colors.primary : Color.red,
-                    style: StrokeStyle(lineWidth: 6, lineCap: .round)
+                    style: StrokeStyle(lineWidth: 4, lineCap: .round)
                 )
-                .frame(width: 80, height: 80)
+                .frame(width: 72, height: 72)
                 .rotationEffect(.degrees(-90))
                 .animation(.linear(duration: 1), value: secondsRemaining)
 
@@ -137,13 +122,12 @@ struct IncomingPingView: View {
                 onAccept()
             } label: {
                 Text("Join")
-                    .font(.fraunces(20, weight: .semiBold))
+                    .font(.inter(17, weight: .semiBold))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
                     .background(Constants.Colors.primary)
                     .foregroundColor(.white)
-                    .cornerRadius(16)
-                    .shadow(color: Constants.Colors.primary.opacity(0.3), radius: 10, x: 0, y: 4)
+                    .cornerRadius(28)
             }
 
             // Not now button
@@ -152,7 +136,7 @@ struct IncomingPingView: View {
                 onDecline()
             } label: {
                 Text("Not now")
-                    .font(.fraunces(16, weight: .regular))
+                    .font(.inter(15, weight: .medium))
                     .foregroundColor(Constants.Colors.textSecondary)
                     .padding(.vertical, 10)
             }

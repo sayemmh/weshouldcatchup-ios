@@ -18,7 +18,7 @@ enum Constants {
     static let liveTTLMinutes: TimeInterval = 10
     static let callEndedAutoDismissSeconds: TimeInterval = 5
 
-    // MARK: - Design (matches weshouldcatchup.vercel.app)
+    // MARK: - Design
     enum Colors {
         // Muted terracotta accent — primary brand color
         static let primary = Color(hex: 0xB5695A)             // muted terracotta

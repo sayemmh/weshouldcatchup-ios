@@ -22,13 +22,13 @@ struct QueueRowView: View {
                     .font(.fraunces(16, weight: .medium))
                     .foregroundColor(Constants.Colors.textPrimary)
 
-                HStack(spacing: 12) {
+                HStack(spacing: 10) {
                     Label(timeSinceLastCall, systemImage: "clock")
-                        .font(.fraunces(12, weight: .regular))
+                        .font(.inter(12, weight: .regular))
                         .foregroundColor(Constants.Colors.textSecondary)
 
                     Label(callCountLabel, systemImage: "phone")
-                        .font(.fraunces(12, weight: .regular))
+                        .font(.inter(12, weight: .regular))
                         .foregroundColor(Constants.Colors.textSecondary)
                 }
             }
@@ -36,13 +36,17 @@ struct QueueRowView: View {
             Spacer()
 
             Image(systemName: "chevron.right")
-                .font(.system(size: 12, weight: .light))
-                .foregroundColor(Constants.Colors.textSecondary.opacity(0.5))
+                .font(.system(size: 11, weight: .regular))
+                .foregroundColor(Constants.Colors.textTertiary)
         }
-        .padding(.vertical, 10)
+        .padding(.vertical, 12)
         .padding(.horizontal, 16)
         .background(Color.white)
         .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Constants.Colors.border, lineWidth: 1)
+        )
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
             Button(role: .destructive) {
                 showRemoveConfirmation = true
@@ -65,7 +69,7 @@ struct QueueRowView: View {
     private var avatarView: some View {
         ZStack {
             Circle()
-                .fill(Constants.Colors.primary.opacity(0.15))
+                .fill(Constants.Colors.primary.opacity(0.10))
                 .frame(width: 44, height: 44)
 
             Text(initials)
@@ -143,5 +147,5 @@ struct QueueRowView: View {
         }
     }
     .listStyle(.plain)
-    .background(Color(red: 0.99, green: 0.97, blue: 0.94))
+    .background(Constants.Colors.background)
 }

@@ -20,6 +20,11 @@ class AuthViewModel: ObservableObject {
     // MARK: - Dependencies
 
     private let authService = AuthService.shared
+    let isReturningUser: Bool
+
+    init(isReturningUser: Bool = false) {
+        self.isReturningUser = isReturningUser
+    }
 
     // MARK: - Onboarding Step Tracking
 
@@ -68,7 +73,7 @@ class AuthViewModel: ObservableObject {
         do {
             try await authService.verifyCode(code: verificationCode)
             isAuthenticated = true
-            currentStep = .notificationPermission
+            currentStep = isReturningUser ? .complete : .notificationPermission
         } catch {
             errorMessage = "Invalid code. Please try again."
         }

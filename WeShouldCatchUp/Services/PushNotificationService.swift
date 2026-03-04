@@ -17,6 +17,9 @@ enum PushNotificationType {
 
     /// A catch-up invite has been accepted by the other user.
     case inviteAccepted(catchupId: String)
+
+    /// Silent update telling the live user who is currently being pinged.
+    case rotationUpdate(pingingUserId: String, pingingUserName: String)
 }
 
 // MARK: - Push Notification Service
@@ -75,13 +78,28 @@ final class PushNotificationService: NSObject {
         firestore
             .collection("users")
             .document(userId)
-            .updateData(["fcmToken": token]) { error in
+            .setData(["fcmToken": token], merge: true) { error in
                 if let error = error {
                     print("[PushNotificationService] Failed to update FCM token: \(error.localizedDescription)")
                 } else {
                     print("[PushNotificationService] FCM token updated successfully.")
                 }
             }
+    }
+
+    /// Removes the FCM token from the current user's Firestore document on sign-out.
+    func clearFCMToken() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        firestore
+            .collection("users")
+            .document(userId)
+            .updateData(["fcmToken": FieldValue.delete()]) { error in
+                if let error = error {
+                    print("[PushNotificationService] Failed to clear FCM token: \(error.localizedDescription)")
+                }
+            }
+        currentFCMToken = nil
     }
 
     // MARK: - Notification Parsing
@@ -126,6 +144,16 @@ final class PushNotificationService: NSObject {
                 return nil
             }
             return .inviteAccepted(catchupId: catchupId)
+
+        case "rotation_update":
+            guard
+                let pingingUserId = userInfo["pingingUserId"] as? String,
+                let pingingUserName = userInfo["pingingUserName"] as? String
+            else {
+                print("[PushNotificationService] rotation_update payload missing required fields.")
+                return nil
+            }
+            return .rotationUpdate(pingingUserId: pingingUserId, pingingUserName: pingingUserName)
 
         default:
             print("[PushNotificationService] Unknown notification type: \(type)")

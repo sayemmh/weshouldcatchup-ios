@@ -22,26 +22,19 @@ struct CallEndedView: View {
                 Spacer()
 
                 // MARK: - Check Icon
-                ZStack {
-                    Circle()
-                        .fill(Constants.Colors.primary.opacity(0.12))
-                        .frame(width: 100, height: 100)
-
-                    Image(systemName: "checkmark.circle")
-                        .font(.system(size: 52, weight: .thin))
-                        .foregroundColor(Constants.Colors.primary)
-                }
+                Image(systemName: "checkmark")
+                    .font(.system(size: 44, weight: .light))
+                    .foregroundColor(Constants.Colors.primary)
 
                 // MARK: - Summary Text
-                VStack(spacing: 10) {
+                VStack(spacing: 8) {
                     Text("You caught up with \(otherPersonName)")
                         .font(.fraunces(22, weight: .medium))
-                        .fontWeight(.bold)
                         .foregroundColor(Constants.Colors.textPrimary)
                         .multilineTextAlignment(.center)
 
                     Text("for \(formattedDuration)")
-                        .font(.fraunces(20, weight: .medium))
+                        .font(.inter(17, weight: .regular))
                         .foregroundColor(Constants.Colors.textSecondary)
                 }
 
@@ -52,12 +45,12 @@ struct CallEndedView: View {
                     onDismiss()
                 } label: {
                     Text("Nice.")
-                        .font(.fraunces(20, weight: .semiBold))
+                        .font(.inter(17, weight: .semiBold))
                         .frame(maxWidth: .infinity)
-                        .padding()
+                        .padding(.vertical, 16)
                         .background(Constants.Colors.primary)
                         .foregroundColor(.white)
-                        .cornerRadius(14)
+                        .cornerRadius(28)
                 }
                 .padding(.bottom, 32)
             }

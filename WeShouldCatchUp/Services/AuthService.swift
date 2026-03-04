@@ -88,6 +88,7 @@ final class AuthService: ObservableObject {
     }
 
     func signOut() throws {
+        PushNotificationService.shared.clearFCMToken()
         try Auth.auth().signOut()
         DispatchQueue.main.async {
             self.isAuthenticated = false

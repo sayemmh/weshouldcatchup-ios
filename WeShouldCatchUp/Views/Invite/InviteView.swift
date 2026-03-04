@@ -24,7 +24,9 @@ struct InviteView: View {
                     Spacer()
 
                     // MARK: - Illustration
-                    illustrationSection
+                    Image(systemName: "paperplane")
+                        .font(.system(size: 44, weight: .light))
+                        .foregroundColor(Constants.Colors.primary)
 
                     // MARK: - Headline
                     textSection
@@ -46,7 +48,8 @@ struct InviteView: View {
                     Button("Close") {
                         dismiss()
                     }
-                    .foregroundColor(Constants.Colors.primary)
+                    .font(.inter(15, weight: .medium))
+                    .foregroundColor(Constants.Colors.textSecondary)
                 }
             }
             .sheet(isPresented: $showShareSheet) {
@@ -59,32 +62,17 @@ struct InviteView: View {
         }
     }
 
-    // MARK: - Illustration
-
-    private var illustrationSection: some View {
-        ZStack {
-            Circle()
-                .fill(Constants.Colors.primary.opacity(0.12))
-                .frame(width: 120, height: 120)
-
-            Image(systemName: "paperplane")
-                .font(.system(size: 48, weight: .thin))
-                .foregroundColor(Constants.Colors.primary)
-        }
-    }
-
     // MARK: - Text
 
     private var textSection: some View {
         VStack(spacing: 12) {
             Text("Invite someone to catch up")
                 .font(.fraunces(22, weight: .medium))
-                .fontWeight(.bold)
                 .foregroundColor(Constants.Colors.textPrimary)
                 .multilineTextAlignment(.center)
 
             Text("Send them a link. When you both have a free moment, the app connects you.")
-                .font(.fraunces(16, weight: .regular))
+                .font(.inter(15, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
@@ -103,13 +91,13 @@ struct InviteView: View {
                         .tint(.white)
                 }
                 Text(isCreatingLink ? "Creating link..." : "Share Invite Link")
-                    .font(.fraunces(16, weight: .semiBold))
+                    .font(.inter(15, weight: .semiBold))
             }
             .frame(maxWidth: .infinity)
-            .padding()
+            .padding(.vertical, 16)
             .background(isCreatingLink ? Color.gray.opacity(0.3) : Constants.Colors.primary)
             .foregroundColor(.white)
-            .cornerRadius(14)
+            .cornerRadius(28)
         }
         .disabled(isCreatingLink)
     }
@@ -120,7 +108,7 @@ struct InviteView: View {
     private var errorSection: some View {
         if let errorMessage = errorMessage {
             Text(errorMessage)
-                .font(.fraunces(13, weight: .regular))
+                .font(.inter(13, weight: .regular))
                 .foregroundColor(.red)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)

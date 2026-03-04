@@ -73,17 +73,16 @@ struct DisplayNameView: View {
 
     private var headerSection: some View {
         VStack(spacing: 12) {
-            Image(systemName: "person.crop.circle.badge.plus")
-                .font(.system(size: 52, weight: .thin))
+            Image(systemName: "person")
+                .font(.system(size: 48, weight: .light))
                 .foregroundColor(Constants.Colors.primary)
 
             Text("What should we call you?")
                 .font(.fraunces(28, weight: .semiBold))
-                .fontWeight(.bold)
                 .foregroundColor(Constants.Colors.textPrimary)
 
             Text("Just your first name is fine")
-                .font(.fraunces(16, weight: .regular))
+                .font(.inter(15, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
         }
     }
@@ -100,7 +99,7 @@ struct DisplayNameView: View {
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+                    .stroke(Constants.Colors.border, lineWidth: 1)
             )
             .textInputAutocapitalization(.words)
             .autocorrectionDisabled(true)
@@ -112,7 +111,7 @@ struct DisplayNameView: View {
     private var errorSection: some View {
         if let errorMessage = viewModel.errorMessage {
             Text(errorMessage)
-                .font(.fraunces(13, weight: .regular))
+                .font(.inter(13, weight: .regular))
                 .foregroundColor(.red)
                 .multilineTextAlignment(.center)
         }
@@ -134,13 +133,13 @@ struct DisplayNameView: View {
                         .tint(.white)
                 }
                 Text(viewModel.isSaving ? "Saving..." : "Let's go")
-                    .font(.fraunces(16, weight: .semiBold))
+                    .font(.inter(15, weight: .semiBold))
             }
             .frame(maxWidth: .infinity)
-            .padding()
+            .padding(.vertical, 16)
             .background(viewModel.canSubmit ? Constants.Colors.primary : Color.gray.opacity(0.3))
             .foregroundColor(.white)
-            .cornerRadius(14)
+            .cornerRadius(28)
         }
         .disabled(!viewModel.canSubmit)
     }

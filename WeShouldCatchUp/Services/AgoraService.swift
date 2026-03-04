@@ -20,8 +20,7 @@ final class AgoraService: NSObject, ObservableObject {
 
     private var agoraKit: AgoraRtcEngineKit?
 
-    // TODO: Replace with your Agora App ID from https://console.agora.io
-    private let appId: String = "YOUR_AGORA_APP_ID"
+    private let appId: String = Constants.agoraAppID
 
     // MARK: - Init
 

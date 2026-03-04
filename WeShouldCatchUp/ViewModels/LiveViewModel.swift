@@ -24,6 +24,14 @@ class LiveViewModel: ObservableObject {
     @Published var liveTTL: Date?
     @Published var errorMessage: String?
 
+    // MARK: - Rotation Progress
+
+    @Published var queue: [QueueItem] = []
+    @Published var currentlyPingingUserId: String?
+    @Published var currentlyPingingName: String?
+    /// User IDs that have already been pinged (no response).
+    @Published var passedUserIds: Set<String> = []
+
     // MARK: - Incoming Ping
 
     @Published var incomingPingFromName: String?
@@ -66,6 +74,24 @@ class LiveViewModel: ObservableObject {
             }
             .store(in: &cancellables)
 
+        // Listen for rotation_update (server tells us who's currently being pinged)
+        NotificationCenter.default.publisher(for: .rotationUpdate)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] notification in
+                guard let self,
+                      let info = notification.userInfo,
+                      let userId = info["pingingUserId"] as? String,
+                      let name = info["pingingUserName"] as? String
+                else { return }
+                // Mark previous person as passed
+                if let prev = self.currentlyPingingUserId {
+                    self.passedUserIds.insert(prev)
+                }
+                self.currentlyPingingUserId = userId
+                self.currentlyPingingName = name
+            }
+            .store(in: &cancellables)
+
         // Listen for call_ready (User A receives this when User B accepts)
         NotificationCenter.default.publisher(for: .callReady)
             .receive(on: DispatchQueue.main)
@@ -100,6 +126,14 @@ class LiveViewModel: ObservableObject {
     func goLive() async {
         state = .goingLive
         errorMessage = nil
+
+        // Fetch queue so we can show who's being pinged.
+        do {
+            queue = try await APIService.shared.fetchQueue()
+        } catch {
+            // Non-fatal — UI just won't show the queue list.
+            queue = []
+        }
 
         do {
             let response = try await APIService.shared.goLive()

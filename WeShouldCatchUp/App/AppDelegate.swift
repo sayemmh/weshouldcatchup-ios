@@ -57,6 +57,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             completionHandler(.noData)
             return
         }
+
+        // Route app-level pushes (pings, call_ready) that arrive in background
+        if let type = PushNotificationService.shared.handleNotification(userInfo: userInfo) {
+            handlePushType(type)
+            completionHandler(.newData)
+            return
+        }
         completionHandler(.noData)
     }
 }
@@ -89,6 +96,12 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
         if let type = PushNotificationService.shared.handleNotification(userInfo: userInfo) {
             handlePushType(type)
+
+            // Suppress banner for silent rotation updates.
+            if case .rotationUpdate = type {
+                completionHandler([])
+                return
+            }
         }
 
         // Show banner even when app is in foreground.
@@ -142,6 +155,16 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                 object: nil,
                 userInfo: ["catchupId": catchupId]
             )
+
+        case .rotationUpdate(let pingingUserId, let pingingUserName):
+            NotificationCenter.default.post(
+                name: .rotationUpdate,
+                object: nil,
+                userInfo: [
+                    "pingingUserId": pingingUserId,
+                    "pingingUserName": pingingUserName
+                ]
+            )
         }
     }
 }
@@ -152,4 +175,5 @@ extension Notification.Name {
     static let incomingCatchUpPing = Notification.Name("incomingCatchUpPing")
     static let callReady = Notification.Name("callReady")
     static let catchUpInviteAccepted = Notification.Name("catchUpInviteAccepted")
+    static let rotationUpdate = Notification.Name("rotationUpdate")
 }

@@ -66,6 +66,48 @@ export async function sendCatchUpPing(
 }
 
 /**
+ * Send a silent "rotation_update" push to the live user (User A) so their
+ * client can show who is currently being pinged.  This is a data-only message
+ * — no notification banner.
+ */
+export async function sendRotationUpdate(
+  fcmToken: string,
+  pingingUserName: string,
+  pingingUserId: string,
+): Promise<void> {
+  const message: admin.messaging.Message = {
+    token: fcmToken,
+    data: {
+      type: "rotation_update",
+      pingingUserName,
+      pingingUserId,
+    },
+    android: {
+      priority: "high",
+    },
+    apns: {
+      payload: {
+        aps: {
+          contentAvailable: true,
+        },
+      },
+    },
+  };
+
+  try {
+    await admin.messaging().send(message);
+  } catch (err: any) {
+    if (
+      err?.code === "messaging/invalid-registration-token" ||
+      err?.code === "messaging/registration-token-not-registered"
+    ) {
+      console.warn(`Stale FCM token for rotation_update. Token should be removed.`);
+    }
+    throw err;
+  }
+}
+
+/**
  * Send a "call ready" push to User A when User B accepts the ping.
  *
  * This tells User A that someone accepted their catch-up request and

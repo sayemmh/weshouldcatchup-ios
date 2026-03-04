@@ -12,6 +12,7 @@ struct WeShouldCatchUpApp: App {
             RootView()
                 .environmentObject(authService)
                 .environmentObject(deepLinkService)
+                .preferredColorScheme(.light)
                 .onOpenURL { url in
                     _ = deepLinkService.handleIncomingURL(url)
                 }
@@ -46,8 +47,10 @@ struct RootView: View {
     var body: some View {
         Group {
             if !authService.isAuthenticated || !hasCompletedOnboarding {
-                OnboardingFlow(onComplete: {
+                OnboardingFlow(isReturningUser: hasCompletedOnboarding, onComplete: {
                     hasCompletedOnboarding = true
+                    // Check clipboard for invite link (deferred deep linking from web)
+                    deepLinkService.checkClipboardForInvite()
                 })
             } else if let catchupId = deepLinkService.pendingInviteCatchupId {
                 AcceptInviteView(
@@ -127,8 +130,13 @@ struct RootView: View {
 
 /// Container that walks through the onboarding steps.
 struct OnboardingFlow: View {
-    @StateObject private var viewModel = AuthViewModel()
+    @StateObject private var viewModel: AuthViewModel
     let onComplete: () -> Void
+
+    init(isReturningUser: Bool = false, onComplete: @escaping () -> Void) {
+        _viewModel = StateObject(wrappedValue: AuthViewModel(isReturningUser: isReturningUser))
+        self.onComplete = onComplete
+    }
 
     var body: some View {
         switch viewModel.currentStep {

@@ -104,7 +104,7 @@ struct LiveWaitingView: View {
             // Pulsing circle animation
             ZStack {
                 Circle()
-                    .fill(Constants.Colors.primary.opacity(0.1))
+                    .fill(Constants.Colors.primary.opacity(0.08))
                     .frame(width: 160, height: 160)
                     .scaleEffect(pulseScale)
                     .opacity(pulseOpacity)
@@ -115,7 +115,7 @@ struct LiveWaitingView: View {
                     )
 
                 Circle()
-                    .fill(Constants.Colors.primary.opacity(0.2))
+                    .fill(Constants.Colors.primary.opacity(0.15))
                     .frame(width: 110, height: 110)
                     .scaleEffect(pulseScale * 0.95)
                     .opacity(pulseOpacity + 0.15)
@@ -131,7 +131,7 @@ struct LiveWaitingView: View {
                     .frame(width: 70, height: 70)
 
                 Image(systemName: "hand.wave")
-                    .font(.system(size: 28, weight: .medium))
+                    .font(.system(size: 26, weight: .regular))
                     .foregroundColor(.white)
             }
             .onAppear {
@@ -139,15 +139,20 @@ struct LiveWaitingView: View {
                 pulseOpacity = 0.2
             }
 
-            Text("Finding someone to catch up with...")
+            Text("Looking for someone...")
                 .font(.fraunces(22, weight: .semiBold))
                 .foregroundColor(Constants.Colors.textPrimary)
                 .multilineTextAlignment(.center)
 
             Text("Sit tight. We're checking your queue.")
-                .font(.fraunces(16, weight: .regular))
+                .font(.inter(15, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
+
+            // Queue progress list
+            if !viewModel.queue.isEmpty {
+                queueProgressList
+            }
         }
     }
 
@@ -156,16 +161,16 @@ struct LiveWaitingView: View {
     private var queueExhaustedContent: some View {
         VStack(spacing: 24) {
             Image(systemName: "moon.zzz")
-                .font(.system(size: 56, weight: .thin))
-                .foregroundColor(Constants.Colors.textSecondary.opacity(0.5))
+                .font(.system(size: 48, weight: .light))
+                .foregroundColor(Constants.Colors.textTertiary)
 
-            Text("No one's free right now.")
+            Text("No one's free right now")
                 .font(.fraunces(22, weight: .semiBold))
                 .foregroundColor(Constants.Colors.textPrimary)
                 .multilineTextAlignment(.center)
 
             Text("We'll keep you live for a few more minutes in case someone pops in.")
-                .font(.fraunces(16, weight: .regular))
+                .font(.inter(15, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
@@ -177,33 +182,69 @@ struct LiveWaitingView: View {
     private var expiredContent: some View {
         VStack(spacing: 24) {
             Image(systemName: "clock")
-                .font(.system(size: 56, weight: .thin))
-                .foregroundColor(Constants.Colors.textSecondary.opacity(0.5))
+                .font(.system(size: 48, weight: .light))
+                .foregroundColor(Constants.Colors.textTertiary)
 
-            Text("No luck this time.")
+            Text("No luck this time")
                 .font(.fraunces(22, weight: .semiBold))
                 .foregroundColor(Constants.Colors.textPrimary)
 
-            Text("Try again later!")
-                .font(.fraunces(16, weight: .regular))
+            Text("Try again later when you're free.")
+                .font(.inter(15, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
 
             Button {
                 dismiss()
             } label: {
                 Text("Back to Home")
-                    .font(.fraunces(16, weight: .semiBold))
+                    .font(.inter(15, weight: .semiBold))
                     .frame(maxWidth: .infinity)
-                    .padding()
+                    .padding(.vertical, 16)
                     .background(Constants.Colors.primary)
                     .foregroundColor(.white)
-                    .cornerRadius(14)
+                    .cornerRadius(28)
             }
             .padding(.top, 8)
         }
     }
 
     // MARK: - Cancel Button
+
+    // MARK: - Queue Progress List
+
+    private var queueProgressList: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            ForEach(viewModel.queue) { item in
+                let userId = item.otherUser.userId
+                let isCurrent = userId == viewModel.currentlyPingingUserId
+                let isPassed = viewModel.passedUserIds.contains(userId)
+
+                HStack(spacing: 8) {
+                    if isPassed {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 10, weight: .semibold))
+                            .foregroundColor(Constants.Colors.textTertiary.opacity(0.5))
+                            .frame(width: 14)
+                    } else if isCurrent {
+                        PingingDot()
+                            .frame(width: 14)
+                    } else {
+                        Color.clear
+                            .frame(width: 14, height: 14)
+                    }
+
+                    Text(item.otherUser.name)
+                        .font(.inter(13, weight: isCurrent ? .medium : .regular))
+                        .foregroundColor(
+                            isCurrent ? Constants.Colors.textPrimary :
+                            isPassed ? Constants.Colors.textTertiary.opacity(0.5) :
+                            Constants.Colors.textTertiary
+                        )
+                }
+            }
+        }
+        .padding(.top, 8)
+    }
 
     private var cancelButton: some View {
         Button {
@@ -220,13 +261,33 @@ struct LiveWaitingView: View {
                         .tint(.secondary)
                 }
                 Text("Never mind")
-                    .font(.fraunces(16, weight: .medium))
+                    .font(.inter(15, weight: .medium))
             }
             .foregroundColor(Constants.Colors.textSecondary)
             .padding(.vertical, 12)
         }
         .disabled(isCancelling)
         .padding(.bottom, 16)
+    }
+}
+
+// MARK: - Pinging Dot
+
+/// A small dot that pulses to indicate the currently-pinged person.
+private struct PingingDot: View {
+    @State private var isAnimating = false
+
+    var body: some View {
+        Circle()
+            .fill(Constants.Colors.primary)
+            .frame(width: 8, height: 8)
+            .scaleEffect(isAnimating ? 1.3 : 0.8)
+            .opacity(isAnimating ? 1.0 : 0.5)
+            .animation(
+                .easeInOut(duration: 0.8).repeatForever(autoreverses: true),
+                value: isAnimating
+            )
+            .onAppear { isAnimating = true }
     }
 }
 

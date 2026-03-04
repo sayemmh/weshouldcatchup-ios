@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 import Combine
 
 /// Handles incoming universal links for catch-up invitations.
@@ -58,5 +59,22 @@ final class DeepLinkService: ObservableObject {
     /// Clears the pending invite after it has been processed.
     func clearPendingInvite() {
         pendingInviteCatchupId = nil
+    }
+
+    // MARK: - Deferred Deep Linking (Clipboard)
+
+    /// Checks the clipboard for an invite link. Called after onboarding to handle
+    /// the case where a new user tapped an invite link on the web, installed the app,
+    /// and the web page copied the invite URL to their clipboard.
+    func checkClipboardForInvite() {
+        guard pendingInviteCatchupId == nil else { return }
+
+        guard let string = UIPasteboard.general.string,
+              let url = URL(string: string) else { return }
+
+        if handleIncomingURL(url) {
+            // Clear the clipboard so we don't re-process it
+            UIPasteboard.general.string = ""
+        }
     }
 }

@@ -8,6 +8,8 @@ struct MainView: View {
     @State private var showInviteView: Bool = false
     @State private var showCallHistory: Bool = false
     @State private var navigateToLive: Bool = false
+    @State private var showSignOutAlert: Bool = false
+    @State private var showSignOutConfirm: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -16,28 +18,28 @@ struct MainView: View {
                     .ignoresSafeArea()
 
                 VStack(spacing: 0) {
+                    // MARK: - Queue List
+                    ScrollView {
+                        queueSection
+                    }
+
                     // MARK: - I'm Free Button
                     imFreeSection
-
-                    Divider()
-                        .padding(.horizontal, 24)
-
-                    // MARK: - Queue List
-                    queueSection
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("We Should Catch Up")
-                        .font(.fraunces(22, weight: .semiBold))
+                        .font(.fraunces(20, weight: .semiBold))
                         .foregroundColor(Constants.Colors.textPrimary)
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        signOut()
+                        showSignOutAlert = true
                     } label: {
                         Image(systemName: "rectangle.portrait.and.arrow.right")
+                            .font(.system(size: 15, weight: .regular))
                             .foregroundColor(Constants.Colors.textSecondary)
                     }
                 }
@@ -45,8 +47,9 @@ struct MainView: View {
                     Button {
                         showInviteView = true
                     } label: {
-                        Image(systemName: "plus.circle")
-                            .foregroundColor(Constants.Colors.primary)
+                        Image(systemName: "plus")
+                            .font(.system(size: 16, weight: .regular))
+                            .foregroundColor(Constants.Colors.textPrimary)
                     }
                 }
             }
@@ -59,6 +62,22 @@ struct MainView: View {
             .navigationDestination(isPresented: $navigateToLive) {
                 LiveWaitingView()
             }
+            .alert("Sign Out", isPresented: $showSignOutAlert) {
+                Button("Sign Out", role: .destructive) {
+                    showSignOutConfirm = true
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Are you sure you want to sign out?")
+            }
+            .alert("Are you really sure?", isPresented: $showSignOutConfirm) {
+                Button("Yes, Sign Out", role: .destructive) {
+                    signOut()
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("You'll need to verify your phone number again to sign back in.")
+            }
             .task {
                 await viewModel.fetchQueue()
             }
@@ -68,32 +87,33 @@ struct MainView: View {
     // MARK: - I'm Free Section
 
     private var imFreeSection: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 10) {
             Button {
                 navigateToLive = true
             } label: {
                 ZStack {
                     Circle()
                         .fill(Constants.Colors.primary)
-                        .frame(width: 120, height: 120)
-                        .shadow(color: Constants.Colors.primary.opacity(0.4), radius: 16, x: 0, y: 6)
+                        .frame(width: 140, height: 140)
+                        .shadow(color: .black.opacity(0.08), radius: 12, x: 0, y: 4)
 
-                    VStack(spacing: 4) {
+                    VStack(spacing: 6) {
                         Image(systemName: "hand.wave")
-                            .font(.fraunces(28, weight: .semiBold))
+                            .font(.system(size: 28, weight: .regular))
                         Text("I'm Free")
-                            .font(.fraunces(16, weight: .semiBold))
+                            .font(.inter(15, weight: .semiBold))
                     }
                     .foregroundColor(.white)
                 }
             }
-            .padding(.top, 24)
 
-            Text("Tap when you have a few minutes to chat")
-                .font(.fraunces(13, weight: .regular))
-                .foregroundColor(Constants.Colors.textSecondary)
-                .padding(.bottom, 20)
+            Text("Tap when you have a few minutes")
+                .font(.inter(13, weight: .regular))
+                .foregroundColor(Constants.Colors.textTertiary)
         }
+        .padding(.top, 16)
+        .padding(.bottom, 44)
+        .background(Constants.Colors.background)
     }
 
     // MARK: - Queue Section
@@ -101,10 +121,14 @@ struct MainView: View {
     private var queueSection: some View {
         Group {
             if viewModel.isLoading {
-                Spacer()
-                ProgressView("Loading your queue...")
-                    .foregroundColor(Constants.Colors.textSecondary)
-                Spacer()
+                VStack(spacing: 12) {
+                    Spacer().frame(height: 60)
+                    ProgressView()
+                    Text("Loading...")
+                        .font(.inter(13, weight: .regular))
+                        .foregroundColor(Constants.Colors.textSecondary)
+                    Spacer()
+                }
             } else if viewModel.queue.isEmpty {
                 emptyQueueView
             } else {
@@ -116,33 +140,37 @@ struct MainView: View {
     // MARK: - Empty Queue
 
     private var emptyQueueView: some View {
-        VStack(spacing: 16) {
-            Spacer()
+        VStack(spacing: 14) {
+            Spacer().frame(height: 32)
 
             Image(systemName: "person.2")
-                .font(.system(size: 40, weight: .light))
-                .foregroundColor(Constants.Colors.textSecondary.opacity(0.5))
+                .font(.system(size: 36, weight: .light))
+                .foregroundColor(Constants.Colors.textTertiary)
 
-            Text("No one in your queue yet.")
-                .font(.fraunces(16, weight: .medium))
-                .foregroundColor(Constants.Colors.textSecondary)
+            Text("No one in your queue yet")
+                .font(.fraunces(18, weight: .medium))
+                .foregroundColor(Constants.Colors.textPrimary)
 
-            Text("Invite someone to catch up.")
-                .font(.fraunces(13, weight: .regular))
+            Text("Invite a friend to get started")
+                .font(.inter(14, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
 
             Button {
                 showInviteView = true
             } label: {
-                Label("Invite a friend", systemImage: "paperplane")
-                    .font(.fraunces(16, weight: .medium))
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 12)
-                    .background(Constants.Colors.primary)
-                    .cornerRadius(12)
+                HStack(spacing: 6) {
+                    Image(systemName: "paperplane")
+                        .font(.system(size: 13, weight: .regular))
+                    Text("Send Invite")
+                        .font(.inter(14, weight: .medium))
+                }
+                .foregroundColor(.white)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 12)
+                .background(Constants.Colors.primary)
+                .cornerRadius(24)
             }
-            .padding(.top, 8)
+            .padding(.top, 4)
 
             Spacer()
         }
@@ -153,47 +181,54 @@ struct MainView: View {
 
     private var queueListView: some View {
         VStack(spacing: 0) {
-            ScrollView {
-                LazyVStack(spacing: 10) {
-                    ForEach(viewModel.queue.indices, id: \.self) { index in
-                        QueueRowView(
-                            item: $viewModel.queue[index],
-                            onRemove: {
-                                Task {
-                                    await viewModel.removeFromQueue(
-                                        catchupId: viewModel.queue[index].catchupId
-                                    )
-                                }
-                            }
-                        )
-                    }
-                }
-                .padding(.horizontal, 16)
-                .padding(.top, 16)
+            // Section header
+            HStack {
+                Text("YOUR QUEUE")
+                    .font(.inter(11, weight: .semiBold))
+                    .foregroundColor(Constants.Colors.textTertiary)
+                    .tracking(1.2)
+                Spacer()
             }
+            .padding(.horizontal, 20)
+            .padding(.top, 16)
+            .padding(.bottom, 10)
+
+            LazyVStack(spacing: 8) {
+                ForEach(viewModel.queue.indices, id: \.self) { index in
+                    QueueRowView(
+                        item: $viewModel.queue[index],
+                        onRemove: {
+                            Task {
+                                await viewModel.removeFromQueue(
+                                    catchupId: viewModel.queue[index].catchupId
+                                )
+                            }
+                        }
+                    )
+                }
+            }
+            .padding(.horizontal, 16)
 
             // MARK: - Call History Link
             Button {
                 showCallHistory = true
             } label: {
                 HStack(spacing: 6) {
-                    Image(systemName: "clock.arrow.circlepath")
+                    Image(systemName: "clock")
+                        .font(.system(size: 12, weight: .regular))
                     Text("Call History")
+                        .font(.inter(13, weight: .medium))
                 }
-                .font(.fraunces(13, weight: .regular))
-                .foregroundColor(Constants.Colors.primary)
-                .padding(.vertical, 12)
+                .foregroundColor(Constants.Colors.textSecondary)
+                .padding(.vertical, 16)
             }
         }
     }
 
     // MARK: - Sign Out
 
-    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
-
     private func signOut() {
         try? AuthService.shared.signOut()
-        hasCompletedOnboarding = false
     }
 
     // MARK: - Error
@@ -202,7 +237,7 @@ struct MainView: View {
     private var errorSection: some View {
         if let errorMessage = viewModel.errorMessage {
             Text(errorMessage)
-                .font(.fraunces(13, weight: .regular))
+                .font(.inter(13, weight: .regular))
                 .foregroundColor(.red)
                 .padding(.horizontal, 24)
         }

@@ -4,7 +4,7 @@ import {
   getActiveCatchUpsForUser,
   createCall,
 } from "./firestoreService.js";
-import { sendCatchUpPing } from "./pushService.js";
+import { sendCatchUpPing, sendRotationUpdate } from "./pushService.js";
 import { generateAgoraToken } from "./agoraTokenService.js";
 import type { CatchUpDoc } from "../types/index.js";
 
@@ -15,9 +15,9 @@ import type { CatchUpDoc } from "../types/index.js";
 interface RotationState {
   /** Set to true when cancelRotation() is called. The loop checks this flag. */
   cancelled: boolean;
-  /** The timeout handle for the current 60-second wait so we can clear it. */
+  /** The timeout handle for the current wait so we can clear it. */
   currentTimeout: ReturnType<typeof setTimeout> | null;
-  /** Resolves the current 60-second wait promise so we can break out early. */
+  /** Resolves the current wait promise so we can break out early. */
   resolveWait: (() => void) | null;
 }
 
@@ -72,7 +72,7 @@ export function cancelRotation(userId: string): void {
 
   state.cancelled = true;
 
-  // If we're in the middle of a 60-second wait, resolve it immediately.
+  // If we're in the middle of a wait, resolve it immediately.
   if (state.resolveWait) {
     state.resolveWait();
   }
@@ -108,11 +108,18 @@ function sortByPriority(catchups: (CatchUpDoc & { id: string })[]): (CatchUpDoc 
  * The main rotation loop.
  */
 async function runRotationLoop(userId: string, state: RotationState): Promise<void> {
+  console.log(`[RotationEngine] Starting rotation for user=${userId}`);
+
   const user = await getUser(userId);
-  if (!user) return;
+  if (!user) {
+    console.log(`[RotationEngine] User ${userId} not found, aborting`);
+    return;
+  }
 
   const catchups = await getActiveCatchUpsForUser(userId);
   const sorted = sortByPriority(catchups as (CatchUpDoc & { id: string })[]);
+
+  console.log(`[RotationEngine] Found ${sorted.length} catch-ups for user=${userId}`);
 
   // ------------------------------------------------------------------
   // PHASE 1: Check if anyone in the queue is already "live".
@@ -124,8 +131,11 @@ async function runRotationLoop(userId: string, state: RotationState): Promise<vo
     const otherUserId = catchup.userA === userId ? catchup.userB : catchup.userA;
     const otherUser = await getUser(otherUserId);
 
+    console.log(`[RotationEngine] Phase 1: checking ${otherUserId}, status=${otherUser?.status ?? "not found"}`);
+
     if (otherUser && otherUser.status === "live") {
       // Both users are live -- connect them immediately!
+      console.log(`[RotationEngine] Mutual live match! Connecting ${userId} <-> ${otherUserId}`);
       const agoraChannel = `catchup_${(catchup as any).id}_${Date.now()}`;
       const agoraToken = generateAgoraToken(agoraChannel, 0);
       const now = new Date().toISOString();
@@ -141,13 +151,17 @@ async function runRotationLoop(userId: string, state: RotationState): Promise<vo
 
       // Send ping to the other live user so their app joins the call.
       if (otherUser.fcmToken) {
-        await sendCatchUpPing(
-          otherUser.fcmToken,
-          user.displayName,
-          userId,
-          (catchup as any).id,
-          callId,
-        );
+        try {
+          await sendCatchUpPing(
+            otherUser.fcmToken,
+            user.displayName,
+            userId,
+            (catchup as any).id,
+            callId,
+          );
+        } catch (err) {
+          console.error("Failed to send mutual-live ping:", err);
+        }
       }
 
       // Cancel the other user's rotation since they're now matched.
@@ -167,7 +181,22 @@ async function runRotationLoop(userId: string, state: RotationState): Promise<vo
     const otherUser = await getUser(otherUserId);
 
     // Skip users who are already in a call.
-    if (!otherUser || otherUser.status === "in_call") continue;
+    if (!otherUser || otherUser.status === "in_call") {
+      console.log(`[RotationEngine] Phase 2: skipping ${otherUserId} (status=${otherUser?.status ?? "not found"})`);
+      continue;
+    }
+
+    console.log(`[RotationEngine] Phase 2: pinging ${otherUserId} (fcmToken=${otherUser.fcmToken ? "present" : "MISSING"})`);
+
+    // Notify the live user (caller) who we're currently pinging so their UI updates.
+    if (user.fcmToken) {
+      const otherName = otherUser.displayName ?? "Someone";
+      try {
+        await sendRotationUpdate(user.fcmToken, otherName, otherUserId);
+      } catch (err) {
+        console.error(`Failed to send rotation_update to live user ${userId}:`, err);
+      }
+    }
 
     // Generate call details ahead of time so the pinged user can accept instantly.
     const agoraChannel = `catchup_${(catchup as any).id}_${Date.now()}`;
@@ -184,19 +213,25 @@ async function runRotationLoop(userId: string, state: RotationState): Promise<vo
 
     // Send push notification to the other user.
     if (otherUser.fcmToken) {
-      await sendCatchUpPing(
-        otherUser.fcmToken,
-        user.displayName,
-        userId,
-        (catchup as any).id,
-        callId,
-      );
+      try {
+        await sendCatchUpPing(
+          otherUser.fcmToken,
+          user.displayName,
+          userId,
+          (catchup as any).id,
+          callId,
+        );
+      } catch (err) {
+        console.error(`Failed to send ping to ${otherUserId}:`, err);
+        // Continue to next person in queue instead of crashing rotation.
+        continue;
+      }
     }
 
-    // Wait up to 60 seconds for a response.
+    // Wait up to 15 seconds for a response.
     // The accept-ping endpoint will set both users to "in_call", which we detect
     // by re-checking the caller's status after the wait.
-    const accepted = await waitForAcceptance(userId, 60_000, state);
+    const accepted = await waitForAcceptance(userId, 15_000, state);
 
     if (state.cancelled) return;
 
@@ -205,7 +240,7 @@ async function runRotationLoop(userId: string, state: RotationState): Promise<vo
       return;
     }
 
-    // No response within 60s -- move to the next person in the queue.
+    // No response within 15s -- move to the next person in the queue.
     // (The orphaned call doc will have no endedAt, which is fine; it can be
     //  cleaned up by a background job or simply ignored.)
   }
