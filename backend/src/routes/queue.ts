@@ -28,11 +28,12 @@ export default async function queueRoutes(fastify: FastifyInstance): Promise<voi
           const otherUserId = catchup.userA === userId ? catchup.userB : catchup.userA;
           const isPending = catchup.status === "pending";
           const otherUser = otherUserId ? await getUser(otherUserId) : null;
+          const pendingName = catchup.invitedName || "Someone";
 
           items.push({
             catchupId: (catchup as any).id ?? "",
             otherUser: {
-              name: isPending ? "Invite sent" : (otherUser?.displayName ?? "Unknown"),
+              name: isPending ? pendingName : (otherUser?.displayName ?? "Unknown"),
               userId: otherUserId,
             },
             lastCallAt: catchup.lastCallAt,

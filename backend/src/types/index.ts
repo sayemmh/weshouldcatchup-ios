@@ -27,6 +27,7 @@ export interface CatchUpDoc {
   userA: string;                 // userId who created the catch-up
   userB: string;                 // userId who accepted the invite
   status: CatchUpStatus;
+  invitedName: string | null;    // name of the person invited (before they accept)
   createdAt: string;             // ISO-8601 timestamp
   acceptedAt: string | null;     // ISO-8601 timestamp
   removedBy: string | null;      // userId who removed the catch-up

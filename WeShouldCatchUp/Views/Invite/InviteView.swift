@@ -7,6 +7,7 @@ struct InviteView: View {
 
     @Environment(\.dismiss) private var dismiss
 
+    @State private var friendName: String = ""
     @State private var isCreatingLink: Bool = false
     @State private var inviteLink: String?
     @State private var errorMessage: String?
@@ -30,6 +31,21 @@ struct InviteView: View {
 
                     // MARK: - Headline
                     textSection
+
+                    // MARK: - Name Input
+                    TextField("", text: $friendName, prompt: Text("Their first name").foregroundColor(Constants.Colors.textTertiary))
+                        .font(.fraunces(20, weight: .medium))
+                        .foregroundColor(Constants.Colors.textPrimary)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Constants.Colors.border, lineWidth: 1)
+                        )
+                        .textInputAutocapitalization(.words)
+                        .autocorrectionDisabled(true)
 
                     // MARK: - Invite Button
                     inviteButton
@@ -95,11 +111,11 @@ struct InviteView: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(Constants.Colors.primary.opacity(isCreatingLink ? 0.5 : 1.0))
+            .background(Constants.Colors.primary.opacity(isCreatingLink || friendName.trimmingCharacters(in: .whitespaces).isEmpty ? 0.4 : 1.0))
             .foregroundColor(.white)
             .cornerRadius(28)
         }
-        .disabled(isCreatingLink)
+        .disabled(isCreatingLink || friendName.trimmingCharacters(in: .whitespaces).isEmpty)
     }
 
     // MARK: - Error
@@ -122,7 +138,7 @@ struct InviteView: View {
         isCreatingLink = true
         errorMessage = nil
         do {
-            let response = try await api.createCatchup()
+            let response = try await api.createCatchup(invitedName: friendName.trimmingCharacters(in: .whitespaces))
             inviteLink = response.inviteLink
             showShareSheet = true
         } catch {

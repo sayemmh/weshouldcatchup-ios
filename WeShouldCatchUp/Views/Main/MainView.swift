@@ -21,10 +21,8 @@ struct MainView: View {
                     .ignoresSafeArea()
 
                 VStack(spacing: 0) {
-                    // MARK: - Queue List
-                    ScrollView {
-                        queueSection
-                    }
+                    // MARK: - Queue Content
+                    queueSection
 
                     // MARK: - I'm Free Button
                     imFreeSection
@@ -224,7 +222,7 @@ struct MainView: View {
             .padding(.top, 16)
             .padding(.bottom, 10)
 
-            VStack(spacing: 8) {
+            List {
                 ForEach(viewModel.queue) { item in
                     QueueRowView(
                         item: item,
@@ -234,9 +232,22 @@ struct MainView: View {
                             }
                         }
                     )
+                    .listRowBackground(Constants.Colors.background)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+                }
+                .onMove(perform: viewModel.moveQueueItem)
+                .onDelete { offsets in
+                    let idsToRemove = offsets.map { viewModel.queue[$0].catchupId }
+                    Task {
+                        for id in idsToRemove {
+                            await viewModel.removeFromQueue(catchupId: id)
+                        }
+                    }
                 }
             }
-            .padding(.horizontal, 16)
+            .listStyle(.plain)
+            .background(Constants.Colors.background)
 
             // MARK: - Call History Link
             Button {

@@ -233,7 +233,7 @@ struct InviteFriendsOnboardingView: View {
         errorMessage = nil
 
         for contact in selectedContacts where inviteLinks[contact.phone] == nil {
-            if let link = await QueueViewModel().createInviteLink() {
+            if let link = await QueueViewModel().createInviteLink(invitedName: contact.name) {
                 inviteLinks[contact.phone] = link
             }
         }

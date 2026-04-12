@@ -22,17 +22,19 @@ const db = admin.firestore;
  */
 export default async function catchupsRoutes(fastify: FastifyInstance): Promise<void> {
   // ---------- POST /create-catchup ----------
-  fastify.post<{ Reply: CreateCatchupResponse }>(
+  fastify.post<{ Body: { invitedName?: string }; Reply: CreateCatchupResponse }>(
     "/create-catchup",
     { preHandler: authMiddleware },
     async (request, _reply) => {
       const { userId } = request;
+      const { invitedName } = (request.body as { invitedName?: string }) ?? {};
       const now = new Date().toISOString();
 
       const catchupData: CatchUpDoc = {
         userA: userId,
-        userB: "",           // Will be filled when the invite is accepted
+        userB: "",
         status: "pending",
+        invitedName: invitedName?.trim() || null,
         createdAt: now,
         acceptedAt: null,
         removedBy: null,

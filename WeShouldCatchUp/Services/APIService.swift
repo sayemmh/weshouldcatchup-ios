@@ -217,8 +217,12 @@ final class APIService {
     // MARK: - Catch-ups
 
     /// POST /create-catchup -- Creates a new catch-up pair and returns an invite link.
-    func createCatchup() async throws -> CreateCatchupResponse {
-        let request = try await authorizedRequest(path: "/create-catchup", method: "POST")
+    func createCatchup(invitedName: String? = nil) async throws -> CreateCatchupResponse {
+        var body: [String: Any]? = nil
+        if let name = invitedName {
+            body = ["invitedName": name]
+        }
+        let request = try await authorizedRequest(path: "/create-catchup", method: "POST", body: body)
         return try await execute(request)
     }
 

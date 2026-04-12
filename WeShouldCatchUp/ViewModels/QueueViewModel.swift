@@ -49,9 +49,9 @@ class QueueViewModel: ObservableObject {
 
     // MARK: - Invite
 
-    func createInviteLink() async -> String? {
+    func createInviteLink(invitedName: String? = nil) async -> String? {
         do {
-            let response = try await APIService.shared.createCatchup()
+            let response = try await APIService.shared.createCatchup(invitedName: invitedName)
             return response.inviteLink
         } catch {
             errorMessage = "Couldn't create invite link."
