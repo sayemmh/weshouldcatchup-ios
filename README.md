@@ -223,3 +223,188 @@ All endpoints except `/health` require a Firebase Auth token in the `Authorizati
 ## Out of Scope (v1)
 
 Video calls, text chat, group calls, Android, contact book sync, availability scheduling, read receipts, payments, social profiles.
+
+---
+
+## App Store Connect — Submission Copy
+
+Copy-paste ready. Character counts are verified.
+
+### Previews and Screenshots
+
+- **6.5" Display**: drag all 5 PNGs from `screenshots/` (1284×2778). Apple uses these for every other iPhone size.
+- No App Previews (video) — leave empty, not required.
+- No iPad / Apple Watch — leave empty, not required.
+
+### Promotional Text (170 char max — editable without resubmission)
+
+```
+Tap "I'm Free" and we'll find a friend who's also around to talk right now. No scheduling, no pressure — just real voice conversations when the moment is right.
+```
+
+### Description (4,000 char max)
+
+```
+We Should Catch Up is for the friends you keep meaning to call but never do.
+
+Instead of scheduling, you tap "I'm Free" when you have a spare moment — on a walk, in the car, doing dishes — and the app pings one friend at a time from your queue. If they're around, you're instantly connected for a voice call. If not, it quietly moves on. No calendar invites, no missed-call guilt, no group texts.
+
+HOW IT WORKS
+
+• Invite a friend with a simple link. They install the app, and you land in each other's queues.
+• When you have a few free minutes, tap "I'm Free".
+• The app reaches out to one person from your queue at a time, starting with whoever you haven't caught up with in the longest.
+• If they're also free, the voice call starts immediately inside the app.
+• If nobody answers, you stay live for 10 minutes in case a friend pops in.
+
+WHAT MAKES IT DIFFERENT
+
+Voice only. One-on-one. No feeds, no likes, no read receipts, no video. The best conversations happen when two people just happen to be free at the same time. This app makes those moments easier to find.
+
+PERFECT FOR
+
+• Long-distance friends you've been meaning to call for months
+• College friends scattered across time zones
+• Family who always text but never call
+• The friend who's always "we should grab coffee soon"
+
+PRIVACY
+
+Your queue is private. Only you see who's in it, and only you decide when you're free. We don't sell your data, track your location, or show ads.
+```
+
+### Keywords (100 char max, comma-separated, no spaces after commas)
+
+```
+voice call,catch up,friends,phone call,keep in touch,reconnect,talk,call app,calling,chat
+```
+
+### Support URL
+
+```
+https://weshouldcatchup.app/support
+```
+
+> If that page doesn't exist yet, point it to the main marketing site: `https://weshouldcatchup.app/`
+
+### Marketing URL
+
+```
+https://weshouldcatchup.app/
+```
+
+### Version
+
+```
+1.0
+```
+
+### Copyright
+
+```
+© 2026 Sayem Hoque
+```
+
+### App Review Information
+
+**Sign-in required?** ✅ Yes (phone auth required)
+
+**Demo Account — configure a Firebase Test Phone Number before submitting:**
+
+1. Firebase Console → Authentication → Sign-in method → Phone → **Phone numbers for testing**
+2. Add: `+1 650-555-1234` with code `123456`
+3. Save. This lets reviewers sign in without a real SMS being sent.
+
+**User name field:**
+```
++1 650-555-1234
+```
+
+**Password field:**
+```
+123456
+```
+
+**Contact Information:**
+
+| Field | Value |
+|---|---|
+| First name | Sayem |
+| Last name | Hoque |
+| Phone number | *(your real number — reviewer may call if they hit a blocker)* |
+| Email | sayem@flexbone.ai |
+
+**Notes (4,000 char max):**
+
+```
+Thank you for reviewing We Should Catch Up.
+
+SIGN-IN
+The app uses phone-number authentication via Firebase Auth. A Firebase Test Phone Number is configured so you can sign in without receiving a real SMS:
+
+  Phone: +1 650-555-1234
+  Code:  123456
+
+After signing in, you'll be asked for a display name. Enter anything (e.g. "Reviewer").
+
+TESTING THE CORE FLOW
+
+1. On the main screen, you'll see "YOUR QUEUE". New test accounts start with an empty queue — this is expected.
+
+2. Tap the "I'm Free" button at the bottom. The app enters live-waiting mode and shows "Looking for someone…". Because the test account has no friends in its queue, nothing will connect. After a short wait you can tap "Never mind" to return.
+
+3. To see a full end-to-end voice call, two test devices are needed. The app will send a push notification to a friend in the queue, they accept, and you're connected via Agora voice SDK. If you'd like us to provision a second test account for a reviewer's device, please email sayem@flexbone.ai and we'll add it within minutes.
+
+PERMISSIONS
+
+On first launch the app will request:
+- Notifications (required — used to tell a user they've been pinged)
+- Microphone (required — used during voice calls via Agora)
+
+Please allow both to fully exercise the app.
+
+FEATURES IN THIS BUILD
+- Phone auth sign-in and display-name onboarding
+- Queue of friends ordered by time since last call
+- Edit mode on the queue list: drag to reorder, swipe or tap minus to remove
+- "I'm Free" → sequential rotation through queue with 15-second ping cycles
+- Inbound ping handling with Accept / Not now
+- 1-on-1 voice calling via Agora SDK
+- Call-ended summary screen
+
+There are no in-app purchases, no ads, and no third-party data sharing beyond Firebase (auth/push) and Agora (voice transport). No content moderation is needed because the app is voice-only and 1-on-1 (no user-generated content is stored or broadcast).
+
+Thank you!
+```
+
+**Attachment**: leave empty (none needed).
+
+### App Store Version Release
+
+Recommended for v1.0 first submission:
+
+✅ **Manually release this version**
+
+Lets you flip the switch after approval, so you can announce on your own schedule and confirm the build is live before telling anyone.
+
+### Fields to leave empty / untouched
+
+- App Clip — skip
+- iMessage App — skip
+- Game Center — skip
+- Routing App Coverage File — skip
+- App Previews (video) — skip
+
+### Before tapping "Add for Review"
+
+- [ ] All 5 screenshots uploaded to 6.5" slot
+- [ ] Description, keywords, promotional text filled
+- [ ] Support URL reachable
+- [ ] Copyright filled
+- [ ] Firebase test phone number configured and verified working
+- [ ] Build 22 (or latest) uploaded, processed, and selected in the "Build" section
+- [ ] Export compliance answered on the selected build (HTTPS-only → "No" to custom encryption)
+- [ ] App Privacy questionnaire complete (separate section — covered under "App Privacy" in the left sidebar)
+- [ ] Age rating complete (under "App Information")
+- [ ] Pricing set (under "Pricing and Availability") — free
+
