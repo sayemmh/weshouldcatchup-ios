@@ -74,7 +74,7 @@ class AuthViewModel: ObservableObject {
         do {
             try await authService.verifyCode(code: verificationCode)
             isAuthenticated = true
-            currentStep = isReturningUser ? .complete : .notificationPermission
+            currentStep = isReturningUser ? .inviteFriends : .notificationPermission
         } catch {
             errorMessage = "Invalid code. Please try again."
         }
