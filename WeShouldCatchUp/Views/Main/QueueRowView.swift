@@ -4,7 +4,7 @@ import SwiftUI
 
 struct QueueRowView: View {
 
-    @Binding var item: QueueItem
+    var item: QueueItem
 
     /// Called when the user confirms removal of this item from the queue.
     var onRemove: () -> Void
@@ -163,7 +163,7 @@ struct QueueRowView: View {
     )
 
     List {
-        QueueRowView(item: .constant(sampleItem)) {
+        QueueRowView(item: sampleItem) {
             print("Remove tapped")
         }
     }

@@ -224,34 +224,19 @@ struct MainView: View {
             .padding(.top, 16)
             .padding(.bottom, 10)
 
-            List {
-                ForEach(viewModel.queue.indices, id: \.self) { index in
+            VStack(spacing: 8) {
+                ForEach(viewModel.queue) { item in
                     QueueRowView(
-                        item: $viewModel.queue[index],
+                        item: item,
                         onRemove: {
                             Task {
-                                await viewModel.removeFromQueue(
-                                    catchupId: viewModel.queue[index].catchupId
-                                )
+                                await viewModel.removeFromQueue(catchupId: item.catchupId)
                             }
                         }
                     )
-                    .listRowBackground(Constants.Colors.background)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
-                }
-                .onMove(perform: viewModel.moveQueueItem)
-                .onDelete { offsets in
-                    let idsToRemove = offsets.map { viewModel.queue[$0].catchupId }
-                    Task {
-                        for id in idsToRemove {
-                            await viewModel.removeFromQueue(catchupId: id)
-                        }
-                    }
                 }
             }
-            .listStyle(.plain)
-            .background(Constants.Colors.background)
+            .padding(.horizontal, 16)
 
             // MARK: - Call History Link
             Button {
