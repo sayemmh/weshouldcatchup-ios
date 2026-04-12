@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import admin from "firebase-admin";
 import { authMiddleware } from "../middleware/auth.js";
 import { getUser, updateUser } from "../services/firestoreService.js";
 import type { UserDoc } from "../types/index.js";
@@ -47,6 +48,36 @@ export default async function profileRoutes(fastify: FastifyInstance): Promise<v
       }
 
       return { status: "ok" };
+    },
+  );
+
+  // ---------- POST /delete-account ----------
+  fastify.post(
+    "/delete-account",
+    { preHandler: authMiddleware },
+    async (request) => {
+      const { userId } = request;
+      const db = admin.firestore();
+
+      // Remove all catchups where user is either side
+      const [asA, asB] = await Promise.all([
+        db.collection("catchups").where("userA", "==", userId).get(),
+        db.collection("catchups").where("userB", "==", userId).get(),
+      ]);
+
+      const batch = db.batch();
+      for (const doc of [...asA.docs, ...asB.docs]) {
+        batch.update(doc.ref, { status: "removed", removedBy: userId });
+      }
+
+      // Delete user document
+      batch.delete(db.collection("users").doc(userId));
+      await batch.commit();
+
+      // Delete Firebase Auth account
+      await admin.auth().deleteUser(userId);
+
+      return { status: "deleted" };
     },
   );
 

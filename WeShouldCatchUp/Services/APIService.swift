@@ -252,6 +252,13 @@ final class APIService {
         let _: [String: String] = try await execute(request)
     }
 
+    // MARK: - Account Deletion
+
+    func deleteAccount() async throws {
+        let request = try await authorizedRequest(path: "/delete-account", method: "POST", body: nil)
+        let _: [String: String] = try await execute(request)
+    }
+
     // MARK: - Queue Reordering
 
     /// POST /reorder-queue -- Saves the user's custom queue order.

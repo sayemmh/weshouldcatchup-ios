@@ -10,6 +10,9 @@ struct MainView: View {
     @State private var navigateToLive: Bool = false
     @State private var showSignOutAlert: Bool = false
     @State private var showSignOutConfirm: Bool = false
+    @State private var showDeleteAccountAlert: Bool = false
+    @State private var showDeleteAccountConfirm: Bool = false
+    @State private var isDeletingAccount: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -62,13 +65,14 @@ struct MainView: View {
             .navigationDestination(isPresented: $navigateToLive) {
                 LiveWaitingView()
             }
-            .alert("Sign Out", isPresented: $showSignOutAlert) {
-                Button("Sign Out", role: .destructive) {
+            .confirmationDialog("Account", isPresented: $showSignOutAlert) {
+                Button("Sign Out") {
                     showSignOutConfirm = true
                 }
+                Button("Delete Account", role: .destructive) {
+                    showDeleteAccountAlert = true
+                }
                 Button("Cancel", role: .cancel) { }
-            } message: {
-                Text("Are you sure you want to sign out?")
             }
             .alert("Are you really sure?", isPresented: $showSignOutConfirm) {
                 Button("Yes, Sign Out", role: .destructive) {
@@ -77,6 +81,22 @@ struct MainView: View {
                 Button("Cancel", role: .cancel) { }
             } message: {
                 Text("You'll need to verify your phone number again to sign back in.")
+            }
+            .alert("Delete Account", isPresented: $showDeleteAccountAlert) {
+                Button("Delete My Account", role: .destructive) {
+                    showDeleteAccountConfirm = true
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("This will permanently delete your account, queue, and all data. This cannot be undone.")
+            }
+            .alert("Are you absolutely sure?", isPresented: $showDeleteAccountConfirm) {
+                Button("Yes, Delete Everything", role: .destructive) {
+                    Task { await deleteAccount() }
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Your account, call history, and all connections will be permanently erased.")
             }
             .task {
                 await viewModel.fetchQueue()
@@ -245,6 +265,20 @@ struct MainView: View {
 
     private func signOut() {
         try? AuthService.shared.signOut()
+    }
+
+    // MARK: - Delete Account
+
+    @MainActor
+    private func deleteAccount() async {
+        isDeletingAccount = true
+        do {
+            try await APIService.shared.deleteAccount()
+            try? AuthService.shared.signOut()
+        } catch {
+            viewModel.errorMessage = "Couldn't delete account. Please try again."
+        }
+        isDeletingAccount = false
     }
 
     // MARK: - Error
