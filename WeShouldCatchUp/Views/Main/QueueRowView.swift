@@ -10,6 +10,7 @@ struct QueueRowView: View {
     var onRemove: () -> Void
 
     @State private var showRemoveConfirmation: Bool = false
+    @State private var showActions: Bool = false
 
     var body: some View {
         HStack(spacing: 14) {
@@ -67,6 +68,22 @@ struct QueueRowView: View {
             RoundedRectangle(cornerRadius: 12)
                 .stroke(Constants.Colors.border, lineWidth: 1)
         )
+        .contentShape(Rectangle())
+        .onTapGesture {
+            showActions = true
+        }
+        .confirmationDialog(item.otherUser.name, isPresented: $showActions) {
+            if item.isPending {
+                Button("Cancel Invite", role: .destructive) {
+                    showRemoveConfirmation = true
+                }
+            } else {
+                Button("Remove from Queue", role: .destructive) {
+                    showRemoveConfirmation = true
+                }
+            }
+            Button("Cancel", role: .cancel) { }
+        }
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
             Button(role: .destructive) {
                 showRemoveConfirmation = true
