@@ -6,7 +6,7 @@
   </defs>
 
   <!-- Dark background -->
-  <rect width="1284" height="2778" fill="#2D2926"/>
+  <rect width="1284" height="2778" fill="#2C2119"/>
 
   <!-- Status Bar (white for dark bg) -->
   <text x="72" y="78" font-family="Inter, SF Pro, system-ui" font-weight="600" font-size="38" fill="white">9:41</text>
@@ -15,8 +15,8 @@
   <rect x="1172" y="62" width="4" height="10" rx="2" fill="white"/>
 
   <!-- Avatar -->
-  <circle cx="642" cy="880" r="120" fill="#B5695A" opacity="0.2"/>
-  <text x="642" y="916" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="96" fill="#B5695A" text-anchor="middle">J</text>
+  <circle cx="642" cy="880" r="120" fill="#6F4E37" opacity="0.2"/>
+  <text x="642" y="916" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="96" fill="#6F4E37" text-anchor="middle">J</text>
 
   <!-- Caller name -->
   <text x="642" y="1100" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="64" fill="white" text-anchor="middle">Jordan</text>

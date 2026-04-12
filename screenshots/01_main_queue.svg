@@ -6,98 +6,98 @@
   </defs>
 
   <!-- Background -->
-  <rect width="1284" height="2778" fill="#FBF7F4"/>
+  <rect width="1284" height="2778" fill="#FAF6F1"/>
 
   <!-- Status Bar -->
-  <text x="72" y="78" font-family="Inter, SF Pro, system-ui" font-weight="600" font-size="38" fill="#2D2926">9:41</text>
-  <circle cx="1080" cy="66" r="14" fill="none" stroke="#2D2926" stroke-width="3"/>
-  <rect x="1074" y="60" width="12" height="12" rx="2" fill="#2D2926"/>
-  <rect x="1120" y="52" width="52" height="28" rx="8" fill="none" stroke="#2D2926" stroke-width="3"/>
-  <rect x="1124" y="56" width="40" height="20" rx="5" fill="#2D2926"/>
-  <rect x="1172" y="62" width="4" height="10" rx="2" fill="#2D2926"/>
+  <text x="72" y="78" font-family="Inter, SF Pro, system-ui" font-weight="600" font-size="38" fill="#2C2119">9:41</text>
+  <circle cx="1080" cy="66" r="14" fill="none" stroke="#2C2119" stroke-width="3"/>
+  <rect x="1074" y="60" width="12" height="12" rx="2" fill="#2C2119"/>
+  <rect x="1120" y="52" width="52" height="28" rx="8" fill="none" stroke="#2C2119" stroke-width="3"/>
+  <rect x="1124" y="56" width="40" height="20" rx="5" fill="#2C2119"/>
+  <rect x="1172" y="62" width="4" height="10" rx="2" fill="#2C2119"/>
 
   <!-- Navigation Bar -->
   <!-- Sign out icon (left) -->
-  <rect x="56" y="130" width="28" height="36" rx="4" fill="none" stroke="#6B6560" stroke-width="3"/>
-  <path d="M 80 148 L 100 148" stroke="#6B6560" stroke-width="3" stroke-linecap="round"/>
-  <path d="M 92 140 L 100 148 L 92 156" stroke="#6B6560" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <rect x="56" y="130" width="28" height="36" rx="4" fill="none" stroke="#5C4F44" stroke-width="3"/>
+  <path d="M 80 148 L 100 148" stroke="#5C4F44" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 92 140 L 100 148 L 92 156" stroke="#5C4F44" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 
   <!-- Title -->
-  <text x="642" y="158" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="46" fill="#2D2926" text-anchor="middle">We Should Catch Up</text>
+  <text x="642" y="158" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="46" fill="#2C2119" text-anchor="middle">We Should Catch Up</text>
 
   <!-- Plus icon (right) -->
-  <line x1="1200" y1="148" x2="1228" y2="148" stroke="#2D2926" stroke-width="3.5" stroke-linecap="round"/>
-  <line x1="1214" y1="134" x2="1214" y2="162" stroke="#2D2926" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="1200" y1="148" x2="1228" y2="148" stroke="#2C2119" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="1214" y1="134" x2="1214" y2="162" stroke="#2C2119" stroke-width="3.5" stroke-linecap="round"/>
 
   <!-- Divider -->
-  <line x1="0" y1="190" x2="1284" y2="190" stroke="#E8E0DA" stroke-width="1"/>
+  <line x1="0" y1="190" x2="1284" y2="190" stroke="#DDD3C8" stroke-width="1"/>
 
   <!-- YOUR QUEUE header -->
-  <text x="56" y="248" font-family="Inter, SF Pro, system-ui" font-weight="600" font-size="28" fill="#9A9490" letter-spacing="3">YOUR QUEUE</text>
-  <text x="1228" y="248" font-family="Inter, SF Pro, system-ui" font-weight="500" font-size="32" fill="#6B6560" text-anchor="end">Edit</text>
+  <text x="56" y="248" font-family="Inter, SF Pro, system-ui" font-weight="600" font-size="28" fill="#8C7E73" letter-spacing="3">YOUR QUEUE</text>
+  <text x="1228" y="248" font-family="Inter, SF Pro, system-ui" font-weight="500" font-size="32" fill="#5C4F44" text-anchor="end">Edit</text>
 
   <!-- Queue Row 1 - Sarah -->
-  <rect x="40" y="280" width="1204" height="140" rx="24" fill="white" stroke="#E8E0DA" stroke-width="2"/>
-  <circle cx="132" cy="350" r="44" fill="#F0DDD7"/>
-  <text x="132" y="364" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="40" fill="#B5695A" text-anchor="middle">S</text>
-  <text x="204" y="334" font-family="Fraunces, Georgia, serif" font-weight="500" font-size="38" fill="#2D2926">Sarah</text>
-  <text x="204" y="374" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#6B6560">3 weeks ago</text>
-  <text x="380" y="374" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#9A9490">  4 calls</text>
-  <path d="M 1180 340 L 1196 350 L 1180 360" stroke="#9A9490" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <rect x="40" y="280" width="1204" height="140" rx="24" fill="white" stroke="#DDD3C8" stroke-width="2"/>
+  <circle cx="132" cy="350" r="44" fill="#E8D5C4"/>
+  <text x="132" y="364" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="40" fill="#6F4E37" text-anchor="middle">S</text>
+  <text x="204" y="334" font-family="Fraunces, Georgia, serif" font-weight="500" font-size="38" fill="#2C2119">Sarah</text>
+  <text x="204" y="374" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#5C4F44">3 weeks ago</text>
+  <text x="380" y="374" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#8C7E73">  4 calls</text>
+  <path d="M 1180 340 L 1196 350 L 1180 360" stroke="#8C7E73" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 
   <!-- Queue Row 2 - Alex -->
-  <rect x="40" y="436" width="1204" height="140" rx="24" fill="white" stroke="#E8E0DA" stroke-width="2"/>
-  <circle cx="132" cy="506" r="44" fill="#F0DDD7"/>
-  <text x="132" y="520" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="40" fill="#B5695A" text-anchor="middle">A</text>
-  <text x="204" y="490" font-family="Fraunces, Georgia, serif" font-weight="500" font-size="38" fill="#2D2926">Alex</text>
-  <text x="204" y="530" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#6B6560">2 weeks ago</text>
-  <text x="384" y="530" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#9A9490">  7 calls</text>
-  <path d="M 1180 496 L 1196 506 L 1180 516" stroke="#9A9490" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <rect x="40" y="436" width="1204" height="140" rx="24" fill="white" stroke="#DDD3C8" stroke-width="2"/>
+  <circle cx="132" cy="506" r="44" fill="#E8D5C4"/>
+  <text x="132" y="520" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="40" fill="#6F4E37" text-anchor="middle">A</text>
+  <text x="204" y="490" font-family="Fraunces, Georgia, serif" font-weight="500" font-size="38" fill="#2C2119">Alex</text>
+  <text x="204" y="530" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#5C4F44">2 weeks ago</text>
+  <text x="384" y="530" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#8C7E73">  7 calls</text>
+  <path d="M 1180 496 L 1196 506 L 1180 516" stroke="#8C7E73" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 
   <!-- Queue Row 3 - Jordan -->
-  <rect x="40" y="592" width="1204" height="140" rx="24" fill="white" stroke="#E8E0DA" stroke-width="2"/>
-  <circle cx="132" cy="662" r="44" fill="#F0DDD7"/>
-  <text x="132" y="676" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="40" fill="#B5695A" text-anchor="middle">J</text>
-  <text x="204" y="646" font-family="Fraunces, Georgia, serif" font-weight="500" font-size="38" fill="#2D2926">Jordan</text>
-  <text x="204" y="686" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#6B6560">5 days ago</text>
-  <text x="366" y="686" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#9A9490">  12 calls</text>
-  <path d="M 1180 652 L 1196 662 L 1180 672" stroke="#9A9490" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <rect x="40" y="592" width="1204" height="140" rx="24" fill="white" stroke="#DDD3C8" stroke-width="2"/>
+  <circle cx="132" cy="662" r="44" fill="#E8D5C4"/>
+  <text x="132" y="676" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="40" fill="#6F4E37" text-anchor="middle">J</text>
+  <text x="204" y="646" font-family="Fraunces, Georgia, serif" font-weight="500" font-size="38" fill="#2C2119">Jordan</text>
+  <text x="204" y="686" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#5C4F44">5 days ago</text>
+  <text x="366" y="686" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#8C7E73">  12 calls</text>
+  <path d="M 1180 652 L 1196 662 L 1180 672" stroke="#8C7E73" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 
   <!-- Queue Row 4 - Mia -->
-  <rect x="40" y="748" width="1204" height="140" rx="24" fill="white" stroke="#E8E0DA" stroke-width="2"/>
-  <circle cx="132" cy="818" r="44" fill="#F0DDD7"/>
-  <text x="132" y="832" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="40" fill="#B5695A" text-anchor="middle">M</text>
-  <text x="204" y="802" font-family="Fraunces, Georgia, serif" font-weight="500" font-size="38" fill="#2D2926">Mia</text>
-  <text x="204" y="842" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#6B6560">yesterday</text>
-  <text x="350" y="842" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#9A9490">  3 calls</text>
-  <path d="M 1180 808 L 1196 818 L 1180 828" stroke="#9A9490" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <rect x="40" y="748" width="1204" height="140" rx="24" fill="white" stroke="#DDD3C8" stroke-width="2"/>
+  <circle cx="132" cy="818" r="44" fill="#E8D5C4"/>
+  <text x="132" y="832" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="40" fill="#6F4E37" text-anchor="middle">M</text>
+  <text x="204" y="802" font-family="Fraunces, Georgia, serif" font-weight="500" font-size="38" fill="#2C2119">Mia</text>
+  <text x="204" y="842" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#5C4F44">yesterday</text>
+  <text x="350" y="842" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#8C7E73">  3 calls</text>
+  <path d="M 1180 808 L 1196 818 L 1180 828" stroke="#8C7E73" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 
   <!-- Queue Row 5 - Nate -->
-  <rect x="40" y="904" width="1204" height="140" rx="24" fill="white" stroke="#E8E0DA" stroke-width="2"/>
-  <circle cx="132" cy="974" r="44" fill="#F0DDD7"/>
-  <text x="132" y="988" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="40" fill="#B5695A" text-anchor="middle">N</text>
-  <text x="204" y="958" font-family="Fraunces, Georgia, serif" font-weight="500" font-size="38" fill="#2D2926">Nate</text>
-  <text x="204" y="998" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#6B6560">just now</text>
-  <text x="332" y="998" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#9A9490">  1 call</text>
-  <path d="M 1180 964 L 1196 974 L 1180 984" stroke="#9A9490" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <rect x="40" y="904" width="1204" height="140" rx="24" fill="white" stroke="#DDD3C8" stroke-width="2"/>
+  <circle cx="132" cy="974" r="44" fill="#E8D5C4"/>
+  <text x="132" y="988" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="40" fill="#6F4E37" text-anchor="middle">N</text>
+  <text x="204" y="958" font-family="Fraunces, Georgia, serif" font-weight="500" font-size="38" fill="#2C2119">Nate</text>
+  <text x="204" y="998" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#5C4F44">just now</text>
+  <text x="332" y="998" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="28" fill="#8C7E73">  1 call</text>
+  <path d="M 1180 964 L 1196 974 L 1180 984" stroke="#8C7E73" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 
   <!-- Call History Link -->
-  <text x="642" y="1120" font-family="Inter, SF Pro, system-ui" font-weight="500" font-size="30" fill="#6B6560" text-anchor="middle">Call History</text>
+  <text x="642" y="1120" font-family="Inter, SF Pro, system-ui" font-weight="500" font-size="30" fill="#5C4F44" text-anchor="middle">Call History</text>
 
   <!-- Bottom section background -->
-  <rect x="0" y="2200" width="1284" height="578" fill="#FBF7F4"/>
+  <rect x="0" y="2200" width="1284" height="578" fill="#FAF6F1"/>
 
   <!-- I'm Free Button -->
-  <circle cx="642" cy="2380" r="180" fill="#B5695A"/>
-  <circle cx="642" cy="2380" r="182" fill="none" stroke="#B5695A" stroke-opacity="0.15" stroke-width="40"/>
+  <circle cx="642" cy="2380" r="180" fill="#6F4E37"/>
+  <circle cx="642" cy="2380" r="182" fill="none" stroke="#6F4E37" stroke-opacity="0.15" stroke-width="40"/>
 
   <!-- Hand wave icon -->
   <text x="642" y="2358" font-family="system-ui" font-size="72" fill="white" text-anchor="middle">&#x1F44B;</text>
   <text x="642" y="2420" font-family="Inter, SF Pro, system-ui" font-weight="600" font-size="38" fill="white" text-anchor="middle">I'm Free</text>
 
   <!-- Subtitle -->
-  <text x="642" y="2600" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="30" fill="#9A9490" text-anchor="middle">Tap when you have a few minutes</text>
+  <text x="642" y="2600" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="30" fill="#8C7E73" text-anchor="middle">Tap when you have a few minutes</text>
 
   <!-- Home indicator -->
-  <rect x="492" y="2726" width="300" height="10" rx="5" fill="#2D2926" opacity="0.2"/>
+  <rect x="492" y="2726" width="300" height="10" rx="5" fill="#2C2119" opacity="0.2"/>
 </svg>

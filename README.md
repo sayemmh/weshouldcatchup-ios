@@ -173,19 +173,19 @@ All endpoints except `/health` require a Firebase Auth token in the `Authorizati
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `primary` | `#B5695A` | Muted terracotta — buttons, accents, brand color |
-| `primaryDark` | `#96524A` | Pressed/hover states |
-| `primaryLight` | `#F0DDD7` | Light terracotta tint (badges, highlights) |
-| `background` | `#FBF7F4` | Cream — main screen background |
-| `backgroundDark` | `#F5EDE8` | Slightly darker cream for depth |
+| `primary` | `#6F4E37` | Coffee brown — buttons, accents, brand color |
+| `primaryDark` | `#553A28` | Espresso — pressed/hover states |
+| `primaryLight` | `#E8D5C4` | Latte — badges, highlights |
+| `background` | `#FAF6F1` | Cream — main screen background |
+| `backgroundDark` | `#F0E8DF` | Oat milk — slightly darker cream for depth |
 | `cardBackground` | `#FFFFFF` | Cards, input fields |
-| `textPrimary` | `#2D2926` | Warm charcoal — headings, body text |
-| `textSecondary` | `#6B6560` | Muted — secondary labels, subtitles |
-| `textTertiary` | `#9A9490` | Warm light — placeholders, icons |
-| `border` | `#E8E0DA` | Input borders, dividers |
+| `textPrimary` | `#2C2119` | Dark roast — headings, body text |
+| `textSecondary` | `#5C4F44` | Medium roast — secondary labels, subtitles |
+| `textTertiary` | `#8C7E73` | Light roast — placeholders, icons |
+| `border` | `#DDD3C8` | Input borders, dividers |
 | `destructive` | `#FB2C36` | Errors, delete actions |
 | `success` | `rgb(77,179,115)` | Success states |
-| `callBackground` | `#2D2926` | Dark background for voice call screen |
+| `callBackground` | `#2C2119` | Dark roast — voice call screen |
 
 ### Typography
 

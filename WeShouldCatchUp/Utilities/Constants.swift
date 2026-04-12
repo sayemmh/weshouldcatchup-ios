@@ -20,28 +20,28 @@ enum Constants {
 
     // MARK: - Design
     enum Colors {
-        // Muted terracotta accent — primary brand color
-        static let primary = Color(hex: 0xB5695A)             // muted terracotta
-        static let primaryDark = Color(hex: 0x96524A)         // darker muted
-        static let primaryLight = Color(hex: 0xF0DDD7)        // --color-terracotta-light
+        // Coffee accent — primary brand color
+        static let primary = Color(hex: 0x6F4E37)             // coffee brown
+        static let primaryDark = Color(hex: 0x553A28)         // espresso
+        static let primaryLight = Color(hex: 0xE8D5C4)        // latte
 
         // Backgrounds
-        static let background = Color(hex: 0xFBF7F4)          // --color-cream
-        static let backgroundDark = Color(hex: 0xF5EDE8)      // --color-cream-dark
-        static let cardBackground = Color.white                // --color-card
+        static let background = Color(hex: 0xFAF6F1)          // cream
+        static let backgroundDark = Color(hex: 0xF0E8DF)      // oat milk
+        static let cardBackground = Color.white                // card
 
         // Text
-        static let textPrimary = Color(hex: 0x2D2926)         // --color-warm-charcoal
-        static let textSecondary = Color(hex: 0x6B6560)       // --color-warm-muted
-        static let textTertiary = Color(hex: 0x9A9490)        // --color-warm-light
+        static let textPrimary = Color(hex: 0x2C2119)         // dark roast
+        static let textSecondary = Color(hex: 0x5C4F44)       // medium roast
+        static let textTertiary = Color(hex: 0x8C7E73)        // light roast
 
         // Borders
-        static let border = Color(hex: 0xE8E0DA)              // --color-border
+        static let border = Color(hex: 0xDDD3C8)              // border
 
         // Utility
-        static let destructive = Color(hex: 0xFB2C36)         // --color-red-500
+        static let destructive = Color(hex: 0xFB2C36)         // red
         static let success = Color(red: 0.30, green: 0.70, blue: 0.45)
-        static let callBackground = Color(hex: 0x2D2926)      // warm charcoal for call screen
+        static let callBackground = Color(hex: 0x2C2119)      // dark roast for call screen
     }
 
     enum Fonts {
