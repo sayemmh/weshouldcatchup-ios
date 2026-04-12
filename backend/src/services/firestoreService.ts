@@ -96,6 +96,13 @@ export async function getVisibleCatchUpsForUser(
   });
 }
 
+export async function getActiveCatchUpsForUser(
+  userId: string,
+): Promise<(CatchUpDoc & { id: string })[]> {
+  const all = await getVisibleCatchUpsForUser(userId);
+  return all.filter((c) => c.status === "active");
+}
+
 /**
  * Update (merge) fields on a catch-up document.
  */

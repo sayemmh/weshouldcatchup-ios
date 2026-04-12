@@ -158,10 +158,11 @@ struct QueueRowView: View {
         catchupId: "preview-1",
         otherUser: QueueItem.OtherUser(name: "Alex", userId: "user-123"),
         lastCallAt: ISO8601DateFormatter().string(from: Date().addingTimeInterval(-604800 * 3)),
-        callCount: 5
+        callCount: 5,
+        status: "active"
     )
 
-    return List {
+    List {
         QueueRowView(item: .constant(sampleItem)) {
             print("Remove tapped")
         }
