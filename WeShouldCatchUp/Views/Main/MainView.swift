@@ -213,6 +213,14 @@ struct MainView: View {
                     .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                 }
                 .onMove(perform: viewModel.moveQueueItem)
+                .onDelete { offsets in
+                    let idsToRemove = offsets.map { viewModel.queue[$0].catchupId }
+                    Task {
+                        for id in idsToRemove {
+                            await viewModel.removeFromQueue(catchupId: id)
+                        }
+                    }
+                }
             }
             .listStyle(.plain)
             .background(Constants.Colors.background)
