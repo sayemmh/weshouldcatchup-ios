@@ -79,8 +79,29 @@ export default async function queueRoutes(fastify: FastifyInstance): Promise<voi
         });
       }
 
+      // Deduplicate by otherUser — keep the most recent catchup per person.
+      // Pending catchups with no otherUser (userB="") are always kept.
+      const seen = new Map<string, number>();
+      const deduped = items.filter((item, idx) => {
+        const key = item.otherUser.userId;
+        if (!key) return true; // pending with no userB
+        if (!seen.has(key)) {
+          seen.set(key, idx);
+          return true;
+        }
+        // Keep the one with more calls, or more recent activity
+        const prevIdx = seen.get(key)!;
+        const prev = items[prevIdx];
+        if (item.callCount > prev.callCount || (item._sortCreatedAt > prev._sortCreatedAt && item.callCount >= prev.callCount)) {
+          seen.set(key, idx);
+          items[prevIdx] = null as any; // mark for removal
+          return true;
+        }
+        return false;
+      }).filter(Boolean);
+
       // Strip internal sort helpers before returning.
-      return items.map(({ _sortLastCallAt, _sortCreatedAt, ...rest }) => rest);
+      return deduped.map(({ _sortLastCallAt, _sortCreatedAt, ...rest }) => rest);
     },
   );
 

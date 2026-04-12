@@ -5,6 +5,7 @@ import {
   getUser,
   getCatchUp,
   updateCatchUp,
+  getActiveCatchUpsForUser,
 } from "../services/firestoreService.js";
 import { sendInviteAccepted } from "../services/pushService.js";
 import type {
@@ -82,6 +83,15 @@ export default async function catchupsRoutes(fastify: FastifyInstance): Promise<
 
       if (catchup.userA === userId) {
         return reply.code(409).send({ error: "You cannot accept your own invite" });
+      }
+
+      // Prevent duplicate connections between the same two people
+      const existing = await getActiveCatchUpsForUser(userId);
+      const alreadyConnected = existing.some(
+        (c) => c.userA === catchup.userA || c.userB === catchup.userA
+      );
+      if (alreadyConnected) {
+        return reply.code(409).send({ error: "You're already connected with this person" });
       }
 
       const now = new Date().toISOString();
