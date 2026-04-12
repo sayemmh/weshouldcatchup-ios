@@ -226,6 +226,116 @@ Video calls, text chat, group calls, Android, contact book sync, availability sc
 
 ---
 
+## Release Workflow
+
+Everything release-related is scripted so no Xcode GUI clicks are needed.
+
+### One-time dev machine setup
+
+```bash
+# SVG → PNG rendering for App Store screenshots
+brew install librsvg
+
+# GitHub CLI (only needed once, for repo creation)
+brew install gh
+```
+
+**App Store Connect API key** (one-time):
+
+1. Go to https://appstoreconnect.apple.com/access/integrations/api
+2. Create an API key with **App Manager** role (or higher)
+3. Download the `.p8` file (Apple only lets you download it once)
+4. Place it at `~/.appstoreconnect/private_keys/AuthKey_<KEY_ID>.p8`
+5. Create `~/.appstoreconnect/credentials.env` with mode `600`:
+
+   ```bash
+   export ASC_KEY_ID="<your key id>"
+   export ASC_ISSUER_ID="<your issuer uuid>"
+   export ASC_KEY_PATH="$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8"
+   ```
+
+   Issuer ID is at the top of the App Store Connect API page. Neither file is committed — both are `.gitignore`'d by the fact that they live outside the repo.
+
+**Git remote** (already configured on this machine):
+
+```
+origin  git@github.com:sayemmh/weshouldcatchup-ios.git  (push + fetch)
+```
+
+### Cutting a new TestFlight build
+
+```bash
+# 1. Bump the build number (edit both Debug and Release in project.pbxproj)
+#    CURRENT_PROJECT_VERSION = N+1
+
+# 2. Commit your changes
+git add -A
+git commit -m "…"
+git push origin main
+
+# 3. Archive, sign, export, and upload — one command
+./scripts/upload-testflight.sh
+```
+
+The script:
+
+1. Cleans + archives in Release configuration
+2. Exports a signed `.ipa` using automatic signing (fetches the distribution cert + provisioning profile from App Store Connect on demand)
+3. Uploads via `xcrun altool` using the API key
+
+Processing on Apple's side takes 5–15 min. Watch TestFlight in App Store Connect → Builds.
+
+**Dry-run** (skip upload, just build the IPA):
+
+```bash
+./scripts/upload-testflight.sh --dry
+```
+
+### Regenerating App Store screenshots
+
+The screenshots under `screenshots/0[1-5]_*.png` are rendered from `*.svg` mockups at 1284×2778 (the accepted 6.5" iPhone display size).
+
+```bash
+# Make sure librsvg is installed first (see setup above)
+
+# Create the fontconfig override so rsvg-convert can find Fraunces + Inter
+mkdir -p /tmp/wscu-fontconf
+cat > /tmp/wscu-fontconf/fonts.conf <<'EOF'
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+  <dir>__REPO_ROOT__/WeShouldCatchUp/Resources/Fonts</dir>
+  <include ignore_missing="yes">/opt/homebrew/etc/fonts/fonts.conf</include>
+  <cachedir>/tmp/wscu-fontconf/cache</cachedir>
+</fontconfig>
+EOF
+# Replace __REPO_ROOT__ with the absolute path to your repo checkout
+# e.g. /Users/sayemhoque/Documents/WeShouldCatchUp
+
+# Render all 5 screenshots
+cd screenshots
+for f in 01_main_queue 02_live_searching 03_incoming_ping 04_voice_call 05_call_ended; do
+  FONTCONFIG_FILE=/tmp/wscu-fontconf/fonts.conf \
+    rsvg-convert -w 1284 -h 2778 "${f}.svg" -o "${f}.png"
+done
+```
+
+Do **not** keep any PNGs at non-standard sizes in `screenshots/` — Apple's upload slot only accepts `1242×2688`, `2688×1242`, `1284×2778`, or `2778×1284`. Anything else gets rejected.
+
+### Commit message conventions
+
+Imperative mood, ~70 char subject, body explains the why. Examples from history:
+
+```
+Add 15s rotation cycles, rotation progress UI, and silent push updates
+Use Fraunces serif font consistently, swap filled icons for clean outlines
+Remove stale 1320x2868 screenshots, keep only App Store 6.5" size
+```
+
+No co-author trailers on commits to this repo.
+
+---
+
 ## App Store Connect — Submission Copy
 
 Copy-paste ready. Character counts are verified.
