@@ -240,21 +240,9 @@ brew install librsvg
 brew install gh
 ```
 
-**App Store Connect API key** (one-time):
+**Xcode Apple ID session** (one-time):
 
-1. Go to https://appstoreconnect.apple.com/access/integrations/api
-2. Create an API key with **App Manager** role (or higher)
-3. Download the `.p8` file (Apple only lets you download it once)
-4. Place it at `~/.appstoreconnect/private_keys/AuthKey_<KEY_ID>.p8`
-5. Create `~/.appstoreconnect/credentials.env` with mode `600`:
-
-   ```bash
-   export ASC_KEY_ID="<your key id>"
-   export ASC_ISSUER_ID="<your issuer uuid>"
-   export ASC_KEY_PATH="$HOME/.appstoreconnect/private_keys/AuthKey_${ASC_KEY_ID}.p8"
-   ```
-
-   Issuer ID is at the top of the App Store Connect API page. Neither file is committed — both are `.gitignore`'d by the fact that they live outside the repo.
+Open Xcode → Settings → Accounts → sign in with your Apple Developer account. The upload script uses this session for both signing and uploading — no API keys or `.p8` files needed.
 
 **Git remote** (already configured on this machine):
 
@@ -280,8 +268,8 @@ git push origin main
 The script:
 
 1. Cleans + archives in Release configuration
-2. Exports a signed `.ipa` using automatic signing (fetches the distribution cert + provisioning profile from App Store Connect on demand)
-3. Uploads via `xcrun altool` using the API key
+2. Exports a signed `.ipa` using automatic signing (fetches the distribution cert + provisioning profile via Xcode's Apple ID session)
+3. Uploads directly to App Store Connect in the same step
 
 Processing on Apple's side takes 5–15 min. Watch TestFlight in App Store Connect → Builds.
 
