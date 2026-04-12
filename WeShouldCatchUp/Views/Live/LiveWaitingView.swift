@@ -149,8 +149,8 @@ struct LiveWaitingView: View {
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)
 
-            // Queue progress list
-            if !viewModel.queue.isEmpty {
+            // Queue progress list (active only — pending invites can't be called)
+            if !activeQueue.isEmpty {
                 queueProgressList
             }
         }
@@ -208,6 +208,10 @@ struct LiveWaitingView: View {
         }
     }
 
+    private var activeQueue: [QueueItem] {
+        viewModel.queue.filter { !$0.isPending }
+    }
+
     // MARK: - Cancel Button
 
     // MARK: - Queue Progress List
@@ -220,7 +224,7 @@ struct LiveWaitingView: View {
                 .textCase(.uppercase)
                 .tracking(0.5)
 
-            ForEach(viewModel.queue) { item in
+            ForEach(activeQueue) { item in
                 let userId = item.otherUser.userId
                 let isCurrent = userId == viewModel.currentlyPingingUserId
                 let isPassed = viewModel.passedUserIds.contains(userId)
