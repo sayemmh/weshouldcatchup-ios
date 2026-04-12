@@ -39,3 +39,6 @@ Thumbs.db
 
 # Local scratch
 agora_test.html
+
+# Build artifacts
+build/
