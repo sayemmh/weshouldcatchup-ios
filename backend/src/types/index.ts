@@ -18,6 +18,7 @@ export interface UserDoc {
   status: UserStatus;
   liveSince: string | null;      // ISO-8601 timestamp
   liveTTL: string | null;        // ISO-8601 timestamp (when the live window expires)
+  queueOrder: string[] | null;   // ordered catchupIds for custom queue priority
   createdAt: string;             // ISO-8601 timestamp
   updatedAt: string;             // ISO-8601 timestamp
 }

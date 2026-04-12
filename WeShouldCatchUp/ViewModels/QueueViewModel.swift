@@ -26,6 +26,18 @@ class QueueViewModel: ObservableObject {
         isLoading = false
     }
 
+    func moveQueueItem(from source: IndexSet, to destination: Int) {
+        queue.move(fromOffsets: source, toOffset: destination)
+        let catchupIds = queue.map { $0.catchupId }
+        Task {
+            do {
+                try await APIService.shared.reorderQueue(catchupIds: catchupIds)
+            } catch {
+                errorMessage = "Couldn't save queue order."
+            }
+        }
+    }
+
     func removeFromQueue(catchupId: String) async {
         do {
             try await APIService.shared.removeCatchup(catchupId: catchupId)

@@ -39,11 +39,34 @@ export default async function profileRoutes(fastify: FastifyInstance): Promise<v
           status: "idle",
           liveSince: null,
           liveTTL: null,
+          queueOrder: null,
           createdAt: now,
           updatedAt: now,
         };
         await updateUser(userId, newUser);
       }
+
+      return { status: "ok" };
+    },
+  );
+
+  // ---------- POST /update-fcm-token ----------
+  fastify.post<{ Body: { fcmToken?: string } }>(
+    "/update-fcm-token",
+    { preHandler: authMiddleware },
+    async (request, reply) => {
+      const { userId } = request;
+      const { fcmToken } = request.body ?? {};
+
+      if (!fcmToken || fcmToken.trim().length === 0) {
+        return reply.code(400).send({ error: "fcmToken is required" });
+      }
+
+      const now = new Date().toISOString();
+      await updateUser(userId, {
+        fcmToken: fcmToken.trim(),
+        updatedAt: now,
+      });
 
       return { status: "ok" };
     },

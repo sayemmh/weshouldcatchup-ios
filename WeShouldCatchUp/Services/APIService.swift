@@ -245,6 +245,22 @@ final class APIService {
         let _: [String: String] = try await execute(request)
     }
 
+    /// Saves the FCM push token to the backend.
+    func updateFCMToken(_ token: String) async throws {
+        let body: [String: Any] = ["fcmToken": token]
+        let request = try await authorizedRequest(path: "/update-fcm-token", method: "POST", body: body)
+        let _: [String: String] = try await execute(request)
+    }
+
+    // MARK: - Queue Reordering
+
+    /// POST /reorder-queue -- Saves the user's custom queue order.
+    func reorderQueue(catchupIds: [String]) async throws {
+        let body: [String: Any] = ["catchupIds": catchupIds]
+        let request = try await authorizedRequest(path: "/reorder-queue", method: "POST", body: body)
+        let _: [String: String] = try await execute(request)
+    }
+
     // MARK: - Queue & History
 
     /// GET /my-queue -- Fetches the user's current catch-up queue.

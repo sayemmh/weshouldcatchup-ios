@@ -167,6 +167,52 @@ gcloud run deploy we-should-catch-up-backend \
 
 All endpoints except `/health` require a Firebase Auth token in the `Authorization: Bearer <token>` header.
 
+## Design System
+
+### Colors
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `primary` | `#B5695A` | Muted terracotta — buttons, accents, brand color |
+| `primaryDark` | `#96524A` | Pressed/hover states |
+| `primaryLight` | `#F0DDD7` | Light terracotta tint (badges, highlights) |
+| `background` | `#FBF7F4` | Cream — main screen background |
+| `backgroundDark` | `#F5EDE8` | Slightly darker cream for depth |
+| `cardBackground` | `#FFFFFF` | Cards, input fields |
+| `textPrimary` | `#2D2926` | Warm charcoal — headings, body text |
+| `textSecondary` | `#6B6560` | Muted — secondary labels, subtitles |
+| `textTertiary` | `#9A9490` | Warm light — placeholders, icons |
+| `border` | `#E8E0DA` | Input borders, dividers |
+| `destructive` | `#FB2C36` | Errors, delete actions |
+| `success` | `rgb(77,179,115)` | Success states |
+| `callBackground` | `#2D2926` | Dark background for voice call screen |
+
+### Typography
+
+| Style | Font | Usage |
+|-------|------|-------|
+| Display / Headings | **Fraunces** (serif) | Screen titles, hero text |
+| Body / UI | **Inter** (sans-serif) | Buttons, labels, body copy |
+
+### Contrast Rules
+
+> **Never put light text on a light background.**
+
+- **White text** (`.white`) is only allowed on dark or primary-colored backgrounds (`primary`, `primaryDark`, `callBackground`).
+- Disabled/loading buttons use `primary.opacity(0.4–0.5)` — **not** `Color.gray.opacity(0.3)` — so white text stays readable.
+- On cream/white backgrounds, use `textPrimary`, `textSecondary`, or `textTertiary` for text.
+- `textTertiary` (`#9A9490`) is the lightest text allowed on light backgrounds — use only for placeholders and icons.
+
+### Layout
+
+| Token | Value |
+|-------|-------|
+| Horizontal padding | 24pt |
+| Section spacing | 32pt |
+| Corner radius | 12pt (cards), 8pt (small), 28pt (pill buttons) |
+| Button height | 56pt |
+| "I'm Free" button | 160pt circle |
+
 ## Key Design Decisions
 
 - **Sequential pinging, not broadcast**: When you go live, the app pings one person at a time (60s timeout each), starting with whoever you haven't talked to in the longest time. No group blasts.

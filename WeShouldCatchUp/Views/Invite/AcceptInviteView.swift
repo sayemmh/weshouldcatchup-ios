@@ -86,7 +86,7 @@ struct AcceptInviteView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
-                    .background(isAccepting ? Color.gray.opacity(0.3) : Constants.Colors.primary)
+                    .background(Constants.Colors.primary.opacity(isAccepting ? 0.5 : 1.0))
                     .foregroundColor(.white)
                     .cornerRadius(28)
                 }

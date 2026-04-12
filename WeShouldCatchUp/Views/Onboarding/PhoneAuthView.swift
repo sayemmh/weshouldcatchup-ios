@@ -75,7 +75,7 @@ struct PhoneAuthView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
-                .background(!viewModel.isLoading ? Constants.Colors.primary : Color.gray.opacity(0.3))
+                .background(Constants.Colors.primary.opacity(viewModel.isLoading ? 0.5 : 1.0))
                 .foregroundColor(.white)
                 .cornerRadius(28)
             }
@@ -123,7 +123,7 @@ struct PhoneAuthView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
-                .background(!viewModel.isLoading ? Constants.Colors.primary : Color.gray.opacity(0.3))
+                .background(Constants.Colors.primary.opacity(viewModel.isLoading ? 0.5 : 1.0))
                 .foregroundColor(.white)
                 .cornerRadius(28)
             }

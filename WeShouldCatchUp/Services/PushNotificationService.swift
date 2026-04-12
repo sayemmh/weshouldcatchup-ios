@@ -1,7 +1,6 @@
 import Foundation
 import UIKit
 import FirebaseMessaging
-import FirebaseFirestore
 import FirebaseAuth
 import UserNotifications
 
@@ -34,8 +33,6 @@ final class PushNotificationService: NSObject {
     /// The current FCM device token, if available.
     var currentFCMToken: String?
 
-    private let firestore = Firestore.firestore()
-
     private override init() {
         super.init()
     }
@@ -64,41 +61,38 @@ final class PushNotificationService: NSObject {
 
     // MARK: - FCM Token Management
 
-    /// Saves the FCM token to the current user's Firestore document.
-    /// Call this whenever the FCM token refreshes (e.g. in `messaging(_:didReceiveRegistrationToken:)`).
-    /// - Parameter token: The new FCM registration token.
+    /// Saves the FCM token via the backend API.
+    /// Call this whenever the FCM token refreshes or after authentication.
     func updateFCMToken(token: String) {
         self.currentFCMToken = token
+        persistToken(token)
+    }
 
-        guard let userId = Auth.auth().currentUser?.uid else {
+    /// Attempts to send the current FCM token to the backend.
+    /// Called from multiple places to handle race conditions between FCM and Auth.
+    func persistTokenIfReady() {
+        guard let token = currentFCMToken else { return }
+        persistToken(token)
+    }
+
+    private func persistToken(_ token: String) {
+        guard Auth.auth().currentUser != nil else {
             print("[PushNotificationService] Cannot update token -- user not authenticated.")
             return
         }
 
-        firestore
-            .collection("users")
-            .document(userId)
-            .setData(["fcmToken": token], merge: true) { error in
-                if let error = error {
-                    print("[PushNotificationService] Failed to update FCM token: \(error.localizedDescription)")
-                } else {
-                    print("[PushNotificationService] FCM token updated successfully.")
-                }
+        Task {
+            do {
+                try await APIService.shared.updateFCMToken(token)
+                print("[PushNotificationService] FCM token updated successfully via API.")
+            } catch {
+                print("[PushNotificationService] Failed to update FCM token: \(error.localizedDescription)")
             }
+        }
     }
 
-    /// Removes the FCM token from the current user's Firestore document on sign-out.
+    /// Clears the local FCM token on sign-out.
     func clearFCMToken() {
-        guard let userId = Auth.auth().currentUser?.uid else { return }
-
-        firestore
-            .collection("users")
-            .document(userId)
-            .updateData(["fcmToken": FieldValue.delete()]) { error in
-                if let error = error {
-                    print("[PushNotificationService] Failed to clear FCM token: \(error.localizedDescription)")
-                }
-            }
         currentFCMToken = nil
     }
 

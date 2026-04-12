@@ -95,7 +95,7 @@ struct InviteView: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(isCreatingLink ? Color.gray.opacity(0.3) : Constants.Colors.primary)
+            .background(Constants.Colors.primary.opacity(isCreatingLink ? 0.5 : 1.0))
             .foregroundColor(.white)
             .cornerRadius(28)
         }

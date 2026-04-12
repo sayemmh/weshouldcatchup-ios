@@ -188,12 +188,15 @@ struct MainView: View {
                     .foregroundColor(Constants.Colors.textTertiary)
                     .tracking(1.2)
                 Spacer()
+                EditButton()
+                    .font(.inter(13, weight: .medium))
+                    .foregroundColor(Constants.Colors.textSecondary)
             }
             .padding(.horizontal, 20)
             .padding(.top, 16)
             .padding(.bottom, 10)
 
-            LazyVStack(spacing: 8) {
+            List {
                 ForEach(viewModel.queue.indices, id: \.self) { index in
                     QueueRowView(
                         item: $viewModel.queue[index],
@@ -205,9 +208,14 @@ struct MainView: View {
                             }
                         }
                     )
+                    .listRowBackground(Constants.Colors.background)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                 }
+                .onMove(perform: viewModel.moveQueueItem)
             }
-            .padding(.horizontal, 16)
+            .listStyle(.plain)
+            .background(Constants.Colors.background)
 
             // MARK: - Call History Link
             Button {

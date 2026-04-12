@@ -1,0 +1,53 @@
+<svg width="1284" height="2778" viewBox="0 0 1284 2778" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap');
+    </style>
+  </defs>
+
+  <!-- Dark background -->
+  <rect width="1284" height="2778" fill="#2D2926"/>
+
+  <!-- Status Bar (white for dark bg) -->
+  <text x="72" y="78" font-family="Inter, SF Pro, system-ui" font-weight="600" font-size="38" fill="white">9:41</text>
+  <rect x="1120" y="52" width="52" height="28" rx="8" fill="none" stroke="white" stroke-width="3"/>
+  <rect x="1124" y="56" width="40" height="20" rx="5" fill="white"/>
+  <rect x="1172" y="62" width="4" height="10" rx="2" fill="white"/>
+
+  <!-- Avatar -->
+  <circle cx="642" cy="880" r="120" fill="#B5695A" opacity="0.2"/>
+  <text x="642" y="916" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="96" fill="#B5695A" text-anchor="middle">J</text>
+
+  <!-- Caller name -->
+  <text x="642" y="1100" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="64" fill="white" text-anchor="middle">Jordan</text>
+
+  <!-- Duration -->
+  <text x="642" y="1170" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="40" fill="white" opacity="0.6" text-anchor="middle">08:24</text>
+
+  <!-- Call controls -->
+  <!-- Mute button -->
+  <circle cx="342" cy="2300" r="68" fill="white" opacity="0.12"/>
+  <!-- Mic icon -->
+  <rect x="328" y="2268" width="28" height="44" rx="14" fill="none" stroke="white" stroke-width="3.5"/>
+  <path d="M 314 2298 C 314 2318 326 2330 342 2330 C 358 2330 370 2318 370 2298" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+  <line x1="342" y1="2330" x2="342" y2="2348" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+  <text x="342" y="2410" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="26" fill="white" opacity="0.6" text-anchor="middle">Mute</text>
+
+  <!-- End call button (red, larger) -->
+  <circle cx="642" cy="2300" r="78" fill="#FB2C36"/>
+  <!-- Phone down icon -->
+  <rect x="604" y="2284" width="76" height="32" rx="16" fill="none" stroke="white" stroke-width="4"/>
+  <line x1="620" y1="2284" x2="612" y2="2268" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <line x1="664" y1="2284" x2="672" y2="2268" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <text x="642" y="2418" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="26" fill="white" opacity="0.6" text-anchor="middle">End</text>
+
+  <!-- Speaker button -->
+  <circle cx="942" cy="2300" r="68" fill="white" opacity="0.12"/>
+  <!-- Speaker icon -->
+  <path d="M 922 2284 L 932 2284 L 948 2270 L 948 2330 L 932 2316 L 922 2316 Z" fill="none" stroke="white" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M 960 2288 C 966 2294 968 2302 968 2310 C 968 2318 966 2324 960 2328" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <text x="942" y="2410" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="26" fill="white" opacity="0.6" text-anchor="middle">Speaker</text>
+
+  <!-- Home indicator (light for dark bg) -->
+  <rect x="492" y="2726" width="300" height="10" rx="5" fill="white" opacity="0.3"/>
+</svg>

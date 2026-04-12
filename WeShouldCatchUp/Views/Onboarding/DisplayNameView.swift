@@ -137,7 +137,7 @@ struct DisplayNameView: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(viewModel.canSubmit ? Constants.Colors.primary : Color.gray.opacity(0.3))
+            .background(Constants.Colors.primary.opacity(viewModel.canSubmit ? 1.0 : 0.4))
             .foregroundColor(.white)
             .cornerRadius(28)
         }

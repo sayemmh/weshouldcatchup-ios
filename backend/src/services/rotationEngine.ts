@@ -93,6 +93,31 @@ export function cancelRotation(userId: string): void {
  *   - Among nulls, newest catch-up first (createdAt desc).
  *   - Among non-nulls, oldest call first (lastCallAt asc).
  */
+/**
+ * Sort catch-ups by the user's custom queue order.
+ * Any catch-ups not in the custom order are appended at the end using default priority.
+ */
+function sortByCustomOrder(
+  catchups: (CatchUpDoc & { id: string })[],
+  order: string[],
+): (CatchUpDoc & { id: string })[] {
+  const orderMap = new Map(order.map((id, idx) => [id, idx]));
+  return [...catchups].sort((a, b) => {
+    const aIdx = orderMap.get(a.id);
+    const bIdx = orderMap.get(b.id);
+    if (aIdx !== undefined && bIdx !== undefined) return aIdx - bIdx;
+    if (aIdx !== undefined) return -1;
+    if (bIdx !== undefined) return 1;
+    // Fall back to default priority for unordered items.
+    if (a.lastCallAt === null && b.lastCallAt !== null) return -1;
+    if (a.lastCallAt !== null && b.lastCallAt === null) return 1;
+    if (a.lastCallAt === null && b.lastCallAt === null) {
+      return b.createdAt.localeCompare(a.createdAt);
+    }
+    return a.lastCallAt!.localeCompare(b.lastCallAt!);
+  });
+}
+
 function sortByPriority(catchups: (CatchUpDoc & { id: string })[]): (CatchUpDoc & { id: string })[] {
   return [...catchups].sort((a, b) => {
     if (a.lastCallAt === null && b.lastCallAt !== null) return -1;
@@ -117,7 +142,10 @@ async function runRotationLoop(userId: string, state: RotationState): Promise<vo
   }
 
   const catchups = await getActiveCatchUpsForUser(userId);
-  const sorted = sortByPriority(catchups as (CatchUpDoc & { id: string })[]);
+  const customOrder = user.queueOrder ?? null;
+  const sorted = customOrder && customOrder.length > 0
+    ? sortByCustomOrder(catchups as (CatchUpDoc & { id: string })[], customOrder)
+    : sortByPriority(catchups as (CatchUpDoc & { id: string })[]);
 
   console.log(`[RotationEngine] Found ${sorted.length} catch-ups for user=${userId}`);
 

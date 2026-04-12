@@ -36,6 +36,16 @@ final class AuthService: ObservableObject {
             DispatchQueue.main.async {
                 self?.isAuthenticated = user != nil
                 self?.currentUserId = user?.uid
+
+                // FCM token often arrives before auth. Try now, and retry shortly
+                // in case the FCM callback hasn't fired yet.
+                if user != nil {
+                    PushNotificationService.shared.persistTokenIfReady()
+                    // Retry after 3s in case FCM token arrives late
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        PushNotificationService.shared.persistTokenIfReady()
+                    }
+                }
             }
         }
     }

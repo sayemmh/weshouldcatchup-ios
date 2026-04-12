@@ -213,7 +213,13 @@ struct LiveWaitingView: View {
     // MARK: - Queue Progress List
 
     private var queueProgressList: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Your queue")
+                .font(.inter(11, weight: .semiBold))
+                .foregroundColor(Constants.Colors.textTertiary)
+                .textCase(.uppercase)
+                .tracking(0.5)
+
             ForEach(viewModel.queue) { item in
                 let userId = item.otherUser.userId
                 let isCurrent = userId == viewModel.currentlyPingingUserId
@@ -223,27 +229,29 @@ struct LiveWaitingView: View {
                     if isPassed {
                         Image(systemName: "checkmark")
                             .font(.system(size: 10, weight: .semibold))
-                            .foregroundColor(Constants.Colors.textTertiary.opacity(0.5))
+                            .foregroundColor(Constants.Colors.textTertiary)
                             .frame(width: 14)
                     } else if isCurrent {
                         PingingDot()
                             .frame(width: 14)
                     } else {
-                        Color.clear
-                            .frame(width: 14, height: 14)
+                        Circle()
+                            .fill(Constants.Colors.textTertiary.opacity(0.3))
+                            .frame(width: 6, height: 6)
+                            .frame(width: 14)
                     }
 
                     Text(item.otherUser.name)
-                        .font(.inter(13, weight: isCurrent ? .medium : .regular))
+                        .font(.inter(14, weight: isCurrent ? .semiBold : .regular))
                         .foregroundColor(
                             isCurrent ? Constants.Colors.textPrimary :
-                            isPassed ? Constants.Colors.textTertiary.opacity(0.5) :
-                            Constants.Colors.textTertiary
+                            isPassed ? Constants.Colors.textTertiary :
+                            Constants.Colors.textSecondary
                         )
                 }
             }
         }
-        .padding(.top, 8)
+        .padding(.top, 16)
     }
 
     private var cancelButton: some View {
@@ -258,7 +266,7 @@ struct LiveWaitingView: View {
             HStack(spacing: 8) {
                 if isCancelling {
                     ProgressView()
-                        .tint(.secondary)
+                        .tint(Constants.Colors.textSecondary)
                 }
                 Text("Never mind")
                     .font(.inter(15, weight: .medium))

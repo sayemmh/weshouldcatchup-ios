@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { authMiddleware } from "../middleware/auth.js";
-import { getActiveCatchUpsForUser, getUser } from "../services/firestoreService.js";
+import { getActiveCatchUpsForUser, getUser, updateUser } from "../services/firestoreService.js";
 import type { QueueItemResponse, CatchUpDoc } from "../types/index.js";
 
 /**
@@ -43,23 +43,64 @@ export default async function queueRoutes(fastify: FastifyInstance): Promise<voi
         }),
       );
 
-      // Sort by rotation priority.
-      items.sort((a, b) => {
-        // Nulls (never called) come first.
-        if (a._sortLastCallAt === null && b._sortLastCallAt !== null) return -1;
-        if (a._sortLastCallAt !== null && b._sortLastCallAt === null) return 1;
+      // Use custom queue order if the user has one, falling back to default
+      // rotation priority for any catchups not in the custom order.
+      const user = await getUser(userId);
+      const customOrder = user?.queueOrder ?? null;
 
-        // Both null: newest catch-up first (createdAt descending).
-        if (a._sortLastCallAt === null && b._sortLastCallAt === null) {
-          return b._sortCreatedAt.localeCompare(a._sortCreatedAt);
-        }
-
-        // Both have lastCallAt: oldest call first (ascending).
-        return a._sortLastCallAt!.localeCompare(b._sortLastCallAt!);
-      });
+      if (customOrder && customOrder.length > 0) {
+        const orderMap = new Map(customOrder.map((id, idx) => [id, idx]));
+        items.sort((a, b) => {
+          const aIdx = orderMap.get(a.catchupId);
+          const bIdx = orderMap.get(b.catchupId);
+          // Both in custom order: sort by position.
+          if (aIdx !== undefined && bIdx !== undefined) return aIdx - bIdx;
+          // Only one in custom order: it comes first.
+          if (aIdx !== undefined) return -1;
+          if (bIdx !== undefined) return 1;
+          // Neither in custom order: fall back to default rotation priority.
+          if (a._sortLastCallAt === null && b._sortLastCallAt !== null) return -1;
+          if (a._sortLastCallAt !== null && b._sortLastCallAt === null) return 1;
+          if (a._sortLastCallAt === null && b._sortLastCallAt === null) {
+            return b._sortCreatedAt.localeCompare(a._sortCreatedAt);
+          }
+          return a._sortLastCallAt!.localeCompare(b._sortLastCallAt!);
+        });
+      } else {
+        // Default rotation priority.
+        items.sort((a, b) => {
+          if (a._sortLastCallAt === null && b._sortLastCallAt !== null) return -1;
+          if (a._sortLastCallAt !== null && b._sortLastCallAt === null) return 1;
+          if (a._sortLastCallAt === null && b._sortLastCallAt === null) {
+            return b._sortCreatedAt.localeCompare(a._sortCreatedAt);
+          }
+          return a._sortLastCallAt!.localeCompare(b._sortLastCallAt!);
+        });
+      }
 
       // Strip internal sort helpers before returning.
       return items.map(({ _sortLastCallAt, _sortCreatedAt, ...rest }) => rest);
+    },
+  );
+
+  // POST /reorder-queue -- Save the user's custom queue order.
+  fastify.post<{ Body: { catchupIds: string[] }; Reply: { status: string } }>(
+    "/reorder-queue",
+    { preHandler: authMiddleware },
+    async (request, _reply) => {
+      const { userId } = request;
+      const { catchupIds } = request.body as { catchupIds: string[] };
+
+      if (!Array.isArray(catchupIds)) {
+        return _reply.status(400).send({ status: "catchupIds must be an array" } as any);
+      }
+
+      await updateUser(userId, {
+        queueOrder: catchupIds,
+        updatedAt: new Date().toISOString(),
+      } as any);
+
+      return { status: "ok" };
     },
   );
 }

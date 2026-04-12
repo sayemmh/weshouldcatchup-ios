@@ -150,7 +150,11 @@ struct OnboardingFlow: View {
 
         case .displayNameEntry:
             DisplayNameView(onComplete: {
-                Task { await viewModel.saveDisplayName() }
+                viewModel.currentStep = .inviteFriends
+            })
+
+        case .inviteFriends:
+            InviteFriendsOnboardingView(onComplete: {
                 onComplete()
             })
 

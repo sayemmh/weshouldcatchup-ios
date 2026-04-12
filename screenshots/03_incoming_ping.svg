@@ -1,0 +1,45 @@
+<svg width="1284" height="2778" viewBox="0 0 1284 2778" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap');
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1284" height="2778" fill="#FBF7F4"/>
+
+  <!-- Status Bar -->
+  <text x="72" y="78" font-family="Inter, SF Pro, system-ui" font-weight="600" font-size="38" fill="#2D2926">9:41</text>
+  <rect x="1120" y="52" width="52" height="28" rx="8" fill="none" stroke="#2D2926" stroke-width="3"/>
+  <rect x="1124" y="56" width="40" height="20" rx="5" fill="#2D2926"/>
+  <rect x="1172" y="62" width="4" height="10" rx="2" fill="#2D2926"/>
+
+  <!-- Avatar circle -->
+  <circle cx="642" cy="820" r="110" fill="#F0DDD7"/>
+  <text x="642" y="852" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="88" fill="#B5695A" text-anchor="middle">J</text>
+
+  <!-- Name -->
+  <text x="642" y="1020" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="62" fill="#2D2926" text-anchor="middle">Jordan</text>
+
+  <!-- Subtitle -->
+  <text x="642" y="1080" font-family="Inter, SF Pro, system-ui" font-weight="400" font-size="36" fill="#6B6560" text-anchor="middle">is free to catch up</text>
+
+  <!-- Countdown ring -->
+  <circle cx="642" cy="1320" r="80" fill="none" stroke="#E8E0DA" stroke-width="8"/>
+  <!-- Progress arc (about 70% remaining = ~252 degrees) -->
+  <circle cx="642" cy="1320" r="80" fill="none" stroke="#B5695A" stroke-width="8"
+    stroke-dasharray="503" stroke-dashoffset="151"
+    stroke-linecap="round"
+    transform="rotate(-90 642 1320)"/>
+  <text x="642" y="1336" font-family="Inter, SF Pro, system-ui" font-weight="600" font-size="56" fill="#2D2926" text-anchor="middle">42</text>
+
+  <!-- Join button -->
+  <rect x="242" y="1560" width="800" height="112" rx="56" fill="#B5695A"/>
+  <text x="642" y="1630" font-family="Inter, SF Pro, system-ui" font-weight="600" font-size="38" fill="white" text-anchor="middle">Join</text>
+
+  <!-- Not now button -->
+  <text x="642" y="1740" font-family="Inter, SF Pro, system-ui" font-weight="500" font-size="36" fill="#6B6560" text-anchor="middle">Not now</text>
+
+  <!-- Home indicator -->
+  <rect x="492" y="2726" width="300" height="10" rx="5" fill="#2D2926" opacity="0.2"/>
+</svg>

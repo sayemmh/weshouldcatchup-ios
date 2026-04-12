@@ -33,6 +33,7 @@ class AuthViewModel: ObservableObject {
         case codeVerification
         case notificationPermission
         case displayNameEntry
+        case inviteFriends
         case complete
     }
 
@@ -107,5 +108,11 @@ class AuthViewModel: ObservableObject {
         }
 
         isLoading = false
+    }
+
+    // MARK: - Invite Friends
+
+    func inviteFriendsCompleted() {
+        currentStep = .complete
     }
 }
