@@ -19,8 +19,10 @@ class QueueViewModel: ObservableObject {
 
         do {
             queue = try await APIService.shared.fetchQueue()
+        } catch let error as APIError {
+            errorMessage = "Queue error: \(error)"
         } catch {
-            errorMessage = "Couldn't load your queue."
+            errorMessage = "Queue error: \(error.localizedDescription)"
         }
 
         isLoading = false

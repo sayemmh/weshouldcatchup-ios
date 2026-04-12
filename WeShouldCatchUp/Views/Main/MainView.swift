@@ -101,6 +101,12 @@ struct MainView: View {
             .task {
                 await viewModel.fetchQueue()
             }
+            .refreshable {
+                await viewModel.fetchQueue()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+                Task { await viewModel.fetchQueue() }
+            }
         }
     }
 
@@ -150,8 +156,10 @@ struct MainView: View {
                     Spacer()
                 }
             } else if viewModel.queue.isEmpty {
+                errorSection
                 emptyQueueView
             } else {
+                errorSection
                 queueListView
             }
         }
