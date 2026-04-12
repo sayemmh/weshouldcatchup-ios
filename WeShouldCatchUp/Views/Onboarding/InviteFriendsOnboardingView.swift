@@ -2,8 +2,6 @@ import SwiftUI
 import ContactsUI
 import MessageUI
 
-// MARK: - InviteFriendsOnboardingView
-
 struct InviteFriendsOnboardingView: View {
 
     var onComplete: () -> Void
@@ -12,7 +10,10 @@ struct InviteFriendsOnboardingView: View {
     @State private var showContactPicker = false
     @State private var showMessageComposer = false
     @State private var currentMessageRecipient: String?
-    @State private var sentCount: Int = 0
+    @State private var currentMessageBody: String?
+    @State private var sendIndex: Int = 0
+    @State private var inviteLinks: [String: String] = [:]
+    @State private var isCreatingLinks = false
     @State private var errorMessage: String?
 
     private let requiredInvites = 3
@@ -25,20 +26,15 @@ struct InviteFriendsOnboardingView: View {
             VStack(spacing: 28) {
                 Spacer()
 
-                // MARK: - Header
                 headerSection
-
-                // MARK: - Selected Contacts
                 selectedContactsList
 
-                // MARK: - Add Contact Button
                 if selectedContacts.count < requiredInvites {
                     addContactButton
                 }
 
                 Spacer()
 
-                // MARK: - Send Invites / Skip
                 bottomSection
             }
             .padding(.horizontal, 24)
@@ -54,16 +50,15 @@ struct InviteFriendsOnboardingView: View {
             .ignoresSafeArea()
         }
         .sheet(isPresented: $showMessageComposer) {
-            if let recipient = currentMessageRecipient {
+            if let recipient = currentMessageRecipient,
+               let body = currentMessageBody {
                 MessageComposeView(
                     recipients: [recipient],
-                    body: "Hey, we should catch up! Download the app and we'll talk whenever we're both free: https://weshouldcatchup.app",
-                    onFinished: { result in
+                    body: body,
+                    onFinished: { _ in
                         showMessageComposer = false
-                        if result == .sent {
-                            sentCount += 1
-                            sendNextOrFinish()
-                        }
+                        sendIndex += 1
+                        sendNextOrFinish()
                     }
                 )
                 .ignoresSafeArea()
@@ -119,6 +114,7 @@ struct InviteFriendsOnboardingView: View {
 
                     Button {
                         selectedContacts.removeAll { $0.id == contact.id }
+                        inviteLinks.removeValue(forKey: contact.phone)
                     } label: {
                         Image(systemName: "xmark")
                             .font(.system(size: 12, weight: .medium))
@@ -135,7 +131,6 @@ struct InviteFriendsOnboardingView: View {
                 )
             }
 
-            // Empty slots
             ForEach(0..<max(0, requiredInvites - selectedContacts.count), id: \.self) { _ in
                 HStack(spacing: 12) {
                     Circle()
@@ -189,19 +184,31 @@ struct InviteFriendsOnboardingView: View {
             }
 
             Button {
-                startSendingInvites()
+                Task { await createLinksAndSend() }
             } label: {
-                Text(selectedContacts.count < requiredInvites
-                     ? "Pick \(requiredInvites - selectedContacts.count) more"
-                     : "Send Invites")
-                    .font(.inter(15, weight: .semiBold))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(Constants.Colors.primary.opacity(selectedContacts.count >= requiredInvites ? 1.0 : 0.4))
-                    .foregroundColor(.white)
-                    .cornerRadius(28)
+                Group {
+                    if isCreatingLinks {
+                        HStack(spacing: 8) {
+                            ProgressView()
+                                .tint(.white)
+                            Text("Creating invite links…")
+                        }
+                    } else if selectedContacts.count < requiredInvites {
+                        Text("Pick \(requiredInvites - selectedContacts.count) more")
+                    } else {
+                        Text("Send Invites")
+                    }
+                }
+                .font(.inter(15, weight: .semiBold))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(Constants.Colors.primary.opacity(
+                    selectedContacts.count >= requiredInvites && !isCreatingLinks ? 1.0 : 0.4
+                ))
+                .foregroundColor(.white)
+                .cornerRadius(28)
             }
-            .disabled(selectedContacts.count < requiredInvites)
+            .disabled(selectedContacts.count < requiredInvites || isCreatingLinks)
 
             Button {
                 onComplete()
@@ -214,21 +221,40 @@ struct InviteFriendsOnboardingView: View {
         }
     }
 
-    // MARK: - Sending Logic
+    // MARK: - Create Links + Send
 
-    private func startSendingInvites() {
+    private func createLinksAndSend() async {
         guard MFMessageComposeViewController.canSendText() else {
             errorMessage = "SMS isn't available on this device."
             return
         }
 
-        sentCount = 0
+        isCreatingLinks = true
+        errorMessage = nil
+
+        for contact in selectedContacts where inviteLinks[contact.phone] == nil {
+            if let link = await QueueViewModel().createInviteLink() {
+                inviteLinks[contact.phone] = link
+            }
+        }
+
+        isCreatingLinks = false
+
+        if inviteLinks.count < selectedContacts.count {
+            errorMessage = "Couldn't create all invite links. Check your connection and try again."
+            return
+        }
+
+        sendIndex = 0
         sendNextOrFinish()
     }
 
     private func sendNextOrFinish() {
-        if sentCount < selectedContacts.count {
-            currentMessageRecipient = selectedContacts[sentCount].phone
+        if sendIndex < selectedContacts.count {
+            let contact = selectedContacts[sendIndex]
+            let link = inviteLinks[contact.phone] ?? "https://weshouldcatchup.app"
+            currentMessageRecipient = contact.phone
+            currentMessageBody = "Hey \(contact.name.components(separatedBy: " ").first ?? ""), we should catch up! Tap this link to connect with me: \(link)"
             showMessageComposer = true
         } else {
             onComplete()
@@ -318,8 +344,6 @@ struct MessageComposeView: UIViewControllerRepresentable {
         }
     }
 }
-
-// MARK: - Preview
 
 #Preview {
     InviteFriendsOnboardingView {
