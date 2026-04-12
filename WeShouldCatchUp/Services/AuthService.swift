@@ -104,6 +104,7 @@ final class AuthService: ObservableObject {
             self.isAuthenticated = false
             self.currentUserId = nil
             self.verificationId = nil
+            UserDefaults.standard.set(false, forKey: "hasCompletedOnboarding")
         }
     }
 

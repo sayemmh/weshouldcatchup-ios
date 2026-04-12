@@ -74,8 +74,13 @@ export default async function profileRoutes(fastify: FastifyInstance): Promise<v
       batch.delete(db.collection("users").doc(userId));
       await batch.commit();
 
-      // Delete Firebase Auth account
-      await admin.auth().deleteUser(userId);
+      // Delete Firebase Auth account (ignore if already gone)
+      try {
+        await admin.auth().deleteUser(userId);
+      } catch (err: unknown) {
+        const code = (err as { code?: string }).code;
+        if (code !== "auth/user-not-found") throw err;
+      }
 
       return { status: "deleted" };
     },

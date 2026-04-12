@@ -250,15 +250,15 @@ struct InviteFriendsOnboardingView: View {
     }
 
     private func sendNextOrFinish() {
-        if sendIndex < selectedContacts.count {
-            let contact = selectedContacts[sendIndex]
-            let link = inviteLinks[contact.phone] ?? "https://weshouldcatchup.app"
-            currentMessageRecipient = contact.phone
-            currentMessageBody = "Hey \(contact.name.components(separatedBy: " ").first ?? ""), we should catch up! Tap this link to connect with me: \(link)"
-            showMessageComposer = true
-        } else {
+        guard sendIndex < selectedContacts.count else {
             onComplete()
+            return
         }
+        let contact = selectedContacts[sendIndex]
+        let link = inviteLinks[contact.phone] ?? "https://weshouldcatchup.app"
+        currentMessageRecipient = contact.phone
+        currentMessageBody = "Hey \(contact.name.components(separatedBy: " ").first ?? ""), we should catch up! Tap this link to connect with me: \(link)"
+        showMessageComposer = true
     }
 }
 
