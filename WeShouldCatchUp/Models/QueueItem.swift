@@ -4,10 +4,12 @@ import Foundation
 struct QueueItem: Codable, Identifiable {
     let catchupId: String
     let otherUser: OtherUser
-    let lastCallAt: String? // ISO 8601 timestamp
+    let lastCallAt: String?
     let callCount: Int
+    let status: String?
 
     var id: String { catchupId }
+    var isPending: Bool { status == "pending" }
 
     struct OtherUser: Codable {
         let name: String

@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { authMiddleware } from "../middleware/auth.js";
-import { getActiveCatchUpsForUser, getUser, updateUser } from "../services/firestoreService.js";
+import { getVisibleCatchUpsForUser, getUser, updateUser } from "../services/firestoreService.js";
 import type { QueueItemResponse, CatchUpDoc } from "../types/index.js";
 
 /**
@@ -18,7 +18,7 @@ export default async function queueRoutes(fastify: FastifyInstance): Promise<voi
     async (request, _reply) => {
       const { userId } = request;
 
-      const catchups = await getActiveCatchUpsForUser(userId);
+      const catchups = await getVisibleCatchUpsForUser(userId);
 
       // Build response items with other-user details.
       const items: (QueueItemResponse & { _sortLastCallAt: string | null; _sortCreatedAt: string })[] = [];
@@ -26,17 +26,18 @@ export default async function queueRoutes(fastify: FastifyInstance): Promise<voi
       await Promise.all(
         catchups.map(async (catchup: CatchUpDoc & { id?: string }) => {
           const otherUserId = catchup.userA === userId ? catchup.userB : catchup.userA;
-          const otherUser = await getUser(otherUserId);
+          const isPending = catchup.status === "pending";
+          const otherUser = otherUserId ? await getUser(otherUserId) : null;
 
           items.push({
             catchupId: (catchup as any).id ?? "",
             otherUser: {
-              name: otherUser?.displayName ?? "Unknown",
+              name: isPending ? "Invite sent" : (otherUser?.displayName ?? "Unknown"),
               userId: otherUserId,
             },
             lastCallAt: catchup.lastCallAt,
             callCount: catchup.callCount,
-            // internal sort helpers
+            status: catchup.status,
             _sortLastCallAt: catchup.lastCallAt,
             _sortCreatedAt: catchup.createdAt,
           });

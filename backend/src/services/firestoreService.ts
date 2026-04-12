@@ -54,10 +54,10 @@ export async function getCatchUp(catchupId: string): Promise<(CatchUpDoc & { id:
  * Firestore does not support OR queries across different fields in a single
  * query, so we run two queries in parallel and merge the results.
  */
-export async function getActiveCatchUpsForUser(
+export async function getVisibleCatchUpsForUser(
   userId: string,
 ): Promise<(CatchUpDoc & { id: string })[]> {
-  const [asA, asB] = await Promise.all([
+  const [activeA, activeB, pendingA] = await Promise.all([
     db()
       .collection("catchups")
       .where("userA", "==", userId)
@@ -68,14 +68,22 @@ export async function getActiveCatchUpsForUser(
       .where("userB", "==", userId)
       .where("status", "==", "active")
       .get(),
+    db()
+      .collection("catchups")
+      .where("userA", "==", userId)
+      .where("status", "==", "pending")
+      .get(),
   ]);
 
   const results: (CatchUpDoc & { id: string })[] = [];
 
-  for (const doc of asA.docs) {
+  for (const doc of activeA.docs) {
     results.push({ id: doc.id, ...(doc.data() as CatchUpDoc) });
   }
-  for (const doc of asB.docs) {
+  for (const doc of activeB.docs) {
+    results.push({ id: doc.id, ...(doc.data() as CatchUpDoc) });
+  }
+  for (const doc of pendingA.docs) {
     results.push({ id: doc.id, ...(doc.data() as CatchUpDoc) });
   }
 

@@ -18,26 +18,46 @@ struct QueueRowView: View {
 
             // MARK: - Info
             VStack(alignment: .leading, spacing: 4) {
-                Text(item.otherUser.name)
-                    .font(.fraunces(16, weight: .medium))
-                    .foregroundColor(Constants.Colors.textPrimary)
+                HStack(spacing: 8) {
+                    Text(item.otherUser.name)
+                        .font(.fraunces(16, weight: .medium))
+                        .foregroundColor(item.isPending ? Constants.Colors.textSecondary : Constants.Colors.textPrimary)
 
-                HStack(spacing: 10) {
-                    Label(timeSinceLastCall, systemImage: "clock")
-                        .font(.inter(12, weight: .regular))
-                        .foregroundColor(Constants.Colors.textSecondary)
+                    if item.isPending {
+                        Text("Pending")
+                            .font(.inter(10, weight: .semiBold))
+                            .foregroundColor(Constants.Colors.primary)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(Constants.Colors.primaryLight)
+                            .cornerRadius(6)
+                    }
+                }
 
-                    Label(callCountLabel, systemImage: "phone")
+                if item.isPending {
+                    Text("Waiting for them to accept")
                         .font(.inter(12, weight: .regular))
-                        .foregroundColor(Constants.Colors.textSecondary)
+                        .foregroundColor(Constants.Colors.textTertiary)
+                } else {
+                    HStack(spacing: 10) {
+                        Label(timeSinceLastCall, systemImage: "clock")
+                            .font(.inter(12, weight: .regular))
+                            .foregroundColor(Constants.Colors.textSecondary)
+
+                        Label(callCountLabel, systemImage: "phone")
+                            .font(.inter(12, weight: .regular))
+                            .foregroundColor(Constants.Colors.textSecondary)
+                    }
                 }
             }
 
             Spacer()
 
-            Image(systemName: "chevron.right")
-                .font(.system(size: 11, weight: .regular))
-                .foregroundColor(Constants.Colors.textTertiary)
+            if !item.isPending {
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 11, weight: .regular))
+                    .foregroundColor(Constants.Colors.textTertiary)
+            }
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 16)

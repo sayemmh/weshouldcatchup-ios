@@ -110,6 +110,7 @@ export interface QueueItemResponse {
   };
   lastCallAt: string | null;
   callCount: number;
+  status: CatchUpStatus;
 }
 
 // GET /call-history item
