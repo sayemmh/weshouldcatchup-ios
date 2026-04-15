@@ -214,9 +214,6 @@ struct MainView: View {
                     .foregroundColor(Constants.Colors.textTertiary)
                     .tracking(1.2)
                 Spacer()
-                EditButton()
-                    .font(.inter(13, weight: .medium))
-                    .foregroundColor(Constants.Colors.textSecondary)
             }
             .padding(.horizontal, 20)
             .padding(.top, 16)
@@ -224,26 +221,18 @@ struct MainView: View {
 
             List {
                 ForEach(viewModel.queue) { item in
+                    let catchupId = item.catchupId
                     QueueRowView(
                         item: item,
                         onRemove: {
                             Task {
-                                await viewModel.removeFromQueue(catchupId: item.catchupId)
+                                await viewModel.removeFromQueue(catchupId: catchupId)
                             }
                         }
                     )
                     .listRowBackground(Constants.Colors.background)
                     .listRowSeparator(.hidden)
                     .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
-                }
-                .onMove(perform: viewModel.moveQueueItem)
-                .onDelete { offsets in
-                    let idsToRemove = offsets.map { viewModel.queue[$0].catchupId }
-                    Task {
-                        for id in idsToRemove {
-                            await viewModel.removeFromQueue(catchupId: id)
-                        }
-                    }
                 }
             }
             .listStyle(.plain)
