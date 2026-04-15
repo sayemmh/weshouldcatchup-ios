@@ -1,24 +1,18 @@
 import SwiftUI
 
-// MARK: - QueueRowView
-
 struct QueueRowView: View {
 
     var item: QueueItem
-
-    /// Called when the user confirms removal of this item from the queue.
     var onRemove: () -> Void
+    var onMoveToTop: () -> Void
 
-    @State private var showRemoveConfirmation: Bool = false
-    @State private var showActions: Bool = false
+    @State private var showConfirm = false
 
     var body: some View {
-        HStack(spacing: 14) {
-            // MARK: - Avatar
+        HStack(spacing: 12) {
             avatarView
 
-            // MARK: - Info
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 8) {
                     Text(item.otherUser.name)
                         .font(.fraunces(16, weight: .medium))
@@ -54,11 +48,29 @@ struct QueueRowView: View {
 
             Spacer()
 
-            if !item.isPending {
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 11, weight: .regular))
+            Button {
+                onMoveToTop()
+            } label: {
+                Image(systemName: "arrow.up")
+                    .font(.system(size: 13, weight: .medium))
                     .foregroundColor(Constants.Colors.textTertiary)
+                    .frame(width: 36, height: 36)
+                    .background(Constants.Colors.background)
+                    .cornerRadius(8)
             }
+            .buttonStyle(.plain)
+
+            Button {
+                showConfirm = true
+            } label: {
+                Image(systemName: "xmark")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundColor(Constants.Colors.textTertiary)
+                    .frame(width: 36, height: 36)
+                    .background(Constants.Colors.background)
+                    .cornerRadius(8)
+            }
+            .buttonStyle(.plain)
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 16)
@@ -68,40 +80,13 @@ struct QueueRowView: View {
             RoundedRectangle(cornerRadius: 12)
                 .stroke(Constants.Colors.border, lineWidth: 1)
         )
-        .contentShape(Rectangle())
-        .onTapGesture {
-            showActions = true
-        }
-        .confirmationDialog(item.otherUser.name, isPresented: $showActions) {
-            if item.isPending {
-                Button("Cancel Invite", role: .destructive) {
-                    showRemoveConfirmation = true
-                }
-            } else {
-                Button("Remove from Queue", role: .destructive) {
-                    showRemoveConfirmation = true
-                }
-            }
-            Button("Cancel", role: .cancel) { }
-        }
-        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-            Button(role: .destructive) {
-                showRemoveConfirmation = true
-            } label: {
-                Label("Remove", systemImage: "trash")
-            }
-        }
-        .alert("Remove from queue?", isPresented: $showRemoveConfirmation) {
+        .alert(item.isPending ? "Cancel invite?" : "Remove \(item.otherUser.name)?", isPresented: $showConfirm) {
             Button("Remove", role: .destructive) {
                 onRemove()
             }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("You'll no longer be able to catch up with \(item.otherUser.name). You can always add them back later.")
+            Button("Keep", role: .cancel) {}
         }
     }
-
-    // MARK: - Avatar
 
     private var avatarView: some View {
         ZStack {
@@ -115,60 +100,42 @@ struct QueueRowView: View {
         }
     }
 
-    // MARK: - Computed Properties
-
-    /// Returns the initials from the user's name (first letter).
     private var initials: String {
         let name = item.otherUser.name
         guard let first = name.first else { return "?" }
         return String(first).uppercased()
     }
 
-    /// Formats the time since the last call as a human-readable string.
     private var timeSinceLastCall: String {
         guard let lastCallAt = item.lastCallAt,
               let date = ISO8601DateFormatter().date(from: lastCallAt) else {
             return "never"
         }
 
-        let now = Date()
-        let interval = now.timeIntervalSince(date)
+        let interval = Date().timeIntervalSince(date)
 
         switch interval {
-        case ..<60:
-            return "just now"
-        case ..<3600:
-            let minutes = Int(interval / 60)
-            return "\(minutes) min ago"
-        case ..<86400:
-            let hours = Int(interval / 3600)
-            return "\(hours)h ago"
-        case ..<604800:
-            let days = Int(interval / 86400)
-            return "\(days)d ago"
+        case ..<60: return "just now"
+        case ..<3600: return "\(Int(interval / 60)) min ago"
+        case ..<86400: return "\(Int(interval / 3600))h ago"
+        case ..<604800: return "\(Int(interval / 86400))d ago"
         case ..<2_592_000:
-            let weeks = Int(interval / 604800)
-            return "\(weeks) week\(weeks == 1 ? "" : "s") ago"
+            let w = Int(interval / 604800)
+            return "\(w) week\(w == 1 ? "" : "s") ago"
         default:
-            let months = Int(interval / 2_592_000)
-            return "\(months) month\(months == 1 ? "" : "s") ago"
+            let m = Int(interval / 2_592_000)
+            return "\(m) month\(m == 1 ? "" : "s") ago"
         }
     }
 
-    /// Formats the call count.
     private var callCountLabel: String {
         switch item.callCount {
-        case 0:
-            return "no calls"
-        case 1:
-            return "1 call"
-        default:
-            return "\(item.callCount) calls"
+        case 0: return "no calls"
+        case 1: return "1 call"
+        default: return "\(item.callCount) calls"
         }
     }
 }
-
-// MARK: - Preview
 
 #Preview {
     let sampleItem = QueueItem(
@@ -179,11 +146,9 @@ struct QueueRowView: View {
         status: "active"
     )
 
-    List {
-        QueueRowView(item: sampleItem) {
-            print("Remove tapped")
-        }
+    VStack {
+        QueueRowView(item: sampleItem, onRemove: {}, onMoveToTop: {})
     }
-    .listStyle(.plain)
+    .padding()
     .background(Constants.Colors.background)
 }

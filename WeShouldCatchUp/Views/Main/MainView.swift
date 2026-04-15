@@ -21,10 +21,13 @@ struct MainView: View {
                     .ignoresSafeArea()
 
                 VStack(spacing: 0) {
-                    // MARK: - Queue Content
-                    queueSection
+                    ScrollView {
+                        queueSection
+                    }
+                    .refreshable {
+                        await viewModel.fetchQueue()
+                    }
 
-                    // MARK: - I'm Free Button
                     imFreeSection
                 }
             }
@@ -97,9 +100,6 @@ struct MainView: View {
                 Text("Your account, call history, and all connections will be permanently erased.")
             }
             .task {
-                await viewModel.fetchQueue()
-            }
-            .refreshable {
                 await viewModel.fetchQueue()
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
@@ -219,7 +219,7 @@ struct MainView: View {
             .padding(.top, 16)
             .padding(.bottom, 10)
 
-            List {
+            VStack(spacing: 8) {
                 ForEach(viewModel.queue) { item in
                     let catchupId = item.catchupId
                     QueueRowView(
@@ -228,15 +228,16 @@ struct MainView: View {
                             Task {
                                 await viewModel.removeFromQueue(catchupId: catchupId)
                             }
+                        },
+                        onMoveToTop: {
+                            withAnimation {
+                                viewModel.moveToTop(catchupId: catchupId)
+                            }
                         }
                     )
-                    .listRowBackground(Constants.Colors.background)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                 }
             }
-            .listStyle(.plain)
-            .background(Constants.Colors.background)
+            .padding(.horizontal, 16)
 
             // MARK: - Call History Link
             Button {
