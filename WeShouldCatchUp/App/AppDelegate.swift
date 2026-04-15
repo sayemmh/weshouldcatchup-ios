@@ -168,6 +168,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
         case .pingExpired:
             UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+
+        case .queueUpdated:
+            NotificationCenter.default.post(name: .queueUpdated, object: nil)
         }
     }
 }
@@ -179,4 +182,5 @@ extension Notification.Name {
     static let callReady = Notification.Name("callReady")
     static let catchUpInviteAccepted = Notification.Name("catchUpInviteAccepted")
     static let rotationUpdate = Notification.Name("rotationUpdate")
+    static let queueUpdated = Notification.Name("queueUpdated")
 }

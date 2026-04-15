@@ -7,7 +7,7 @@ import {
   updateCatchUp,
   getActiveCatchUpsForUser,
 } from "../services/firestoreService.js";
-import { sendInviteAccepted } from "../services/pushService.js";
+import { sendInviteAccepted, sendQueueUpdated } from "../services/pushService.js";
 import type {
   CreateCatchupResponse,
   AcceptCatchupRequest,
@@ -152,6 +152,17 @@ export default async function catchupsRoutes(fastify: FastifyInstance): Promise<
         status: "removed",
         removedBy: userId,
       });
+
+      // Notify the other person so their app refreshes the queue.
+      const otherUserId = catchup.userA === userId ? catchup.userB : catchup.userA;
+      if (otherUserId) {
+        const otherUser = await getUser(otherUserId);
+        if (otherUser?.fcmToken) {
+          sendQueueUpdated(otherUser.fcmToken).catch((err) => {
+            request.log.warn({ err }, "Failed to send queue_updated push");
+          });
+        }
+      }
 
       return { status: "removed" };
     },

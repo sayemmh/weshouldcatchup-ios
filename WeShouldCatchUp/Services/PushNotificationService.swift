@@ -22,6 +22,9 @@ enum PushNotificationType {
 
     /// The ping expired — clear the notification from this device.
     case pingExpired(fromUserId: String)
+
+    /// Queue changed remotely — refresh the queue.
+    case queueUpdated
 }
 
 // MARK: - Push Notification Service
@@ -157,6 +160,9 @@ final class PushNotificationService: NSObject {
                 return nil
             }
             return .pingExpired(fromUserId: fromUserId)
+
+        case "queue_updated":
+            return .queueUpdated
 
         default:
             print("[PushNotificationService] Unknown notification type: \(type)")

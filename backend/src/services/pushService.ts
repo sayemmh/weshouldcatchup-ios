@@ -158,6 +158,33 @@ export async function sendPingExpired(
 }
 
 /**
+ * Send a silent push to trigger the recipient's app to refresh their queue.
+ * Used when someone removes a catchup so the other person's queue updates.
+ */
+export async function sendQueueUpdated(
+  fcmToken: string,
+): Promise<void> {
+  const message: admin.messaging.Message = {
+    token: fcmToken,
+    data: {
+      type: "queue_updated",
+    },
+    android: { priority: "high" },
+    apns: {
+      payload: {
+        aps: { contentAvailable: true },
+      },
+    },
+  };
+
+  try {
+    await admin.messaging().send(message);
+  } catch {
+    // Best effort.
+  }
+}
+
+/**
  * Send a "call ready" push to User A when User B accepts the ping.
  *
  * This tells User A that someone accepted their catch-up request and

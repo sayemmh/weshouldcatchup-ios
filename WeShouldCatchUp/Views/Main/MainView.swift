@@ -105,6 +105,9 @@ struct MainView: View {
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                 Task { await viewModel.fetchQueue() }
             }
+            .onReceive(NotificationCenter.default.publisher(for: .queueUpdated)) { _ in
+                Task { await viewModel.fetchQueue() }
+            }
         }
     }
 
