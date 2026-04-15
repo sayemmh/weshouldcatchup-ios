@@ -4,7 +4,7 @@ import {
   getActiveCatchUpsForUser,
   createCall,
 } from "./firestoreService.js";
-import { sendCatchUpPing, sendRotationUpdate } from "./pushService.js";
+import { sendCatchUpPing, sendRotationUpdate, sendPingExpired } from "./pushService.js";
 import { generateAgoraToken } from "./agoraTokenService.js";
 import type { CatchUpDoc } from "../types/index.js";
 
@@ -268,9 +268,12 @@ async function runRotationLoop(userId: string, state: RotationState): Promise<vo
       return;
     }
 
-    // No response within 15s -- move to the next person in the queue.
-    // (The orphaned call doc will have no endedAt, which is fine; it can be
-    //  cleaned up by a background job or simply ignored.)
+    // No response within 15s -- clear their notification and move on.
+    if (otherUser?.fcmToken) {
+      sendPingExpired(otherUser.fcmToken, userId).catch((err) => {
+        console.error(`Failed to send ping_expired to ${otherUserId}:`, err);
+      });
+    }
   }
 
   // ------------------------------------------------------------------

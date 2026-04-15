@@ -19,6 +19,9 @@ enum PushNotificationType {
 
     /// Silent update telling the live user who is currently being pinged.
     case rotationUpdate(pingingUserId: String, pingingUserName: String)
+
+    /// The ping expired — clear the notification from this device.
+    case pingExpired(fromUserId: String)
 }
 
 // MARK: - Push Notification Service
@@ -148,6 +151,12 @@ final class PushNotificationService: NSObject {
                 return nil
             }
             return .rotationUpdate(pingingUserId: pingingUserId, pingingUserName: pingingUserName)
+
+        case "ping_expired":
+            guard let fromUserId = userInfo["fromUserId"] as? String else {
+                return nil
+            }
+            return .pingExpired(fromUserId: fromUserId)
 
         default:
             print("[PushNotificationService] Unknown notification type: \(type)")

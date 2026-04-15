@@ -165,6 +165,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                     "pingingUserName": pingingUserName
                 ]
             )
+
+        case .pingExpired:
+            UNUserNotificationCenter.current().removeAllDeliveredNotifications()
         }
     }
 }

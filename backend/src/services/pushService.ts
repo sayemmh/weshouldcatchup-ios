@@ -108,6 +108,48 @@ export async function sendRotationUpdate(
 }
 
 /**
+ * Send a silent "ping_expired" push to clear a stale ping notification
+ * from a user's device after the rotation moves past them.
+ */
+export async function sendPingExpired(
+  fcmToken: string,
+  fromUserId: string,
+): Promise<void> {
+  const message: admin.messaging.Message = {
+    token: fcmToken,
+    data: {
+      type: "ping_expired",
+      fromUserId,
+    },
+    android: {
+      priority: "high",
+    },
+    apns: {
+      headers: {
+        "apns-collapse-id": `ping-${fromUserId}`,
+      },
+      payload: {
+        aps: {
+          contentAvailable: true,
+        },
+      },
+    },
+  };
+
+  try {
+    await admin.messaging().send(message);
+  } catch (err: any) {
+    if (
+      err?.code === "messaging/invalid-registration-token" ||
+      err?.code === "messaging/registration-token-not-registered"
+    ) {
+      console.warn(`Stale FCM token for ping_expired.`);
+    }
+    // Non-fatal — best effort to clear the notification.
+  }
+}
+
+/**
  * Send a "call ready" push to User A when User B accepts the ping.
  *
  * This tells User A that someone accepted their catch-up request and
