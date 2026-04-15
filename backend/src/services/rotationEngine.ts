@@ -268,9 +268,9 @@ async function runRotationLoop(userId: string, state: RotationState): Promise<vo
       return;
     }
 
-    // No response within 15s -- clear their notification and move on.
+    // No response within 15s -- replace their notification with "missed" message.
     if (otherUser?.fcmToken) {
-      sendPingExpired(otherUser.fcmToken, userId).catch((err) => {
+      sendPingExpired(otherUser.fcmToken, userId, user.displayName).catch((err) => {
         console.error(`Failed to send ping_expired to ${otherUserId}:`, err);
       });
     }

@@ -40,6 +40,7 @@ export async function sendCatchUpPing(
     apns: {
       headers: {
         "apns-collapse-id": `ping-${fromUserId}`,
+        "apns-expiration": `${Math.floor(Date.now() / 1000) + 20}`,
       },
       payload: {
         aps: {
@@ -108,21 +109,29 @@ export async function sendRotationUpdate(
 }
 
 /**
- * Send a silent "ping_expired" push to clear a stale ping notification
- * from a user's device after the rotation moves past them.
+ * Replace a stale ping notification with a "missed" message.
+ * Uses the same collapse-id so it overwrites the original "is free" notification
+ * rather than stacking a new one. This is more reliable than silent pushes
+ * which iOS throttles.
  */
 export async function sendPingExpired(
   fcmToken: string,
   fromUserId: string,
+  fromUserName: string,
 ): Promise<void> {
   const message: admin.messaging.Message = {
     token: fcmToken,
+    notification: {
+      title: "We Should Catch Up",
+      body: `You missed ${fromUserName} — they moved on. Next time!`,
+    },
     data: {
       type: "ping_expired",
       fromUserId,
     },
     android: {
       priority: "high",
+      collapseKey: `ping-${fromUserId}`,
     },
     apns: {
       headers: {
@@ -130,7 +139,7 @@ export async function sendPingExpired(
       },
       payload: {
         aps: {
-          contentAvailable: true,
+          sound: "",
         },
       },
     },
@@ -145,7 +154,6 @@ export async function sendPingExpired(
     ) {
       console.warn(`Stale FCM token for ping_expired.`);
     }
-    // Non-fatal — best effort to clear the notification.
   }
 }
 
