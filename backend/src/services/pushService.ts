@@ -33,11 +33,14 @@ export async function sendCatchUpPing(
       catchupId,
       callId,
     },
-    // High priority to wake the device and show immediately.
     android: {
       priority: "high",
+      collapseKey: `ping-${fromUserId}`,
     },
     apns: {
+      headers: {
+        "apns-collapse-id": `ping-${fromUserId}`,
+      },
       payload: {
         aps: {
           sound: "default",
@@ -50,7 +53,6 @@ export async function sendCatchUpPing(
   try {
     await admin.messaging().send(message);
   } catch (err: any) {
-    // If the token is invalid/expired, log it so we can clean up.
     if (
       err?.code === "messaging/invalid-registration-token" ||
       err?.code === "messaging/registration-token-not-registered"
@@ -58,8 +60,6 @@ export async function sendCatchUpPing(
       console.warn(
         `Stale FCM token detected for catchup=${catchupId}. Token should be removed.`,
       );
-      // In a production system you'd mark this token as stale in Firestore
-      // so the client refreshes it on next launch.
     }
     throw err;
   }

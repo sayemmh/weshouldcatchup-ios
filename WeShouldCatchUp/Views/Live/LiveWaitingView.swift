@@ -1,7 +1,5 @@
 import SwiftUI
 
-// MARK: - LiveWaitingView
-
 struct LiveWaitingView: View {
 
     @StateObject private var viewModel = LiveViewModel()
@@ -11,13 +9,34 @@ struct LiveWaitingView: View {
     @State private var pulseOpacity: Double = 0.6
     @State private var isCancelling: Bool = false
     @State private var activeCallVM: CallViewModel?
+    @State private var clientPingIndex: Int = 0
+    @State private var pingTimer: Timer?
+
+    private var activeQueue: [QueueItem] {
+        viewModel.queue.filter { !$0.isPending }
+    }
+
+    private var currentPingingName: String? {
+        if let serverName = viewModel.currentlyPingingName {
+            return serverName
+        }
+        guard !activeQueue.isEmpty, clientPingIndex < activeQueue.count else { return nil }
+        return activeQueue[clientPingIndex].otherUser.name
+    }
+
+    private var currentPingingUserId: String? {
+        viewModel.currentlyPingingUserId ?? {
+            guard !activeQueue.isEmpty, clientPingIndex < activeQueue.count else { return nil }
+            return activeQueue[clientPingIndex].otherUser.userId
+        }()
+    }
 
     var body: some View {
         ZStack {
             Constants.Colors.background
                 .ignoresSafeArea()
 
-            VStack(spacing: 32) {
+            VStack(spacing: 24) {
                 Spacer()
 
                 switch viewModel.state {
@@ -31,7 +50,6 @@ struct LiveWaitingView: View {
 
                 Spacer()
 
-                // MARK: - Cancel Button
                 if viewModel.state != .noMatch {
                     cancelButton
                 }
@@ -42,14 +60,15 @@ struct LiveWaitingView: View {
         .navigationBarBackButtonHidden(true)
         .task {
             await viewModel.goLive()
+            startClientPingTimer()
         }
         .onAppear {
             LiveViewModel.isActive = true
         }
         .onDisappear {
             LiveViewModel.isActive = false
+            pingTimer?.invalidate()
         }
-        // Incoming ping (mutual-live: someone pings while we're searching)
         .fullScreenCover(isPresented: $viewModel.showIncomingPing) {
             IncomingPingView(
                 callerName: viewModel.incomingPingFromName ?? "Someone",
@@ -63,7 +82,6 @@ struct LiveWaitingView: View {
                 }
             )
         }
-        // Voice call (triggered when Agora credentials arrive)
         .fullScreenCover(item: $activeCallVM) { callVM in
             VoiceCallView(viewModel: callVM, onCallEnded: { name, duration in
                 activeCallVM = nil
@@ -76,7 +94,6 @@ struct LiveWaitingView: View {
                 viewModel.showCallEnded = true
             })
         }
-        // Call ended summary
         .fullScreenCover(isPresented: $viewModel.showCallEnded) {
             CallEndedView(
                 otherPersonName: viewModel.callEndedName,
@@ -97,41 +114,42 @@ struct LiveWaitingView: View {
         }
     }
 
+    // MARK: - Client-side ping timer
+
+    private func startClientPingTimer() {
+        pingTimer = Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { _ in
+            Task { @MainActor in
+                if clientPingIndex < activeQueue.count - 1 {
+                    withAnimation { clientPingIndex += 1 }
+                }
+            }
+        }
+    }
+
     // MARK: - Searching Content
 
     private var searchingContent: some View {
-        VStack(spacing: 24) {
-            // Pulsing circle animation
+        VStack(spacing: 20) {
             ZStack {
                 Circle()
                     .fill(Constants.Colors.primary.opacity(0.08))
-                    .frame(width: 160, height: 160)
+                    .frame(width: 140, height: 140)
                     .scaleEffect(pulseScale)
                     .opacity(pulseOpacity)
-                    .animation(
-                        .easeInOut(duration: 1.5)
-                        .repeatForever(autoreverses: true),
-                        value: pulseScale
-                    )
+                    .animation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true), value: pulseScale)
 
                 Circle()
                     .fill(Constants.Colors.primary.opacity(0.15))
-                    .frame(width: 110, height: 110)
+                    .frame(width: 100, height: 100)
                     .scaleEffect(pulseScale * 0.95)
-                    .opacity(pulseOpacity + 0.15)
-                    .animation(
-                        .easeInOut(duration: 1.5)
-                        .repeatForever(autoreverses: true)
-                        .delay(0.2),
-                        value: pulseScale
-                    )
+                    .animation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true).delay(0.2), value: pulseScale)
 
                 Circle()
                     .fill(Constants.Colors.primary)
-                    .frame(width: 70, height: 70)
+                    .frame(width: 64, height: 64)
 
                 Image(systemName: "hand.wave")
-                    .font(.system(size: 26, weight: .regular))
+                    .font(.system(size: 24, weight: .regular))
                     .foregroundColor(.white)
             }
             .onAppear {
@@ -139,24 +157,84 @@ struct LiveWaitingView: View {
                 pulseOpacity = 0.2
             }
 
-            Text("Looking for someone...")
-                .font(.fraunces(22, weight: .semiBold))
-                .foregroundColor(Constants.Colors.textPrimary)
-                .multilineTextAlignment(.center)
+            if let name = currentPingingName {
+                VStack(spacing: 6) {
+                    Text("Pinging \(name)...")
+                        .font(.fraunces(22, weight: .semiBold))
+                        .foregroundColor(Constants.Colors.textPrimary)
 
-            Text("Sit tight. We're checking your queue.")
-                .font(.inter(15, weight: .regular))
-                .foregroundColor(Constants.Colors.textSecondary)
-                .multilineTextAlignment(.center)
+                    Text("Waiting for them to pick up")
+                        .font(.inter(14, weight: .regular))
+                        .foregroundColor(Constants.Colors.textSecondary)
+                }
+            } else {
+                Text("Looking for someone...")
+                    .font(.fraunces(22, weight: .semiBold))
+                    .foregroundColor(Constants.Colors.textPrimary)
+            }
 
-            // Queue progress list (active only — pending invites can't be called)
             if !activeQueue.isEmpty {
                 queueProgressList
             }
         }
     }
 
-    // MARK: - Queue Exhausted Content
+    // MARK: - Queue Progress List
+
+    private var queueProgressList: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            ForEach(Array(activeQueue.enumerated()), id: \.element.id) { index, item in
+                let userId = item.otherUser.userId
+                let isCurrent = userId == currentPingingUserId
+                let isPassed = {
+                    if viewModel.passedUserIds.contains(userId) { return true }
+                    if viewModel.currentlyPingingUserId == nil {
+                        return index < clientPingIndex
+                    }
+                    return false
+                }()
+
+                HStack(spacing: 10) {
+                    if isPassed {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 14))
+                            .foregroundColor(Constants.Colors.textTertiary)
+                    } else if isCurrent {
+                        PingingDot()
+                    } else {
+                        Circle()
+                            .fill(Constants.Colors.textTertiary.opacity(0.3))
+                            .frame(width: 8, height: 8)
+                    }
+
+                    Text(item.otherUser.name)
+                        .font(.inter(14, weight: isCurrent ? .semiBold : .regular))
+                        .foregroundColor(
+                            isCurrent ? Constants.Colors.textPrimary :
+                            isPassed ? Constants.Colors.textTertiary :
+                            Constants.Colors.textSecondary
+                        )
+
+                    Spacer()
+
+                    if isCurrent {
+                        Text("15s")
+                            .font(.inter(11, weight: .medium))
+                            .foregroundColor(Constants.Colors.textTertiary)
+                    }
+                }
+            }
+        }
+        .padding(16)
+        .background(Color.white)
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Constants.Colors.border, lineWidth: 1)
+        )
+    }
+
+    // MARK: - Queue Exhausted
 
     private var queueExhaustedContent: some View {
         VStack(spacing: 24) {
@@ -167,7 +245,6 @@ struct LiveWaitingView: View {
             Text("No one's free right now")
                 .font(.fraunces(22, weight: .semiBold))
                 .foregroundColor(Constants.Colors.textPrimary)
-                .multilineTextAlignment(.center)
 
             Text("We'll keep you live for a few more minutes in case someone pops in.")
                 .font(.inter(15, weight: .regular))
@@ -177,7 +254,7 @@ struct LiveWaitingView: View {
         }
     }
 
-    // MARK: - Expired Content
+    // MARK: - Expired
 
     private var expiredContent: some View {
         VStack(spacing: 24) {
@@ -208,55 +285,7 @@ struct LiveWaitingView: View {
         }
     }
 
-    private var activeQueue: [QueueItem] {
-        viewModel.queue.filter { !$0.isPending }
-    }
-
     // MARK: - Cancel Button
-
-    // MARK: - Queue Progress List
-
-    private var queueProgressList: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Your queue")
-                .font(.inter(11, weight: .semiBold))
-                .foregroundColor(Constants.Colors.textTertiary)
-                .textCase(.uppercase)
-                .tracking(0.5)
-
-            ForEach(activeQueue) { item in
-                let userId = item.otherUser.userId
-                let isCurrent = userId == viewModel.currentlyPingingUserId
-                let isPassed = viewModel.passedUserIds.contains(userId)
-
-                HStack(spacing: 8) {
-                    if isPassed {
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 10, weight: .semibold))
-                            .foregroundColor(Constants.Colors.textTertiary)
-                            .frame(width: 14)
-                    } else if isCurrent {
-                        PingingDot()
-                            .frame(width: 14)
-                    } else {
-                        Circle()
-                            .fill(Constants.Colors.textTertiary.opacity(0.3))
-                            .frame(width: 6, height: 6)
-                            .frame(width: 14)
-                    }
-
-                    Text(item.otherUser.name)
-                        .font(.inter(14, weight: isCurrent ? .semiBold : .regular))
-                        .foregroundColor(
-                            isCurrent ? Constants.Colors.textPrimary :
-                            isPassed ? Constants.Colors.textTertiary :
-                            Constants.Colors.textSecondary
-                        )
-                }
-            }
-        }
-        .padding(.top, 16)
-    }
 
     private var cancelButton: some View {
         Button {
@@ -283,27 +312,19 @@ struct LiveWaitingView: View {
     }
 }
 
-// MARK: - Pinging Dot
-
-/// A small dot that pulses to indicate the currently-pinged person.
 private struct PingingDot: View {
     @State private var isAnimating = false
 
     var body: some View {
         Circle()
             .fill(Constants.Colors.primary)
-            .frame(width: 8, height: 8)
+            .frame(width: 10, height: 10)
             .scaleEffect(isAnimating ? 1.3 : 0.8)
             .opacity(isAnimating ? 1.0 : 0.5)
-            .animation(
-                .easeInOut(duration: 0.8).repeatForever(autoreverses: true),
-                value: isAnimating
-            )
+            .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: isAnimating)
             .onAppear { isAnimating = true }
     }
 }
-
-// MARK: - Preview
 
 #Preview {
     NavigationStack {
