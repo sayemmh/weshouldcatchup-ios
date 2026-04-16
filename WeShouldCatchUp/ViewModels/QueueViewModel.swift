@@ -19,8 +19,11 @@ class QueueViewModel: ObservableObject {
 
         do {
             queue = try await APIService.shared.fetchQueue()
+            errorMessage = nil
         } catch {
-            errorMessage = "Couldn't load your queue."
+            if queue.isEmpty {
+                errorMessage = "Couldn't load your queue."
+            }
         }
 
         isLoading = false
