@@ -7,7 +7,7 @@ enum Constants {
 
     // MARK: - Agora
     /// Agora App ID from the Agora Console.
-    static let agoraAppID = "ea5bfbc0e9184dbea8d5b48b37babfe2"
+    static let agoraAppID = "e7f6e9aeecf14b2ba10e3f40be9f56e7"
 
     // MARK: - Deep Links
     static let universalLinkHost = "weshouldcatchup.app"
