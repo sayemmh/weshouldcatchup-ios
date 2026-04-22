@@ -1,5 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import admin from "firebase-admin";
+import { Resend } from "resend";
 
 export default async function waitlistRoutes(fastify: FastifyInstance): Promise<void> {
   // POST /waitlist-signup — public, no auth needed
@@ -38,6 +39,21 @@ export default async function waitlistRoutes(fastify: FastifyInstance): Promise<
 
       const count = (await db.collection("waitlist").count().get()).data().count;
       console.log(`[waitlist] New signup: ${trimmed} (total: ${count})`);
+
+      // Notify via email
+      const resendKey = process.env.RESEND_API_KEY;
+      if (resendKey) {
+        const resend = new Resend(resendKey);
+        resend.emails.send({
+          from: "WSCU Signups <wscu@flexbone.ai>",
+          to: "sayem@flexbone.ai",
+          subject: `[WSCU] New signup (#${count}): ${trimmed}`,
+          html: `<p><strong>${trimmed}</strong></p>
+            <p>TestFlight: ${wantTestFlight ? "Yes" : "No"}</p>
+            ${comment ? `<p>Comment: ${comment}</p>` : ""}
+            <p style="color:#888;font-size:12px">Total signups: ${count}</p>`,
+        }).catch((err) => console.error("[waitlist] Email failed:", err));
+      }
 
       return { success: true };
     },
