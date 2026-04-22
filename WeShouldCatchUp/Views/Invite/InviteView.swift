@@ -11,6 +11,7 @@ struct InviteView: View {
     @State private var inviteLink: String?
     @State private var errorMessage: String?
     @State private var showShareSheet: Bool = false
+    @State private var wasShared: Bool = false
 
     private let api = APIService.shared
 
@@ -72,7 +73,9 @@ struct InviteView: View {
                     ActivityViewController(
                         activityItems: [shareMessage(link: link)],
                         onComplete: { completed in
-                            if !completed, let id = pendingCatchupId {
+                            if completed {
+                                wasShared = true
+                            } else if let id = pendingCatchupId, !wasShared {
                                 Task {
                                     try? await api.removeCatchup(catchupId: id)
                                     pendingCatchupId = nil
@@ -150,7 +153,7 @@ struct InviteView: View {
     }
 
     private func cleanupAndDismiss() {
-        if let id = pendingCatchupId {
+        if let id = pendingCatchupId, !wasShared {
             Task {
                 try? await api.removeCatchup(catchupId: id)
             }
