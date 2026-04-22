@@ -5,8 +5,11 @@ struct QueueRowView: View {
     var item: QueueItem
     var onRemove: () -> Void
     var onMoveToTop: () -> Void
+    var onReport: () -> Void
+    var onBlock: () -> Void
 
     @State private var showConfirm = false
+    @State private var showReport = false
 
     var body: some View {
         HStack(spacing: 12) {
@@ -80,11 +83,33 @@ struct QueueRowView: View {
             RoundedRectangle(cornerRadius: 12)
                 .stroke(Constants.Colors.border, lineWidth: 1)
         )
+        .contextMenu {
+            if !item.isPending {
+                Button(role: .destructive) {
+                    showReport = true
+                } label: {
+                    Label("Report", systemImage: "flag")
+                }
+                Button(role: .destructive) {
+                    onBlock()
+                } label: {
+                    Label("Block", systemImage: "hand.raised")
+                }
+            }
+        }
         .alert(item.isPending ? "Cancel invite?" : "Remove \(item.otherUser.name)?", isPresented: $showConfirm) {
             Button("Remove", role: .destructive) {
                 onRemove()
             }
             Button("Keep", role: .cancel) {}
+        }
+        .alert("Report \(item.otherUser.name)?", isPresented: $showReport) {
+            Button("Report & Block", role: .destructive) {
+                onReport()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will block them and notify our team. We review all reports within 24 hours.")
         }
     }
 
@@ -147,7 +172,7 @@ struct QueueRowView: View {
     )
 
     VStack {
-        QueueRowView(item: sampleItem, onRemove: {}, onMoveToTop: {})
+        QueueRowView(item: sampleItem, onRemove: {}, onMoveToTop: {}, onReport: {}, onBlock: {})
     }
     .padding()
     .background(Constants.Colors.background)

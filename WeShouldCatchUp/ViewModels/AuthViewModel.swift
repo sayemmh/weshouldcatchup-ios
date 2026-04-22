@@ -32,6 +32,7 @@ class AuthViewModel: ObservableObject {
         case phoneEntry
         case codeVerification
         case notificationPermission
+        case termsAgreement
         case displayNameEntry
         case inviteFriends
         case complete
@@ -85,6 +86,10 @@ class AuthViewModel: ObservableObject {
     // MARK: - Notifications
 
     func notificationsEnabled() {
+        currentStep = .termsAgreement
+    }
+
+    func termsAccepted() {
         currentStep = .displayNameEntry
     }
 

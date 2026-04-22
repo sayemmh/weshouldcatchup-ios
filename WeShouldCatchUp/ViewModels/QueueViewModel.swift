@@ -64,6 +64,17 @@ class QueueViewModel: ObservableObject {
         }
     }
 
+    // MARK: - Report & Block
+
+    func reportUser(catchupId: String, userId: String) async {
+        do {
+            try await APIService.shared.reportUser(catchupId: catchupId, reportedUserId: userId)
+            queue.removeAll { $0.catchupId == catchupId }
+        } catch {
+            errorMessage = "Couldn't report. Please try again."
+        }
+    }
+
     // MARK: - Invite
 
     func createInviteLink(invitedName: String? = nil) async -> String? {

@@ -256,6 +256,14 @@ final class APIService {
         let _: [String: String] = try await execute(request)
     }
 
+    // MARK: - Report & Block
+
+    func reportUser(catchupId: String, reportedUserId: String) async throws {
+        let body: [String: Any] = ["catchupId": catchupId, "reportedUserId": reportedUserId]
+        let request = try await authorizedRequest(path: "/report-user", method: "POST", body: body)
+        let _: [String: String] = try await execute(request)
+    }
+
     // MARK: - Account Deletion
 
     func deleteAccount() async throws {

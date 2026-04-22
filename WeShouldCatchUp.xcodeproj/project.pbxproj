@@ -45,6 +45,7 @@
 		E6EECC9BD5C8DC7F66277BCC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD1D8BAFD8BF7297F2E623A /* AppDelegate.swift */; };
 		E7E8C646FE8362562433EEF7 /* NotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2C12C36928E8A3D030FBDE /* NotificationPermissionView.swift */; };
 		A1B2C3D4E5F60002 /* InviteFriendsOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001 /* InviteFriendsOnboardingView.swift */; };
+		A1B2C3D4E5F60004 /* TermsAgreementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60003 /* TermsAgreementView.swift */; };
 		EEC4D73D68FD248F7B0EE228 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 4E899B9DBDB2B89EF6EC5FEB /* FirebaseFirestore */; };
 		EF75722CCFAD1C62BE720BC4 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6487B63AB8A88F20E3A8617D /* AuthService.swift */; };
 		F34B3502088443B73C7A5FAF /* PhoneAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078E5F490917D585444D24B7 /* PhoneAuthView.swift */; };
@@ -87,6 +88,7 @@
 		C5308925642CA7E36F4D3A7A /* CallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallViewModel.swift; sourceTree = "<group>"; };
 		CA2C12C36928E8A3D030FBDE /* NotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionView.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F60001 /* InviteFriendsOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteFriendsOnboardingView.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60003 /* TermsAgreementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAgreementView.swift; sourceTree = "<group>"; };
 		D3EE8BF441DBB0B366D44BF3 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Medium.ttf"; sourceTree = "<group>"; };
 		D99EA62A6C1A4FA4A824E0A5 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		F21B3B18AA595B7988F10823 /* Fraunces-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Fraunces-Bold.ttf"; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				75DDA3E7205AD614ABC2B786 /* DisplayNameView.swift */,
 				CA2C12C36928E8A3D030FBDE /* NotificationPermissionView.swift */,
 				A1B2C3D4E5F60001 /* InviteFriendsOnboardingView.swift */,
+				A1B2C3D4E5F60003 /* TermsAgreementView.swift */,
 				078E5F490917D585444D24B7 /* PhoneAuthView.swift */,
 			);
 			path = Onboarding;
@@ -398,6 +401,7 @@
 				0388D8B72DA8017F18B5ECC8 /* MainView.swift in Sources */,
 				E7E8C646FE8362562433EEF7 /* NotificationPermissionView.swift in Sources */,
 				A1B2C3D4E5F60002 /* InviteFriendsOnboardingView.swift in Sources */,
+				A1B2C3D4E5F60004 /* TermsAgreementView.swift in Sources */,
 				F34B3502088443B73C7A5FAF /* PhoneAuthView.swift in Sources */,
 				DC16085F7FD21F70FF7A19AA /* PushNotificationService.swift in Sources */,
 				944B2EDC7926CE85BFC033C5 /* QueueItem.swift in Sources */,
@@ -482,7 +486,7 @@
 				CODE_SIGN_ENTITLEMENTS = WeShouldCatchUp/WeShouldCatchUp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_TEAM = 345UAJF999;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeShouldCatchUp/Info.plist;
@@ -510,7 +514,7 @@
 				CODE_SIGN_ENTITLEMENTS = WeShouldCatchUp/WeShouldCatchUp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 44;
+				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_TEAM = 345UAJF999;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeShouldCatchUp/Info.plist;

@@ -70,6 +70,7 @@ struct MainView: View {
                 Button("Sign Out") {
                     showSignOutConfirm = true
                 }
+                Link("Contact Support", destination: URL(string: "mailto:support@weshouldcatchup.app")!)
                 Button("Delete Account", role: .destructive) {
                     showDeleteAccountAlert = true
                 }
@@ -235,6 +236,16 @@ struct MainView: View {
                         onMoveToTop: {
                             withAnimation {
                                 viewModel.moveToTop(catchupId: catchupId)
+                            }
+                        },
+                        onReport: {
+                            Task {
+                                await viewModel.reportUser(catchupId: catchupId, userId: item.otherUser.userId)
+                            }
+                        },
+                        onBlock: {
+                            Task {
+                                await viewModel.reportUser(catchupId: catchupId, userId: item.otherUser.userId)
                             }
                         }
                     )

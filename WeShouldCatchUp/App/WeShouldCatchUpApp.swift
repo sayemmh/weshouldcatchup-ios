@@ -148,6 +148,11 @@ struct OnboardingFlow: View {
                 viewModel.notificationsEnabled()
             })
 
+        case .termsAgreement:
+            TermsAgreementView(onAccepted: {
+                viewModel.termsAccepted()
+            })
+
         case .displayNameEntry:
             DisplayNameView(onComplete: {
                 viewModel.currentStep = .inviteFriends
