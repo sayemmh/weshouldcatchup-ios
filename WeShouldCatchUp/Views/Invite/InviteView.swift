@@ -1,14 +1,13 @@
 import SwiftUI
 import UIKit
 
-// MARK: - InviteView
-
 struct InviteView: View {
 
     @Environment(\.dismiss) private var dismiss
 
     @State private var friendName: String = ""
     @State private var isCreatingLink: Bool = false
+    @State private var pendingCatchupId: String?
     @State private var inviteLink: String?
     @State private var errorMessage: String?
     @State private var showShareSheet: Bool = false
@@ -24,15 +23,12 @@ struct InviteView: View {
                 VStack(spacing: 32) {
                     Spacer()
 
-                    // MARK: - Illustration
                     Image(systemName: "paperplane")
                         .font(.system(size: 44, weight: .light))
                         .foregroundColor(Constants.Colors.primary)
 
-                    // MARK: - Headline
                     textSection
 
-                    // MARK: - Name Input
                     TextField("", text: $friendName, prompt: Text("Their first name").foregroundColor(Constants.Colors.textTertiary))
                         .font(.fraunces(20, weight: .medium))
                         .foregroundColor(Constants.Colors.textPrimary)
@@ -47,10 +43,7 @@ struct InviteView: View {
                         .textInputAutocapitalization(.words)
                         .autocorrectionDisabled(true)
 
-                    // MARK: - Invite Button
                     inviteButton
-
-                    // MARK: - Error
                     errorSection
 
                     Spacer()
@@ -62,23 +55,35 @@ struct InviteView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Close") {
-                        dismiss()
+                        cleanupAndDismiss()
                     }
                     .font(.inter(15, weight: .medium))
                     .foregroundColor(Constants.Colors.textSecondary)
                 }
             }
-            .sheet(isPresented: $showShareSheet) {
+            .sheet(isPresented: $showShareSheet, onDismiss: {
+                // If share sheet closed without the invite being accepted elsewhere,
+                // the catchup stays pending — that's fine, invite was shown to the user.
+                // But if they never actually shared it, we should clean up.
+                // We can't reliably detect if they shared, so we keep it.
+                // The real cleanup happens if user taps Close without sharing.
+            }) {
                 if let link = inviteLink {
                     ActivityViewController(
-                        activityItems: [shareMessage(link: link)]
+                        activityItems: [shareMessage(link: link)],
+                        onComplete: { completed in
+                            if !completed, let id = pendingCatchupId {
+                                Task {
+                                    try? await api.removeCatchup(catchupId: id)
+                                    pendingCatchupId = nil
+                                }
+                            }
+                        }
                     )
                 }
             }
         }
     }
-
-    // MARK: - Text
 
     private var textSection: some View {
         VStack(spacing: 12) {
@@ -95,8 +100,6 @@ struct InviteView: View {
         }
     }
 
-    // MARK: - Invite Button
-
     private var inviteButton: some View {
         Button {
             Task { await createAndShare() }
@@ -111,14 +114,14 @@ struct InviteView: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(Constants.Colors.primary.opacity(isCreatingLink || friendName.trimmingCharacters(in: .whitespaces).isEmpty ? 0.4 : 1.0))
+            .background(Constants.Colors.primary.opacity(
+                isCreatingLink || friendName.trimmingCharacters(in: .whitespaces).isEmpty ? 0.4 : 1.0
+            ))
             .foregroundColor(.white)
             .cornerRadius(28)
         }
         .disabled(isCreatingLink || friendName.trimmingCharacters(in: .whitespaces).isEmpty)
     }
-
-    // MARK: - Error
 
     @ViewBuilder
     private var errorSection: some View {
@@ -131,14 +134,13 @@ struct InviteView: View {
         }
     }
 
-    // MARK: - Actions
-
     @MainActor
     private func createAndShare() async {
         isCreatingLink = true
         errorMessage = nil
         do {
             let response = try await api.createCatchup(invitedName: friendName.trimmingCharacters(in: .whitespaces))
+            pendingCatchupId = response.catchupId
             inviteLink = response.inviteLink
             showShareSheet = true
         } catch {
@@ -147,32 +149,49 @@ struct InviteView: View {
         isCreatingLink = false
     }
 
-    // MARK: - Share Message
+    private func cleanupAndDismiss() {
+        if let id = pendingCatchupId {
+            Task {
+                try? await api.removeCatchup(catchupId: id)
+            }
+        }
+        dismiss()
+    }
 
     private func shareMessage(link: String) -> String {
         "Hey, we should catch up! Tap this link and we'll talk whenever we're both free: \(link)"
     }
 }
 
-// MARK: - UIActivityViewController Wrapper
-
-/// Wraps UIActivityViewController for use in SwiftUI's .sheet modifier.
 struct ActivityViewController: UIViewControllerRepresentable {
 
     let activityItems: [Any]
-    var applicationActivities: [UIActivity]? = nil
+    var onComplete: ((Bool) -> Void)?
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(onComplete: onComplete)
+    }
 
     func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(
+        let vc = UIActivityViewController(
             activityItems: activityItems,
-            applicationActivities: applicationActivities
+            applicationActivities: nil
         )
+        vc.completionWithItemsHandler = { _, completed, _, _ in
+            context.coordinator.onComplete?(completed)
+        }
+        return vc
     }
 
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}
 
-// MARK: - Preview
+    class Coordinator {
+        let onComplete: ((Bool) -> Void)?
+        init(onComplete: ((Bool) -> Void)?) {
+            self.onComplete = onComplete
+        }
+    }
+}
 
 #Preview {
     InviteView()

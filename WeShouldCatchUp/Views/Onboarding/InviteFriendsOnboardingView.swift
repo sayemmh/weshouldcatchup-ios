@@ -55,8 +55,19 @@ struct InviteFriendsOnboardingView: View {
                 MessageComposeView(
                     recipients: [recipient],
                     body: body,
-                    onFinished: { _ in
+                    onFinished: { result in
                         showMessageComposer = false
+                        if result != .sent {
+                            // SMS cancelled — delete the catchup we created
+                            let contact = selectedContacts[sendIndex]
+                            if let link = inviteLinks[contact.phone] {
+                                let catchupId = link.components(separatedBy: "/").last ?? ""
+                                if !catchupId.isEmpty {
+                                    Task { try? await APIService.shared.removeCatchup(catchupId: catchupId) }
+                                }
+                                inviteLinks.removeValue(forKey: contact.phone)
+                            }
+                        }
                         sendIndex += 1
                         sendNextOrFinish()
                     }

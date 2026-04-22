@@ -482,11 +482,11 @@
 				CODE_SIGN_ENTITLEMENTS = WeShouldCatchUp/WeShouldCatchUp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 41;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = 345UAJF999;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeShouldCatchUp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = WSCU;
+				INFOPLIST_KEY_CFBundleDisplayName = CatchUp;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -510,11 +510,11 @@
 				CODE_SIGN_ENTITLEMENTS = WeShouldCatchUp/WeShouldCatchUp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 41;
+				CURRENT_PROJECT_VERSION = 42;
 				DEVELOPMENT_TEAM = 345UAJF999;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeShouldCatchUp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = WSCU;
+				INFOPLIST_KEY_CFBundleDisplayName = CatchUp;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
