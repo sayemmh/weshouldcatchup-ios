@@ -3,10 +3,14 @@ import admin from "firebase-admin";
 
 export default async function waitlistRoutes(fastify: FastifyInstance): Promise<void> {
   // POST /waitlist-signup — public, no auth needed
-  fastify.post<{ Body: { email: string } }>(
+  fastify.post<{ Body: { email: string; wantTestFlight?: boolean; comment?: string } }>(
     "/waitlist-signup",
     async (request, reply) => {
-      const { email } = (request.body as { email?: string }) ?? {};
+      const { email, wantTestFlight, comment } = (request.body as {
+        email?: string;
+        wantTestFlight?: boolean;
+        comment?: string;
+      }) ?? {};
 
       if (!email || typeof email !== "string") {
         return reply.code(400).send({ error: "Email is required" });
@@ -15,7 +19,6 @@ export default async function waitlistRoutes(fastify: FastifyInstance): Promise<
       const trimmed = email.trim().toLowerCase();
       const db = admin.firestore();
 
-      // Check for duplicate
       const existing = await db
         .collection("waitlist")
         .where("email", "==", trimmed)
@@ -28,6 +31,8 @@ export default async function waitlistRoutes(fastify: FastifyInstance): Promise<
 
       await db.collection("waitlist").add({
         email: trimmed,
+        wantTestFlight: wantTestFlight ?? false,
+        comment: comment?.trim() || null,
         createdAt: new Date().toISOString(),
       });
 
