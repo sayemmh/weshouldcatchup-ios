@@ -11,6 +11,7 @@ import catchupsRoutes from "./routes/catchups.js";
 import queueRoutes from "./routes/queue.js";
 import historyRoutes from "./routes/history.js";
 import profileRoutes from "./routes/profile.js";
+import waitlistRoutes from "./routes/waitlist.js";
 
 // ---------------------------------------------------------------------------
 // Firebase Admin Initialization
@@ -57,6 +58,7 @@ await server.register(catchupsRoutes);
 await server.register(queueRoutes);
 await server.register(historyRoutes);
 await server.register(profileRoutes);
+await server.register(waitlistRoutes);
 
 // ---------------------------------------------------------------------------
 // Health check
