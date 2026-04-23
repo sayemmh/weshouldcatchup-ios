@@ -16,7 +16,6 @@ struct AcceptPingResponse: Codable {
 }
 
 struct EndCallResponse: Codable {
-    let status: String
     let duration: Int // seconds
 }
 

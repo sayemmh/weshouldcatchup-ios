@@ -27,22 +27,23 @@ struct RootView: View {
 
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
 
-    // MARK: - Global Incoming Ping State
+    // MARK: - Single Overlay State (avoids multiple fullScreenCover conflicts)
 
-    @State private var showGlobalIncomingPing = false
-    @State private var globalPingFromName: String = ""
-    @State private var globalPingCatchupId: String = ""
-    @State private var globalPingCallId: String = ""
+    enum GlobalOverlay: Identifiable {
+        case incomingPing(name: String, catchupId: String, callId: String)
+        case voiceCall(CallViewModel)
+        case callEnded(name: String, duration: Int)
 
-    // MARK: - Global Voice Call State
+        var id: String {
+            switch self {
+            case .incomingPing(_, let catchupId, _): return "ping-\(catchupId)"
+            case .voiceCall(let vm): return "call-\(vm.id)"
+            case .callEnded(let name, _): return "ended-\(name)"
+            }
+        }
+    }
 
-    @State private var globalCallVM: CallViewModel?
-
-    // MARK: - Global Call Ended State
-
-    @State private var showGlobalCallEnded = false
-    @State private var globalCallEndedName: String = ""
-    @State private var globalCallEndedDuration: Int = 0
+    @State private var globalOverlay: GlobalOverlay?
 
     var body: some View {
         Group {
@@ -72,58 +73,67 @@ struct RootView: View {
                   let callId = info["callId"] as? String
             else { return }
 
-            globalPingFromName = fromName
-            globalPingCatchupId = catchupId
-            globalPingCallId = callId
-            showGlobalIncomingPing = true
+            globalOverlay = .incomingPing(name: fromName, catchupId: catchupId, callId: callId)
         }
-        .fullScreenCover(isPresented: $showGlobalIncomingPing) {
-            IncomingPingView(
-                callerName: globalPingFromName,
-                catchupId: globalPingCatchupId,
-                callId: globalPingCallId,
-                onAccept: {
-                    showGlobalIncomingPing = false
-                    Task {
-                        do {
-                            let response = try await APIService.shared.acceptPing(
-                                catchupId: globalPingCatchupId,
-                                callId: globalPingCallId
-                            )
-                            await MainActor.run {
-                                globalCallVM = CallViewModel(
-                                    otherUserName: globalPingFromName,
-                                    callId: response.callId,
-                                    agoraChannel: response.agoraChannel,
-                                    agoraToken: response.agoraToken
+        .fullScreenCover(item: $globalOverlay) { overlay in
+            switch overlay {
+            case .incomingPing(let name, let catchupId, let callId):
+                IncomingPingView(
+                    callerName: name,
+                    catchupId: catchupId,
+                    callId: callId,
+                    onAccept: {
+                        // Dismiss first, then accept in background.
+                        // The API response will trigger the voice call overlay.
+                        globalOverlay = nil
+                        Task {
+                            do {
+                                let response = try await APIService.shared.acceptPing(
+                                    catchupId: catchupId,
+                                    callId: callId
                                 )
+                                // Wait for dismiss animation to complete before presenting next cover
+                                try? await Task.sleep(for: .milliseconds(400))
+                                await MainActor.run {
+                                    let callVM = CallViewModel(
+                                        otherUserName: name,
+                                        callId: response.callId,
+                                        agoraChannel: response.agoraChannel,
+                                        agoraToken: response.agoraToken
+                                    )
+                                    globalOverlay = .voiceCall(callVM)
+                                }
+                            } catch {
+                                print("[RootView] Failed to accept ping: \(error)")
                             }
-                        } catch {
-                            print("[RootView] Failed to accept ping: \(error)")
+                        }
+                    },
+                    onDecline: {
+                        globalOverlay = nil
+                    }
+                )
+
+            case .voiceCall(let callVM):
+                VoiceCallView(viewModel: callVM, onCallEnded: { name, duration in
+                    globalOverlay = nil
+                    Task {
+                        // Wait for dismiss before showing call ended
+                        try? await Task.sleep(for: .milliseconds(400))
+                        await MainActor.run {
+                            globalOverlay = .callEnded(name: name, duration: duration)
                         }
                     }
-                },
-                onDecline: {
-                    showGlobalIncomingPing = false
-                }
-            )
-        }
-        .fullScreenCover(item: $globalCallVM) { callVM in
-            VoiceCallView(viewModel: callVM, onCallEnded: { name, duration in
-                globalCallVM = nil
-                globalCallEndedName = name
-                globalCallEndedDuration = duration
-                showGlobalCallEnded = true
-            })
-        }
-        .fullScreenCover(isPresented: $showGlobalCallEnded) {
-            CallEndedView(
-                otherPersonName: globalCallEndedName,
-                durationSeconds: globalCallEndedDuration,
-                onDismiss: {
-                    showGlobalCallEnded = false
-                }
-            )
+                })
+
+            case .callEnded(let name, let duration):
+                CallEndedView(
+                    otherPersonName: name,
+                    durationSeconds: duration,
+                    onDismiss: {
+                        globalOverlay = nil
+                    }
+                )
+            }
         }
     }
 }

@@ -8,9 +8,26 @@ struct LiveWaitingView: View {
     @State private var pulseScale: CGFloat = 1.0
     @State private var pulseOpacity: Double = 0.6
     @State private var isCancelling: Bool = false
-    @State private var activeCallVM: CallViewModel?
     @State private var clientPingIndex: Int = 0
     @State private var pingTimer: Timer?
+
+    // MARK: - Single Overlay (avoids multiple fullScreenCover conflicts)
+
+    enum LiveOverlay: Identifiable {
+        case incomingPing
+        case voiceCall(CallViewModel)
+        case callEnded
+
+        var id: String {
+            switch self {
+            case .incomingPing: return "ping"
+            case .voiceCall(let vm): return "call-\(vm.id)"
+            case .callEnded: return "ended"
+            }
+        }
+    }
+
+    @State private var liveOverlay: LiveOverlay?
 
     private var activeQueue: [QueueItem] {
         viewModel.queue.filter { !$0.isPending }
@@ -69,40 +86,58 @@ struct LiveWaitingView: View {
             LiveViewModel.isActive = false
             pingTimer?.invalidate()
         }
-        .fullScreenCover(isPresented: $viewModel.showIncomingPing) {
-            IncomingPingView(
-                callerName: viewModel.incomingPingFromName ?? "Someone",
-                catchupId: viewModel.incomingPingCatchupId ?? "",
-                callId: viewModel.incomingPingCallId ?? "",
-                onAccept: {
-                    Task { await viewModel.acceptPing() }
-                },
-                onDecline: {
-                    viewModel.declinePing()
-                }
-            )
+        .fullScreenCover(item: $liveOverlay) { overlay in
+            switch overlay {
+            case .incomingPing:
+                IncomingPingView(
+                    callerName: viewModel.incomingPingFromName ?? "Someone",
+                    catchupId: viewModel.incomingPingCatchupId ?? "",
+                    callId: viewModel.incomingPingCallId ?? "",
+                    onAccept: {
+                        liveOverlay = nil
+                        Task {
+                            await viewModel.acceptPing()
+                        }
+                    },
+                    onDecline: {
+                        liveOverlay = nil
+                        viewModel.declinePing()
+                    }
+                )
+
+            case .voiceCall(let callVM):
+                VoiceCallView(viewModel: callVM, onCallEnded: { name, duration in
+                    liveOverlay = nil
+                    viewModel.connectedCallId = nil
+                    viewModel.connectedAgoraChannel = nil
+                    viewModel.connectedAgoraToken = nil
+                    viewModel.connectedOtherUserName = nil
+                    viewModel.callEndedName = name
+                    viewModel.callEndedDuration = duration
+                    Task {
+                        // Wait for dismiss animation before showing call ended
+                        try? await Task.sleep(for: .milliseconds(400))
+                        await MainActor.run {
+                            liveOverlay = .callEnded
+                        }
+                    }
+                })
+
+            case .callEnded:
+                CallEndedView(
+                    otherPersonName: viewModel.callEndedName,
+                    durationSeconds: viewModel.callEndedDuration,
+                    onDismiss: {
+                        liveOverlay = nil
+                        dismiss()
+                    }
+                )
+            }
         }
-        .fullScreenCover(item: $activeCallVM) { callVM in
-            VoiceCallView(viewModel: callVM, onCallEnded: { name, duration in
-                activeCallVM = nil
-                viewModel.connectedCallId = nil
-                viewModel.connectedAgoraChannel = nil
-                viewModel.connectedAgoraToken = nil
-                viewModel.connectedOtherUserName = nil
-                viewModel.callEndedName = name
-                viewModel.callEndedDuration = duration
-                viewModel.showCallEnded = true
-            })
-        }
-        .fullScreenCover(isPresented: $viewModel.showCallEnded) {
-            CallEndedView(
-                otherPersonName: viewModel.callEndedName,
-                durationSeconds: viewModel.callEndedDuration,
-                onDismiss: {
-                    viewModel.showCallEnded = false
-                    dismiss()
-                }
-            )
+        .onChange(of: viewModel.showIncomingPing) { showing in
+            if showing && liveOverlay == nil {
+                liveOverlay = .incomingPing
+            }
         }
         .onChange(of: viewModel.connectedCallId) { newCallId in
             guard let callId = newCallId,
@@ -110,7 +145,21 @@ struct LiveWaitingView: View {
                   let token = viewModel.connectedAgoraToken
             else { return }
             let name = viewModel.connectedOtherUserName ?? "Someone"
-            activeCallVM = CallViewModel(otherUserName: name, callId: callId, agoraChannel: channel, agoraToken: token)
+            let callVM = CallViewModel(otherUserName: name, callId: callId, agoraChannel: channel, agoraToken: token)
+
+            if liveOverlay == nil {
+                liveOverlay = .voiceCall(callVM)
+            } else {
+                // Another overlay is active (e.g. incoming ping was just dismissed).
+                // Wait for it to finish dismissing, then present the call.
+                liveOverlay = nil
+                Task {
+                    try? await Task.sleep(for: .milliseconds(400))
+                    await MainActor.run {
+                        liveOverlay = .voiceCall(callVM)
+                    }
+                }
+            }
         }
     }
 
