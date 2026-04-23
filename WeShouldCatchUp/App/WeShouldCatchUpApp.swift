@@ -74,7 +74,11 @@ struct RootView: View {
             else { return }
 
             print("[RootView] Received incomingCatchUpPing: from=\(fromName), catchup=\(catchupId), call=\(callId)")
-            globalOverlay = .incomingPing(name: fromName, catchupId: catchupId, callId: callId)
+            // Force a state change so SwiftUI always presents, even on repeated delivery
+            if globalOverlay != nil { globalOverlay = nil }
+            DispatchQueue.main.async {
+                globalOverlay = .incomingPing(name: fromName, catchupId: catchupId, callId: callId)
+            }
         }
         // Global call_ready handler — User A receives this when User B accepts,
         // even if User A is no longer on LiveWaitingView.

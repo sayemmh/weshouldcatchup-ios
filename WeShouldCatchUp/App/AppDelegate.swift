@@ -58,10 +58,21 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             return
         }
 
-        // Route app-level pushes (pings, call_ready) that arrive in background
+        // Only handle data-only (silent) notification types here.
+        // catch_up_ping and call_ready have visible alerts and are handled
+        // by willPresent (foreground) or didReceive (user tap) instead.
+        // Handling them here causes double-delivery: the background handler
+        // sets UI state while the app is suspended, and when the user taps
+        // the notification, the state is already set so the UI doesn't present.
         if let type = PushNotificationService.shared.handleNotification(userInfo: userInfo) {
-            handlePushType(type)
-            completionHandler(.newData)
+            switch type {
+            case .rotationUpdate, .queueUpdated, .pingExpired:
+                handlePushType(type)
+                completionHandler(.newData)
+            default:
+                // Let willPresent or didReceive handle visible notifications
+                completionHandler(.noData)
+            }
             return
         }
         completionHandler(.noData)
