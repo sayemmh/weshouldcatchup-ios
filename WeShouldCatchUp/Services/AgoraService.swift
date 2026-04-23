@@ -153,7 +153,11 @@ extension AgoraService: AgoraRtcEngineDelegate {
     }
 
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOccurError errorCode: AgoraErrorCode) {
-        print("[AgoraService] ERROR: \(errorCode.rawValue)")
+        print("[AgoraService] ERROR: code=\(errorCode.rawValue) — check Agora App ID and token match")
+    }
+
+    func rtcEngine(_ engine: AgoraRtcEngineKit, connectionChangedTo state: AgoraConnectionState, reason: AgoraConnectionChangedReason) {
+        print("[AgoraService] Connection state: \(state.rawValue), reason: \(reason.rawValue)")
     }
 
     func rtcEngine(_ engine: AgoraRtcEngineKit, reportAudioVolumeIndicationOfSpeakers speakers: [AgoraRtcAudioVolumeInfo], totalVolume: Int) {

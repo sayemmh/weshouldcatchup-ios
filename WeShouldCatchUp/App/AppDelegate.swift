@@ -97,14 +97,17 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         if let type = PushNotificationService.shared.handleNotification(userInfo: userInfo) {
             handlePushType(type)
 
-            // Suppress banner for silent rotation updates.
-            if case .rotationUpdate = type {
+            // Suppress banner for types we handle in-app with their own UI.
+            switch type {
+            case .rotationUpdate, .catchUpPing, .callReady, .queueUpdated, .pingExpired:
                 completionHandler([])
                 return
+            default:
+                break
             }
         }
 
-        // Show banner even when app is in foreground.
+        // Show banner for types without in-app handling (inviteAccepted, etc).
         completionHandler([.banner, .sound])
     }
 

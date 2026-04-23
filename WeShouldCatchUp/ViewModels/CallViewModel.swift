@@ -37,8 +37,11 @@ class CallViewModel: ObservableObject, Identifiable {
     // MARK: - Call Lifecycle
 
     func startCall() {
+        print("[CallViewModel] startCall: channel=\(agoraChannel), callId=\(callId), otherUser=\(otherUserName)")
+
         agoraService.onRemoteUserLeft = { [weak self] in
             Task { @MainActor in
+                print("[CallViewModel] Remote user left — ending call")
                 self?.endCall()
             }
         }

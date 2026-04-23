@@ -73,7 +73,41 @@ struct RootView: View {
                   let callId = info["callId"] as? String
             else { return }
 
+            print("[RootView] Received incomingCatchUpPing: from=\(fromName), catchup=\(catchupId), call=\(callId)")
             globalOverlay = .incomingPing(name: fromName, catchupId: catchupId, callId: callId)
+        }
+        // Global call_ready handler — User A receives this when User B accepts,
+        // even if User A is no longer on LiveWaitingView.
+        .onReceive(NotificationCenter.default.publisher(for: .callReady)) { notification in
+            guard !LiveViewModel.isActive else { return }
+            guard let info = notification.userInfo,
+                  let fromUserName = info["fromUserName"] as? String,
+                  let callId = info["callId"] as? String
+            else { return }
+
+            print("[RootView] Received callReady: from=\(fromUserName), call=\(callId)")
+            Task {
+                do {
+                    let response = try await APIService.shared.joinCall(callId: callId)
+                    // Wait for any existing overlay dismiss
+                    if globalOverlay != nil {
+                        globalOverlay = nil
+                        try? await Task.sleep(for: .milliseconds(400))
+                    }
+                    await MainActor.run {
+                        let callVM = CallViewModel(
+                            otherUserName: fromUserName,
+                            callId: response.callId,
+                            agoraChannel: response.agoraChannel,
+                            agoraToken: response.agoraToken
+                        )
+                        print("[RootView] Presenting voice call: channel=\(response.agoraChannel)")
+                        globalOverlay = .voiceCall(callVM)
+                    }
+                } catch {
+                    print("[RootView] Failed to join call: \(error)")
+                }
+            }
         }
         .fullScreenCover(item: $globalOverlay) { overlay in
             switch overlay {
@@ -83,8 +117,7 @@ struct RootView: View {
                     catchupId: catchupId,
                     callId: callId,
                     onAccept: {
-                        // Dismiss first, then accept in background.
-                        // The API response will trigger the voice call overlay.
+                        print("[RootView] User tapped Join — accepting ping: catchup=\(catchupId), call=\(callId)")
                         globalOverlay = nil
                         Task {
                             do {
@@ -92,6 +125,7 @@ struct RootView: View {
                                     catchupId: catchupId,
                                     callId: callId
                                 )
+                                print("[RootView] acceptPing succeeded: channel=\(response.agoraChannel), callId=\(response.callId)")
                                 // Wait for dismiss animation to complete before presenting next cover
                                 try? await Task.sleep(for: .milliseconds(400))
                                 await MainActor.run {
@@ -104,7 +138,7 @@ struct RootView: View {
                                     globalOverlay = .voiceCall(callVM)
                                 }
                             } catch {
-                                print("[RootView] Failed to accept ping: \(error)")
+                                print("[RootView] acceptPing FAILED: \(error)")
                             }
                         }
                     },
