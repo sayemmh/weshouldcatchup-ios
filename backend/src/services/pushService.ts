@@ -239,6 +239,51 @@ export async function sendCallReady(
 }
 
 /**
+ * Send a "call ended" push notification to the other participant.
+ *
+ * This is a backup mechanism: Agora's didOfflineOfUid should fire when
+ * one side leaves, but if the connection was flaky it may be delayed.
+ * This push ensures the other device dismisses the call UI promptly.
+ */
+export async function sendCallEnded(
+  fcmToken: string,
+  callerName: string,
+  callId: string,
+  duration: number,
+): Promise<void> {
+  const message: admin.messaging.Message = {
+    token: fcmToken,
+    data: {
+      type: "call_ended",
+      callId,
+      callerName,
+      duration: String(duration),
+    },
+    android: { priority: "high" },
+    apns: {
+      headers: {
+        "apns-priority": "10",
+      },
+      payload: {
+        aps: { contentAvailable: true },
+      },
+    },
+  };
+
+  try {
+    await admin.messaging().send(message);
+  } catch (err: any) {
+    if (
+      err?.code === "messaging/invalid-registration-token" ||
+      err?.code === "messaging/registration-token-not-registered"
+    ) {
+      console.warn(`Stale FCM token for call_ended.`);
+    }
+    // Non-fatal — Agora's own disconnect detection is the primary mechanism.
+  }
+}
+
+/**
  * Send a notification when someone accepts a catch-up invite.
  *
  * @param fcmToken - The recipient's (invite creator's) FCM device token.

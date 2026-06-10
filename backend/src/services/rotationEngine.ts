@@ -5,7 +5,6 @@ import {
   createCall,
 } from "./firestoreService.js";
 import { sendCatchUpPing, sendRotationUpdate, sendPingExpired } from "./pushService.js";
-import { generateAgoraToken } from "./agoraTokenService.js";
 import type { CatchUpDoc } from "../types/index.js";
 
 // ---------------------------------------------------------------------------
@@ -165,7 +164,6 @@ async function runRotationLoop(userId: string, state: RotationState): Promise<vo
       // Both users are live -- connect them immediately!
       console.log(`[RotationEngine] Mutual live match! Connecting ${userId} <-> ${otherUserId}`);
       const agoraChannel = `catchup_${(catchup as any).id}_${Date.now()}`;
-      const agoraToken = generateAgoraToken(agoraChannel, 0);
       const now = new Date().toISOString();
 
       const callId = await createCall({

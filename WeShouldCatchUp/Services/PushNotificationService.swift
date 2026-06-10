@@ -20,6 +20,9 @@ enum PushNotificationType {
     /// Silent update telling the live user who is currently being pinged.
     case rotationUpdate(pingingUserId: String, pingingUserName: String)
 
+    /// The other participant ended the call — dismiss call UI.
+    case callEnded(callId: String, callerName: String, duration: Int)
+
     /// The ping expired — clear the notification from this device.
     case pingExpired(fromUserId: String)
 
@@ -154,6 +157,16 @@ final class PushNotificationService: NSObject {
                 return nil
             }
             return .rotationUpdate(pingingUserId: pingingUserId, pingingUserName: pingingUserName)
+
+        case "call_ended":
+            guard let callId = userInfo["callId"] as? String,
+                  let callerName = userInfo["callerName"] as? String
+            else {
+                print("[PushNotificationService] call_ended payload missing required fields.")
+                return nil
+            }
+            let duration = Int(userInfo["duration"] as? String ?? "0") ?? 0
+            return .callEnded(callId: callId, callerName: callerName, duration: duration)
 
         case "ping_expired":
             guard let fromUserId = userInfo["fromUserId"] as? String else {

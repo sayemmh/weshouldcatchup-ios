@@ -9,7 +9,7 @@ import {
   updateCall,
 } from "../services/firestoreService.js";
 import { generateAgoraToken } from "../services/agoraTokenService.js";
-import { sendCallReady } from "../services/pushService.js";
+import { sendCallReady, sendCallEnded } from "../services/pushService.js";
 import type {
   AcceptPingRequest,
   AcceptPingResponse,
@@ -47,6 +47,9 @@ export default async function callsRoutes(fastify: FastifyInstance): Promise<voi
       if (!existingCall) {
         return reply.code(404).send({ error: "Call not found" } as any);
       }
+      if (existingCall.endedAt) {
+        return reply.code(410).send({ error: "This call already ended" } as any);
+      }
 
       // Determine the other participant (User A — the one who went live).
       const otherUserId = catchup.userA === userId ? catchup.userB : catchup.userA;
@@ -55,6 +58,12 @@ export default async function callsRoutes(fastify: FastifyInstance): Promise<voi
       const [caller, callee] = await Promise.all([getUser(userId), getUser(otherUserId)]);
       if (!caller || !callee) {
         return reply.code(404).send({ error: "One or both users not found" } as any);
+      }
+
+      // If the live user already got matched with someone else (stale ping),
+      // don't let a second acceptor hijack the call.
+      if (callee.status === "in_call") {
+        return reply.code(409).send({ error: "They're already on a call" } as any);
       }
 
       // Generate Agora token for User B using the existing channel.
@@ -170,6 +179,21 @@ export default async function callsRoutes(fastify: FastifyInstance): Promise<voi
           updateUser(uid, { status: "idle", updatedAt: nowISO }),
         ),
       );
+
+      // Notify the OTHER participant that the call ended (backup for Agora disconnect).
+      const otherUserId = call.participants.find((uid) => uid !== userId);
+      if (otherUserId) {
+        const otherUser = await getUser(otherUserId);
+        if (otherUser?.fcmToken) {
+          const callerUser = await getUser(userId);
+          const callerName = callerUser?.displayName ?? "Someone";
+          try {
+            await sendCallEnded(otherUser.fcmToken, callerName, callId, durationSeconds);
+          } catch (err) {
+            console.error("Failed to send call_ended push:", err);
+          }
+        }
+      }
 
       return { duration: durationSeconds };
     },

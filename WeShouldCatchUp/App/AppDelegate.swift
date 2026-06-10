@@ -66,7 +66,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         // the notification, the state is already set so the UI doesn't present.
         if let type = PushNotificationService.shared.handleNotification(userInfo: userInfo) {
             switch type {
-            case .rotationUpdate, .queueUpdated, .pingExpired:
+            case .rotationUpdate, .queueUpdated, .pingExpired, .callEnded:
                 handlePushType(type)
                 completionHandler(.newData)
             default:
@@ -110,7 +110,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
             // Suppress banner for types we handle in-app with their own UI.
             switch type {
-            case .rotationUpdate, .catchUpPing, .callReady, .queueUpdated, .pingExpired:
+            case .rotationUpdate, .catchUpPing, .callReady, .callEnded, .queueUpdated, .pingExpired:
                 completionHandler([])
                 return
             default:
@@ -163,6 +163,17 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                 ]
             )
 
+        case .callEnded(let callId, let callerName, let duration):
+            NotificationCenter.default.post(
+                name: .callEndedRemotely,
+                object: nil,
+                userInfo: [
+                    "callId": callId,
+                    "callerName": callerName,
+                    "duration": duration
+                ]
+            )
+
         case .inviteAccepted(let catchupId):
             NotificationCenter.default.post(
                 name: .catchUpInviteAccepted,
@@ -194,6 +205,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 extension Notification.Name {
     static let incomingCatchUpPing = Notification.Name("incomingCatchUpPing")
     static let callReady = Notification.Name("callReady")
+    static let callEndedRemotely = Notification.Name("callEndedRemotely")
     static let catchUpInviteAccepted = Notification.Name("catchUpInviteAccepted")
     static let rotationUpdate = Notification.Name("rotationUpdate")
     static let queueUpdated = Notification.Name("queueUpdated")
