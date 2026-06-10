@@ -40,12 +40,13 @@ export async function sendCatchUpPing(
     apns: {
       headers: {
         "apns-collapse-id": `ping-${fromUserId}`,
-        "apns-expiration": `${Math.floor(Date.now() / 1000) + 20}`,
+        "apns-expiration": `${Math.floor(Date.now() / 1000) + 25}`,
       },
       payload: {
         aps: {
           sound: "default",
           contentAvailable: true,
+          "interruption-level": "time-sensitive",
         },
       },
     },
@@ -218,6 +219,7 @@ export async function sendCallReady(
         aps: {
           sound: "default",
           contentAvailable: true,
+          "interruption-level": "time-sensitive",
         },
       },
     },

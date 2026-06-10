@@ -28,10 +28,13 @@ class CallViewModel: ObservableObject, Identifiable {
     private let agoraService = AgoraService()
     private var timerTask: Task<Void, Never>?
     private var connectTimeoutTask: Task<Void, Never>?
+    private var remoteJoinTimeoutTask: Task<Void, Never>?
     private var cancellables = Set<AnyCancellable>()
 
     /// How long to wait for the channel join before declaring failure.
     private static let connectTimeout: Duration = .seconds(20)
+    /// How long to wait alone in the channel before giving up on the other person.
+    private static let remoteJoinTimeout: Duration = .seconds(60)
 
     // MARK: - Init
 
@@ -80,9 +83,14 @@ class CallViewModel: ObservableObject, Identifiable {
                 switch phase {
                 case .connected:
                     self.connectTimeoutTask?.cancel()
+                    self.remoteJoinTimeoutTask?.cancel()
                     if self.timerTask == nil { self.startTimer() }
+                case .waitingForRemote:
+                    self.connectTimeoutTask?.cancel()
+                    self.startRemoteJoinTimeout()
                 case .failed, .micDenied:
                     self.connectTimeoutTask?.cancel()
+                    self.remoteJoinTimeoutTask?.cancel()
                     self.timerTask?.cancel()
                     self.timerTask = nil
                 default:
@@ -105,9 +113,19 @@ class CallViewModel: ObservableObject, Identifiable {
             guard let self, !Task.isCancelled else { return }
             if case .connecting = self.connectionPhase {
                 self.connectionPhase = .failed("Couldn't reach the call server.")
-            } else if case .waitingForRemote = self.connectionPhase {
-                // We're in; the other side never made it. Keep waiting but tell the user.
-                print("[CallViewModel] Remote never joined after \(Self.connectTimeout)")
+            }
+        }
+    }
+
+    /// If the other person never joins (missed the notification, lost signal),
+    /// don't leave the user sitting in an empty channel forever.
+    private func startRemoteJoinTimeout() {
+        remoteJoinTimeoutTask?.cancel()
+        remoteJoinTimeoutTask = Task { [weak self] in
+            try? await Task.sleep(for: Self.remoteJoinTimeout)
+            guard let self, !Task.isCancelled else { return }
+            if case .waitingForRemote = self.connectionPhase {
+                self.connectionPhase = .failed("\(self.otherUserName) couldn't make it this time.")
             }
         }
     }

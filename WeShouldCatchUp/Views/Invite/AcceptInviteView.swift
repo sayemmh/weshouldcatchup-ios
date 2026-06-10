@@ -21,8 +21,14 @@ struct AcceptInviteView: View {
     @State private var isAccepting: Bool = false
     @State private var showSuccess: Bool = false
     @State private var errorMessage: String?
+    @State private var resolvedInviterName: String?
 
     private let api = APIService.shared
+
+    /// The best name we have for the inviter: server-resolved, else what the caller passed.
+    private var displayInviterName: String {
+        resolvedInviterName ?? inviterName
+    }
 
     var body: some View {
         ZStack {
@@ -33,6 +39,11 @@ struct AcceptInviteView: View {
                 successContent
             } else {
                 inviteContent
+            }
+        }
+        .task {
+            if let info = try? await api.fetchInviteInfo(catchupId: catchupId) {
+                resolvedInviterName = info.inviterName
             }
         }
     }
@@ -50,7 +61,7 @@ struct AcceptInviteView: View {
 
             // MARK: - Headline
             VStack(spacing: 12) {
-                Text("\(inviterName) wants to catch up with you")
+                Text("\(displayInviterName) wants to catch up with you")
                     .font(.fraunces(22, weight: .medium))
                     .foregroundColor(Constants.Colors.textPrimary)
                     .multilineTextAlignment(.center)

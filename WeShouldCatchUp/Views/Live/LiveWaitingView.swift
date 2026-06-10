@@ -134,6 +134,15 @@ struct LiveWaitingView: View {
                 )
             }
         }
+        .alert(
+            viewModel.errorMessage ?? "",
+            isPresented: Binding(
+                get: { viewModel.errorMessage != nil },
+                set: { if !$0 { viewModel.errorMessage = nil } }
+            )
+        ) {
+            Button("OK", role: .cancel) { }
+        }
         .onChange(of: viewModel.showIncomingPing) { showing in
             if showing && liveOverlay == nil {
                 liveOverlay = .incomingPing
@@ -225,6 +234,13 @@ struct LiveWaitingView: View {
             if !activeQueue.isEmpty {
                 queueProgressList
             }
+
+            Text("You can close the app — we'll keep looking and send you a notification when someone's free. Go put on some music \u{2615}")
+                .font(.inter(13, weight: .regular))
+                .foregroundColor(Constants.Colors.textTertiary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.top, 4)
         }
     }
 
@@ -295,7 +311,7 @@ struct LiveWaitingView: View {
                 .font(.fraunces(22, weight: .semiBold))
                 .foregroundColor(Constants.Colors.textPrimary)
 
-            Text("We'll keep you live for a few more minutes in case someone pops in.")
+            Text("We'll stay on the lookout for a few more minutes. You can close the app — we'll notify you if someone pops in.")
                 .font(.inter(15, weight: .regular))
                 .foregroundColor(Constants.Colors.textSecondary)
                 .multilineTextAlignment(.center)

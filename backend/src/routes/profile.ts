@@ -51,6 +51,25 @@ export default async function profileRoutes(fastify: FastifyInstance): Promise<v
     },
   );
 
+  // ---------- GET /me ----------
+  // Lightweight self-status check so the client can restore live state on launch.
+  fastify.get(
+    "/me",
+    { preHandler: authMiddleware },
+    async (request, reply) => {
+      const { userId } = request;
+      const user = await getUser(userId);
+      if (!user) {
+        return reply.code(404).send({ error: "User not found" });
+      }
+      return {
+        displayName: user.displayName,
+        status: user.status,
+        liveTTL: user.liveTTL,
+      };
+    },
+  );
+
   // ---------- POST /delete-account ----------
   fastify.post(
     "/delete-account",

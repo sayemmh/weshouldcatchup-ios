@@ -27,6 +27,9 @@ interface RotationState {
  */
 const activeRotations = new Map<string, RotationState>();
 
+/** How long to wait for each pinged person to accept before moving on. */
+const PING_WAIT_MS = 20_000;
+
 // ---------------------------------------------------------------------------
 // Public API
 // ---------------------------------------------------------------------------
@@ -160,9 +163,9 @@ async function runRotationLoop(userId: string, state: RotationState): Promise<vo
 
     console.log(`[RotationEngine] Phase 1: checking ${otherUserId}, status=${otherUser?.status ?? "not found"}`);
 
-    if (otherUser && otherUser.status === "live") {
-      // Both users are live -- connect them immediately!
-      console.log(`[RotationEngine] Mutual live match! Connecting ${userId} <-> ${otherUserId}`);
+    if (otherUser && otherUser.status === "live" && otherUser.fcmToken) {
+      // Both users are live -- ping them for an instant connect.
+      console.log(`[RotationEngine] Mutual live match! Pinging ${otherUserId} for ${userId}`);
       const agoraChannel = `catchup_${(catchup as any).id}_${Date.now()}`;
       const now = new Date().toISOString();
 
@@ -175,25 +178,35 @@ async function runRotationLoop(userId: string, state: RotationState): Promise<vo
         duration: null,
       });
 
-      // Send ping to the other live user so their app joins the call.
-      if (otherUser.fcmToken) {
-        try {
-          await sendCatchUpPing(
-            otherUser.fcmToken,
-            user.displayName,
-            userId,
-            (catchup as any).id,
-            callId,
-          );
-        } catch (err) {
-          console.error("Failed to send mutual-live ping:", err);
-        }
+      try {
+        await sendCatchUpPing(
+          otherUser.fcmToken,
+          user.displayName,
+          userId,
+          (catchup as any).id,
+          callId,
+        );
+      } catch (err) {
+        console.error("Failed to send mutual-live ping:", err);
+        continue; // Unreachable after all -- try the next person.
       }
 
-      // Cancel the other user's rotation since they're now matched.
-      cancelRotation(otherUserId);
+      // A "live" status can be stale (user abandoned the app; TTL not yet
+      // expired), so wait for an actual acceptance before committing.
+      // Their own rotation keeps running until they accept; accept-ping
+      // flips both users to in_call which stops both loops.
+      const accepted = await waitForAcceptance(userId, PING_WAIT_MS, state);
+      if (state.cancelled) return;
 
-      return; // Rotation complete -- a match was found.
+      if (accepted) {
+        cancelRotation(otherUserId);
+        return; // Rotation complete -- a match was found.
+      }
+
+      console.log(`[RotationEngine] Mutual-live ping to ${otherUserId} not accepted, moving on`);
+      sendPingExpired(otherUser.fcmToken, userId, user.displayName).catch((err) => {
+        console.error(`Failed to send ping_expired to ${otherUserId}:`, err);
+      });
     }
   }
 
@@ -206,13 +219,14 @@ async function runRotationLoop(userId: string, state: RotationState): Promise<vo
     const otherUserId = catchup.userA === userId ? catchup.userB : catchup.userA;
     const otherUser = await getUser(otherUserId);
 
-    // Skip users who are already in a call.
-    if (!otherUser || otherUser.status === "in_call") {
-      console.log(`[RotationEngine] Phase 2: skipping ${otherUserId} (status=${otherUser?.status ?? "not found"})`);
+    // Skip users who are already in a call, and users we have no way to
+    // reach -- pinging them would just burn the wait window for nothing.
+    if (!otherUser || otherUser.status === "in_call" || !otherUser.fcmToken) {
+      console.log(`[RotationEngine] Phase 2: skipping ${otherUserId} (status=${otherUser?.status ?? "not found"}, fcmToken=${otherUser?.fcmToken ? "present" : "MISSING"})`);
       continue;
     }
 
-    console.log(`[RotationEngine] Phase 2: pinging ${otherUserId} (fcmToken=${otherUser.fcmToken ? "present" : "MISSING"})`);
+    console.log(`[RotationEngine] Phase 2: pinging ${otherUserId}`);
 
     // Notify the live user (caller) who we're currently pinging so their UI updates.
     if (user.fcmToken) {
@@ -238,26 +252,23 @@ async function runRotationLoop(userId: string, state: RotationState): Promise<vo
     });
 
     // Send push notification to the other user.
-    if (otherUser.fcmToken) {
-      try {
-        await sendCatchUpPing(
-          otherUser.fcmToken,
-          user.displayName,
-          userId,
-          (catchup as any).id,
-          callId,
-        );
-      } catch (err) {
-        console.error(`Failed to send ping to ${otherUserId}:`, err);
-        // Continue to next person in queue instead of crashing rotation.
-        continue;
-      }
+    try {
+      await sendCatchUpPing(
+        otherUser.fcmToken,
+        user.displayName,
+        userId,
+        (catchup as any).id,
+        callId,
+      );
+    } catch (err) {
+      console.error(`Failed to send ping to ${otherUserId}:`, err);
+      // Continue to next person in queue instead of crashing rotation.
+      continue;
     }
 
-    // Wait up to 15 seconds for a response.
-    // The accept-ping endpoint will set both users to "in_call", which we detect
-    // by re-checking the caller's status after the wait.
-    const accepted = await waitForAcceptance(userId, 15_000, state);
+    // Wait for a response. The accept-ping endpoint will set both users to
+    // "in_call", which we detect by re-checking the caller's status.
+    const accepted = await waitForAcceptance(userId, PING_WAIT_MS, state);
 
     if (state.cancelled) return;
 

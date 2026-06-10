@@ -181,7 +181,11 @@ class LiveViewModel: ObservableObject {
             connectedOtherUserName = incomingPingFromName
             showIncomingPing = false
         } catch {
-            errorMessage = "Couldn't connect. They may no longer be free."
+            if case APIError.httpError(let code, _) = error, code == 409 || code == 410 {
+                errorMessage = "Too late — \(incomingPingFromName ?? "they") already moved on. Next time!"
+            } else {
+                errorMessage = "Couldn't connect. They may no longer be free."
+            }
             showIncomingPing = false
         }
     }

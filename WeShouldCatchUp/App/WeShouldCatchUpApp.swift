@@ -44,6 +44,7 @@ struct RootView: View {
     }
 
     @State private var globalOverlay: GlobalOverlay?
+    @State private var acceptErrorMessage: String?
 
     var body: some View {
         Group {
@@ -113,6 +114,15 @@ struct RootView: View {
                 }
             }
         }
+        .alert(
+            acceptErrorMessage ?? "",
+            isPresented: Binding(
+                get: { acceptErrorMessage != nil },
+                set: { if !$0 { acceptErrorMessage = nil } }
+            )
+        ) {
+            Button("OK", role: .cancel) { }
+        }
         .fullScreenCover(item: $globalOverlay) { overlay in
             switch overlay {
             case .incomingPing(let name, let catchupId, let callId):
@@ -143,6 +153,13 @@ struct RootView: View {
                                 }
                             } catch {
                                 print("[RootView] acceptPing FAILED: \(error)")
+                                await MainActor.run {
+                                    if case APIError.httpError(let code, _) = error, code == 409 || code == 410 {
+                                        acceptErrorMessage = "Too late — \(name) already moved on. Next time!"
+                                    } else {
+                                        acceptErrorMessage = "Couldn't connect. They may no longer be free."
+                                    }
+                                }
                             }
                         }
                     },

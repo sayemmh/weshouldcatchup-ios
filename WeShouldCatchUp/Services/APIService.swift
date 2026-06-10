@@ -43,6 +43,18 @@ struct CancelLiveResponse: Codable {
     let status: String
 }
 
+struct MeResponse: Codable {
+    let displayName: String
+    let status: String
+    let liveTTL: String?
+}
+
+struct InviteInfoResponse: Codable {
+    let inviterName: String
+    let invitedName: String?
+    let status: String
+}
+
 struct CallHistoryItem: Codable, Identifiable {
     let callId: String
     let otherUser: OtherUser
@@ -184,6 +196,18 @@ final class APIService {
     /// POST /cancel-live -- Cancels the current user's live status.
     func cancelLive() async throws -> CancelLiveResponse {
         let request = try await authorizedRequest(path: "/cancel-live", method: "POST")
+        return try await execute(request)
+    }
+
+    /// GET /me -- Fetches the current user's status so the client can restore live state.
+    func fetchMe() async throws -> MeResponse {
+        let request = try await authorizedRequest(path: "/me", method: "GET")
+        return try await execute(request)
+    }
+
+    /// GET /invite-info/:catchupId -- Resolves the inviter's name for an invite link.
+    func fetchInviteInfo(catchupId: String) async throws -> InviteInfoResponse {
+        let request = try await authorizedRequest(path: "/invite-info/\(catchupId)", method: "GET")
         return try await execute(request)
     }
 

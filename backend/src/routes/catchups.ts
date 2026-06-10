@@ -57,6 +57,28 @@ export default async function catchupsRoutes(fastify: FastifyInstance): Promise<
     },
   );
 
+  // ---------- GET /invite-info/:catchupId ----------
+  // Lets the invitee see who actually invited them before accepting.
+  fastify.get<{ Params: { catchupId: string } }>(
+    "/invite-info/:catchupId",
+    { preHandler: authMiddleware },
+    async (request, reply) => {
+      const { catchupId } = request.params;
+
+      const catchup = await getCatchUp(catchupId);
+      if (!catchup) {
+        return reply.code(404).send({ error: "Invite not found" });
+      }
+
+      const inviter = await getUser(catchup.userA);
+      return {
+        inviterName: inviter?.displayName ?? "Someone",
+        invitedName: catchup.invitedName,
+        status: catchup.status,
+      };
+    },
+  );
+
   // ---------- POST /accept-catchup ----------
   fastify.post<{ Body: AcceptCatchupRequest }>(
     "/accept-catchup",

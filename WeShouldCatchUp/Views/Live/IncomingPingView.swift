@@ -21,12 +21,16 @@ struct IncomingPingView: View {
 
     // MARK: - State
 
-    @State private var secondsRemaining: Int = 60
+    /// Matches the server's rotation window (PING_WAIT_MS) so the countdown
+    /// reflects how long the caller actually waits before moving on.
+    private static let pingWindowSeconds = 20
+
+    @State private var secondsRemaining: Int = IncomingPingView.pingWindowSeconds
     @State private var timerActive: Bool = true
 
     /// Countdown progress from 1.0 (full) to 0.0 (expired).
     private var countdownProgress: Double {
-        Double(secondsRemaining) / 60.0
+        Double(secondsRemaining) / Double(IncomingPingView.pingWindowSeconds)
     }
 
     var body: some View {

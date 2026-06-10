@@ -13,6 +13,8 @@ struct MainView: View {
     @State private var showDeleteAccountAlert: Bool = false
     @State private var showDeleteAccountConfirm: Bool = false
     @State private var isDeletingAccount: Bool = false
+    @State private var liveUntil: Date?
+    @State private var isStoppingLive: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -21,6 +23,8 @@ struct MainView: View {
                     .ignoresSafeArea()
 
                 VStack(spacing: 0) {
+                    liveBanner
+
                     ScrollView {
                         queueSection
                     }
@@ -102,14 +106,92 @@ struct MainView: View {
             }
             .task {
                 await viewModel.fetchQueue()
+                await refreshLiveStatus()
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-                Task { await viewModel.fetchQueue() }
+                Task {
+                    await viewModel.fetchQueue()
+                    await refreshLiveStatus()
+                }
+            }
+            .onChange(of: navigateToLive) { isShowing in
+                // Coming back from LiveWaitingView — pick up live state if still active.
+                if !isShowing {
+                    Task { await refreshLiveStatus() }
+                }
             }
             .onReceive(NotificationCenter.default.publisher(for: .queueUpdated)) { _ in
                 Task { await viewModel.fetchQueue() }
             }
         }
+    }
+
+    // MARK: - Live Banner
+
+    @ViewBuilder
+    private var liveBanner: some View {
+        if let until = liveUntil, until > Date() {
+            HStack(spacing: 10) {
+                Circle()
+                    .fill(Constants.Colors.success)
+                    .frame(width: 8, height: 8)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("You're available")
+                        .font(.inter(14, weight: .semiBold))
+                        .foregroundColor(Constants.Colors.textPrimary)
+                    Text("We're pinging your queue — \(minutesLeft(until)) min left. Feel free to close the app.")
+                        .font(.inter(12, weight: .regular))
+                        .foregroundColor(Constants.Colors.textSecondary)
+                }
+
+                Spacer()
+
+                Button {
+                    Task { await stopLive() }
+                } label: {
+                    if isStoppingLive {
+                        ProgressView()
+                            .tint(Constants.Colors.textSecondary)
+                    } else {
+                        Text("Stop")
+                            .font(.inter(13, weight: .semiBold))
+                            .foregroundColor(Constants.Colors.primary)
+                    }
+                }
+                .disabled(isStoppingLive)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(Constants.Colors.success.opacity(0.10))
+            .cornerRadius(12)
+            .padding(.horizontal, 16)
+            .padding(.top, 8)
+        }
+    }
+
+    private func minutesLeft(_ until: Date) -> Int {
+        max(1, Int((until.timeIntervalSinceNow / 60.0).rounded()))
+    }
+
+    @MainActor
+    private func refreshLiveStatus() async {
+        guard let me = try? await APIService.shared.fetchMe() else { return }
+        if me.status == "live",
+           let ttlString = me.liveTTL,
+           let ttl = ISO8601DateFormatter().date(from: ttlString) {
+            liveUntil = ttl
+        } else {
+            liveUntil = nil
+        }
+    }
+
+    @MainActor
+    private func stopLive() async {
+        isStoppingLive = true
+        _ = try? await APIService.shared.cancelLive()
+        liveUntil = nil
+        isStoppingLive = false
     }
 
     // MARK: - I'm Free Section
