@@ -204,6 +204,19 @@ struct OnboardingFlow: View {
     }
 
     var body: some View {
+        ZStack {
+            step
+                .id(viewModel.currentStep)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                    removal: .move(edge: .leading).combined(with: .opacity)
+                ))
+        }
+        .animation(Motion.spring, value: viewModel.currentStep)
+    }
+
+    @ViewBuilder
+    private var step: some View {
         switch viewModel.currentStep {
         case .phoneEntry, .codeVerification:
             PhoneAuthView(viewModel: viewModel)

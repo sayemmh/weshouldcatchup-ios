@@ -20,28 +20,36 @@ enum Constants {
 
     // MARK: - Design
     enum Colors {
-        // Coffee accent — primary brand color
-        static let primary = Color(hex: 0x6F4E37)             // coffee brown
-        static let primaryDark = Color(hex: 0x553A28)         // espresso
-        static let primaryLight = Color(hex: 0xE8D5C4)        // latte
+        // Coffee accent — primary brand color (richer espresso for stronger contrast)
+        static let primary = Color(hex: 0x6B4A34)             // espresso accent
+        static let primaryDark = Color(hex: 0x4F3625)         // dark espresso (pressed)
+        static let primaryLight = Color(hex: 0xF1E7DC)        // soft latte tint
 
         // Backgrounds
-        static let background = Color(hex: 0xFAF6F1)          // cream
-        static let backgroundDark = Color(hex: 0xF0E8DF)      // oat milk
-        static let cardBackground = Color.white                // card
+        static let background = Color(hex: 0xFBF8F4)          // warm canvas
+        static let backgroundDark = Color(hex: 0xF3ECE3)      // oat milk
+        static let cardBackground = Color.white                // card surface
 
         // Text
-        static let textPrimary = Color(hex: 0x2C2119)         // dark roast
+        static let textPrimary = Color(hex: 0x221A13)         // dark roast
         static let textSecondary = Color(hex: 0x5C4F44)       // medium roast
-        static let textTertiary = Color(hex: 0x8C7E73)        // light roast
+        static let textTertiary = Color(hex: 0x9C8E82)        // light roast
 
         // Borders
-        static let border = Color(hex: 0xDDD3C8)              // border
+        static let border = Color(hex: 0xECE4D9)              // hairline
 
         // Utility
-        static let destructive = Color(hex: 0xFB2C36)         // red
-        static let success = Color(red: 0.30, green: 0.70, blue: 0.45)
-        static let callBackground = Color(hex: 0x2C2119)      // dark roast for call screen
+        static let destructive = Color(hex: 0xE5484D)         // softer red
+        static let success = Color(hex: 0x3FA972)             // green
+        static let callBackground = Color(hex: 0x221A13)      // dark roast for call screen
+
+        // Semantic aliases — prefer these in new components.
+        static let canvas = background
+        static let surface = cardBackground
+        static let hairline = border
+        static let accent = primary
+        static let accentSoft = primaryLight
+        static let onAccent = Color.white
     }
 
     enum Fonts {

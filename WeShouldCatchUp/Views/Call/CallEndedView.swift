@@ -13,18 +13,27 @@ struct CallEndedView: View {
     /// Called when the user taps "Nice." or after auto-dismiss.
     var onDismiss: () -> Void
 
+    @State private var appeared = false
+
     var body: some View {
         ZStack {
-            Constants.Colors.background
+            Constants.Colors.canvas
                 .ignoresSafeArea()
 
             VStack(spacing: 28) {
                 Spacer()
 
                 // MARK: - Check Icon
-                Image(systemName: "checkmark")
-                    .font(.system(size: 44, weight: .light))
-                    .foregroundColor(Constants.Colors.primary)
+                ZStack {
+                    Circle()
+                        .fill(Constants.Colors.accent.opacity(0.10))
+                        .frame(width: 88, height: 88)
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 40, weight: .medium))
+                        .foregroundColor(Constants.Colors.accent)
+                }
+                .scaleEffect(appeared ? 1 : 0.6)
+                .opacity(appeared ? 1 : 0)
 
                 // MARK: - Summary Text
                 VStack(spacing: 8) {
@@ -37,24 +46,18 @@ struct CallEndedView: View {
                         .font(.inter(17, weight: .regular))
                         .foregroundColor(Constants.Colors.textSecondary)
                 }
+                .opacity(appeared ? 1 : 0)
 
                 Spacer()
 
-                // MARK: - Dismiss Button
-                Button {
-                    onDismiss()
-                } label: {
-                    Text("Nice.")
-                        .font(.inter(17, weight: .semiBold))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                        .background(Constants.Colors.primary)
-                        .foregroundColor(.white)
-                        .cornerRadius(28)
-                }
-                .padding(.bottom, 32)
+                PrimaryButton(title: "Nice.") { onDismiss() }
+                    .padding(.bottom, 32)
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, Space.xxl)
+        }
+        .onAppear {
+            Haptics.success()
+            withAnimation(Motion.spring) { appeared = true }
         }
         .task {
             // Auto-dismiss after 5 seconds.

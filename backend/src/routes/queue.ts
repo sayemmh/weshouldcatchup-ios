@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { authMiddleware } from "../middleware/auth.js";
 import { getVisibleCatchUpsForUser, getUser, updateUser, isCaughtUp } from "../services/firestoreService.js";
-import type { QueueItemResponse, CatchUpDoc } from "../types/index.js";
+import type { QueueItemResponse, CatchUpDoc, RecatchState } from "../types/index.js";
 
 /**
  * Queue route: returns the user's active catch-up list sorted by rotation priority.
@@ -18,14 +18,18 @@ export default async function queueRoutes(fastify: FastifyInstance): Promise<voi
     async (request, _reply) => {
       const { userId } = request;
 
-      // Caught-up pairs (a call already happened) move to the "Caught Up" list and
-      // are excluded from the active queue. Pending invites are always kept.
-      const catchups = (await getVisibleCatchUpsForUser(userId)).filter(
-        (c) => c.status === "pending" || !isCaughtUp(c),
-      );
+      // Home shows everyone: active (pingable) AND caught-up. Caught-up people are
+      // flagged so the client renders them under a "Caught Up" section and sorts them
+      // below the active ones. Rotation still skips caught-up (getPingableCatchUpsForUser).
+      const catchups = await getVisibleCatchUpsForUser(userId);
 
       // Build response items with other-user details.
-      const items: (QueueItemResponse & { _sortLastCallAt: string | null; _sortCreatedAt: string })[] = [];
+      // _group orders the list: 0 = incoming re-catch (actionable), 1 = active, 2 = caught-up.
+      const items: (QueueItemResponse & {
+        _sortLastCallAt: string | null;
+        _sortCreatedAt: string;
+        _group: number;
+      })[] = [];
 
       await Promise.all(
         catchups.map(async (catchup: CatchUpDoc & { id?: string }) => {
@@ -33,6 +37,13 @@ export default async function queueRoutes(fastify: FastifyInstance): Promise<voi
           const isPending = catchup.status === "pending";
           const otherUser = otherUserId ? await getUser(otherUserId) : null;
           const pendingName = catchup.invitedName || "Someone";
+
+          const caughtUp = catchup.status === "active" && isCaughtUp(catchup);
+          let recatchState: RecatchState = "idle";
+          if (catchup.recatchRequestedBy) {
+            recatchState = catchup.recatchRequestedBy === userId ? "requested_by_me" : "incoming";
+          }
+          const group = recatchState === "incoming" ? 0 : caughtUp ? 2 : 1;
 
           items.push({
             catchupId: (catchup as any).id ?? "",
@@ -43,8 +54,11 @@ export default async function queueRoutes(fastify: FastifyInstance): Promise<voi
             lastCallAt: catchup.lastCallAt,
             callCount: catchup.callCount,
             status: catchup.status,
+            caughtUp,
+            recatchState,
             _sortLastCallAt: catchup.lastCallAt,
             _sortCreatedAt: catchup.createdAt,
+            _group: group,
           });
         }),
       );
@@ -57,6 +71,8 @@ export default async function queueRoutes(fastify: FastifyInstance): Promise<voi
       if (customOrder && customOrder.length > 0) {
         const orderMap = new Map(customOrder.map((id, idx) => [id, idx]));
         items.sort((a, b) => {
+          // Group first: incoming re-catch on top, caught-up always at the bottom.
+          if (a._group !== b._group) return a._group - b._group;
           const aIdx = orderMap.get(a.catchupId);
           const bIdx = orderMap.get(b.catchupId);
           // Both in custom order: sort by position.
@@ -75,6 +91,8 @@ export default async function queueRoutes(fastify: FastifyInstance): Promise<voi
       } else {
         // Default rotation priority.
         items.sort((a, b) => {
+          // Group first: incoming re-catch on top, caught-up always at the bottom.
+          if (a._group !== b._group) return a._group - b._group;
           if (a._sortLastCallAt === null && b._sortLastCallAt !== null) return -1;
           if (a._sortLastCallAt !== null && b._sortLastCallAt === null) return 1;
           if (a._sortLastCallAt === null && b._sortLastCallAt === null) {
@@ -106,7 +124,7 @@ export default async function queueRoutes(fastify: FastifyInstance): Promise<voi
       }).filter(Boolean);
 
       // Strip internal sort helpers before returning.
-      return deduped.map(({ _sortLastCallAt, _sortCreatedAt, ...rest }) => rest);
+      return deduped.map(({ _sortLastCallAt, _sortCreatedAt, _group, ...rest }) => rest);
     },
   );
 

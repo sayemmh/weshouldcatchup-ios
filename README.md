@@ -171,21 +171,29 @@ All endpoints except `/health` require a Firebase Auth token in the `Authorizati
 
 ### Colors
 
+Canonical tokens live in code: `WeShouldCatchUp/Utilities/Constants.swift` (colors) and
+`WeShouldCatchUp/Utilities/Theme.swift` (type scale, spacing, radius, elevation). Refreshed in
+build 56 to an elevated, premium take on the warm identity — prefer the semantic aliases
+(`canvas`, `surface`, `hairline`, `accent`, `accentSoft`, `onAccent`) in new components.
+
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `primary` | `#6F4E37` | Coffee brown — buttons, accents, brand color |
-| `primaryDark` | `#553A28` | Espresso — pressed/hover states |
-| `primaryLight` | `#E8D5C4` | Latte — badges, highlights |
-| `background` | `#FAF6F1` | Cream — main screen background |
-| `backgroundDark` | `#F0E8DF` | Oat milk — slightly darker cream for depth |
-| `cardBackground` | `#FFFFFF` | Cards, input fields |
-| `textPrimary` | `#2C2119` | Dark roast — headings, body text |
-| `textSecondary` | `#5C4F44` | Medium roast — secondary labels, subtitles |
-| `textTertiary` | `#8C7E73` | Light roast — placeholders, icons |
-| `border` | `#DDD3C8` | Input borders, dividers |
-| `destructive` | `#FB2C36` | Errors, delete actions |
-| `success` | `rgb(77,179,115)` | Success states |
-| `callBackground` | `#2C2119` | Dark roast — voice call screen |
+| `primary` / `accent` | `#6B4A34` | Espresso — buttons, accents, brand color |
+| `primaryDark` | `#4F3625` | Dark espresso — pressed states |
+| `primaryLight` / `accentSoft` | `#F1E7DC` | Soft latte — badges, soft-fill buttons |
+| `background` / `canvas` | `#FBF8F4` | Warm canvas — main screen background |
+| `backgroundDark` | `#F3ECE3` | Oat milk — slightly darker depth |
+| `cardBackground` / `surface` | `#FFFFFF` | Cards, input fields |
+| `textPrimary` | `#221A13` | Dark roast — headings, body text |
+| `textSecondary` | `#5C4F44` | Medium roast — secondary labels |
+| `textTertiary` | `#9C8E82` | Light roast — placeholders, icons |
+| `border` / `hairline` | `#ECE4D9` | Hairline borders, dividers |
+| `destructive` | `#E5484D` | Errors, delete actions |
+| `success` | `#3FA972` | Success / live states |
+| `callBackground` | `#221A13` | Dark roast — voice call screen |
+
+Motion tokens live in `Utilities/Motion.swift` (canonical spring, press spring, fade) with a
+shared `PressableButtonStyle` and `Haptics` helper used app-wide.
 
 ### Typography
 

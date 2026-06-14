@@ -104,26 +104,14 @@ struct InviteView: View {
     }
 
     private var inviteButton: some View {
-        Button {
+        PrimaryButton(
+            title: isCreatingLink ? "Creating link…" : "Share Invite Link",
+            systemImage: "paperplane.fill",
+            isLoading: isCreatingLink,
+            isEnabled: !friendName.trimmingCharacters(in: .whitespaces).isEmpty
+        ) {
             Task { await createAndShare() }
-        } label: {
-            HStack(spacing: 8) {
-                if isCreatingLink {
-                    ProgressView()
-                        .tint(.white)
-                }
-                Text(isCreatingLink ? "Creating link..." : "Share Invite Link")
-                    .font(.inter(15, weight: .semiBold))
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .background(Constants.Colors.primary.opacity(
-                isCreatingLink || friendName.trimmingCharacters(in: .whitespaces).isEmpty ? 0.4 : 1.0
-            ))
-            .foregroundColor(.white)
-            .cornerRadius(28)
         }
-        .disabled(isCreatingLink || friendName.trimmingCharacters(in: .whitespaces).isEmpty)
     }
 
     @ViewBuilder

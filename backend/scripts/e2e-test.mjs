@@ -134,7 +134,8 @@ async function run() {
   // 3. Active queue shows B; caught-up empty
   console.log("\n[3] Queue before any call");
   let queueA = await api("GET", "/my-queue", tokenA);
-  ok(queueA.json.some((i) => i.otherUser.userId === B), "A /my-queue includes B");
+  const bActive = queueA.json.find((i) => i.otherUser.userId === B);
+  ok(bActive && bActive.caughtUp === false, "A /my-queue includes B (not caught up)");
   let caughtA = await api("GET", "/caught-up", tokenA);
   ok(Array.isArray(caughtA.json) && caughtA.json.length === 0, "A /caught-up is empty");
 
@@ -166,12 +167,13 @@ async function run() {
   const [uA, uB] = await Promise.all([db.collection("users").doc(A).get(), db.collection("users").doc(B).get()]);
   ok(uA.data()?.status === "idle" && uB.data()?.status === "idle", "both users back to idle");
 
-  // 5. Caught up moved lists
-  console.log("\n[5] Lists after catching up");
+  // 5. Caught up — B stays on the unified home list, now flagged caughtUp
+  console.log("\n[5] Unified list after catching up");
   queueA = await api("GET", "/my-queue", tokenA);
-  ok(!queueA.json.some((i) => i.otherUser.userId === B), "A /my-queue NO LONGER includes B");
+  const bCaught = queueA.json.find((i) => i.otherUser.userId === B);
+  ok(bCaught && bCaught.caughtUp === true && bCaught.recatchState === "idle", "A /my-queue includes B marked caughtUp");
   caughtA = await api("GET", "/caught-up", tokenA);
-  ok(caughtA.json.some((i) => i.otherUser.userId === B && i.state === "idle"), "A /caught-up includes B (state idle)");
+  ok(caughtA.json.some((i) => i.otherUser.userId === B && i.state === "idle"), "A /caught-up still includes B (legacy endpoint)");
 
   // 6. Rotation actually skips caught-up people (not just the queue view).
   //    Give B a token so the ONLY reason rotation could skip is caughtUp.
@@ -200,6 +202,9 @@ async function run() {
   ok(caughtA.json.find((i) => i.otherUser.userId === B)?.state === "requested_by_me", "A sees state requested_by_me");
   const caughtB = await api("GET", "/caught-up", tokenB);
   ok(caughtB.json.find((i) => i.otherUser.userId === A)?.state === "incoming", "B sees state incoming");
+  // Unified home reflects the same states.
+  const queueBReq = await api("GET", "/my-queue", tokenB);
+  ok(queueBReq.json.find((i) => i.otherUser.userId === A)?.recatchState === "incoming", "B /my-queue shows A as incoming");
 
   // 8. Re-catch accept -> reactivated
   console.log("\n[8] Accept -> reactivated");
@@ -208,7 +213,8 @@ async function run() {
   doc = await getCatchupDoc(catchupId);
   ok(doc?.caughtUp === false && !doc?.recatchRequestedBy, "doc caughtUp false, request cleared");
   queueA = await api("GET", "/my-queue", tokenA);
-  ok(queueA.json.some((i) => i.otherUser.userId === B), "A /my-queue includes B again (re-activated)");
+  const bReact = queueA.json.find((i) => i.otherUser.userId === B);
+  ok(bReact && bReact.caughtUp === false, "A /my-queue includes B again, not caught up (re-activated)");
 
   // 9. Upgrade path: legacy doc with callCount>0 and NO caughtUp field is treated caught up.
   console.log("\n[9] Upgrade path (no caughtUp field)");
@@ -225,7 +231,8 @@ async function run() {
   });
   created.catchups.add(legacyRef.id);
   queueA = await api("GET", "/my-queue", tokenA);
-  ok(!queueA.json.some((i) => i.otherUser.userId === C), "legacy pair excluded from /my-queue");
+  const cItem = queueA.json.find((i) => i.otherUser.userId === C);
+  ok(cItem && cItem.caughtUp === true, "legacy pair present in /my-queue, marked caughtUp");
   caughtA = await api("GET", "/caught-up", tokenA);
   ok(caughtA.json.some((i) => i.otherUser.userId === C), "legacy pair present in /caught-up");
 }

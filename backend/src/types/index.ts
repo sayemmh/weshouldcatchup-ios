@@ -118,6 +118,11 @@ export interface QueueItemResponse {
   lastCallAt: string | null;
   callCount: number;
   status: CatchUpStatus;
+  // Whether this pair has caught up (a call happened). Caught-up people stay on the
+  // home list but are shown under the "Caught Up" section and skipped by rotation.
+  caughtUp: boolean;
+  // Per-viewer re-catch state so the client can render the right inline action.
+  recatchState: RecatchState;
 }
 
 // GET /caught-up item

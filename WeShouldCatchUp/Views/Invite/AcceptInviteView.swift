@@ -20,6 +20,7 @@ struct AcceptInviteView: View {
 
     @State private var isAccepting: Bool = false
     @State private var showSuccess: Bool = false
+    @State private var successAppeared: Bool = false
     @State private var errorMessage: String?
     @State private var resolvedInviterName: String?
 
@@ -82,37 +83,11 @@ struct AcceptInviteView: View {
             }
 
             // MARK: - Action Buttons
-            VStack(spacing: 14) {
-                // Accept
-                Button {
+            VStack(spacing: Space.md) {
+                PrimaryButton(title: isAccepting ? "Joining…" : "I'm down", isLoading: isAccepting) {
                     Task { await acceptInvite() }
-                } label: {
-                    HStack(spacing: 8) {
-                        if isAccepting {
-                            ProgressView()
-                                .tint(.white)
-                        }
-                        Text(isAccepting ? "Joining..." : "I'm down")
-                            .font(.inter(15, weight: .semiBold))
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(Constants.Colors.primary.opacity(isAccepting ? 0.5 : 1.0))
-                    .foregroundColor(.white)
-                    .cornerRadius(28)
                 }
-                .disabled(isAccepting)
-
-                // Decline
-                Button {
-                    onDeclined()
-                } label: {
-                    Text("Nah")
-                        .font(.inter(15, weight: .medium))
-                        .foregroundColor(Constants.Colors.textSecondary)
-                        .padding(.vertical, 8)
-                }
-                .disabled(isAccepting)
+                TextButton(title: "Nah") { onDeclined() }
             }
             .padding(.bottom, 32)
         }
@@ -125,9 +100,14 @@ struct AcceptInviteView: View {
         VStack(spacing: 24) {
             Spacer()
 
-            Image(systemName: "checkmark")
-                .font(.system(size: 44, weight: .light))
-                .foregroundColor(Constants.Colors.primary)
+            ZStack {
+                Circle().fill(Constants.Colors.accent.opacity(0.10)).frame(width: 88, height: 88)
+                Image(systemName: "checkmark")
+                    .font(.system(size: 40, weight: .medium))
+                    .foregroundColor(Constants.Colors.accent)
+            }
+            .scaleEffect(successAppeared ? 1 : 0.6)
+            .opacity(successAppeared ? 1 : 0)
 
             Text("Added to your queue!")
                 .font(.fraunces(22, weight: .medium))
@@ -141,6 +121,10 @@ struct AcceptInviteView: View {
             Spacer()
         }
         .padding(.horizontal, 24)
+        .onAppear {
+            Haptics.success()
+            withAnimation(Motion.spring) { successAppeared = true }
+        }
         .task {
             // Navigate to main after a brief delay.
             try? await Task.sleep(nanoseconds: 2_000_000_000)

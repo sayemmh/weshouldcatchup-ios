@@ -317,13 +317,8 @@ final class APIService {
         return try await execute(request)
     }
 
-    // MARK: - Caught Up / Re-catch
-
-    /// GET /caught-up -- People the user has already caught up with.
-    func fetchCaughtUp() async throws -> [CaughtUpItem] {
-        let request = try await authorizedRequest(path: "/caught-up", method: "GET")
-        return try await execute(request)
-    }
+    // MARK: - Re-catch
+    // The caught-up list is now folded into /my-queue (items carry `caughtUp` + `recatchState`).
 
     /// POST /request-recatch -- Ask to catch up again with a caught-up person.
     func requestRecatch(catchupId: String) async throws {
