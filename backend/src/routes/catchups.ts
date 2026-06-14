@@ -40,6 +40,8 @@ export default async function catchupsRoutes(fastify: FastifyInstance): Promise<
         removedBy: null,
         lastCallAt: null,
         callCount: 0,
+        caughtUp: false,
+        recatchRequestedBy: null,
       };
 
       const docRef = await admin

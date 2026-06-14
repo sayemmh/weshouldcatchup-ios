@@ -104,6 +104,37 @@ export async function getActiveCatchUpsForUser(
 }
 
 /**
+ * A pair is "caught up" once they've actually had a call.
+ * `caughtUp` is the source of truth when present; for pre-feature docs that lack
+ * the field we derive it from callCount, so no backfill/migration is needed.
+ * Accepting a re-catch sets caughtUp=false explicitly, which overrides callCount>0.
+ */
+export function isCaughtUp(c: CatchUpDoc): boolean {
+  return c.caughtUp ?? c.callCount > 0;
+}
+
+/**
+ * Active catch-ups the user has already caught up with — the "Caught Up" list.
+ */
+export async function getCaughtUpCatchUpsForUser(
+  userId: string,
+): Promise<(CatchUpDoc & { id: string })[]> {
+  const active = await getActiveCatchUpsForUser(userId);
+  return active.filter(isCaughtUp);
+}
+
+/**
+ * Active catch-ups the user can still be pinged about when going live —
+ * everything active that is NOT caught up.
+ */
+export async function getPingableCatchUpsForUser(
+  userId: string,
+): Promise<(CatchUpDoc & { id: string })[]> {
+  const active = await getActiveCatchUpsForUser(userId);
+  return active.filter((c) => !isCaughtUp(c));
+}
+
+/**
  * Update (merge) fields on a catch-up document.
  */
 export async function updateCatchUp(

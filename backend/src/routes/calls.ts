@@ -169,6 +169,10 @@ export default async function callsRoutes(fastify: FastifyInstance): Promise<voi
         await updateCatchUp(call.catchupId, {
           lastCallAt: now.toISOString(),
           callCount: catchup.callCount + 1,
+          // The pair has now caught up — auto-archive them to the Caught Up list.
+          // Clear any stale re-catch request that led to this call.
+          caughtUp: true,
+          recatchRequestedBy: null,
         });
       }
 

@@ -5,7 +5,9 @@ import SwiftUI
 struct MainView: View {
 
     @StateObject private var viewModel = QueueViewModel()
+    @StateObject private var caughtUpViewModel = CaughtUpViewModel()
     @State private var showInviteView: Bool = false
+    @State private var showCaughtUp: Bool = false
     @State private var showCallHistory: Bool = false
     @State private var navigateToLive: Bool = false
     @State private var showSignOutAlert: Bool = false
@@ -27,9 +29,11 @@ struct MainView: View {
 
                     ScrollView {
                         queueSection
+                        bottomLinks
                     }
                     .refreshable {
                         await viewModel.fetchQueue()
+                        await caughtUpViewModel.fetch()
                     }
 
                     imFreeSection
@@ -63,6 +67,9 @@ struct MainView: View {
             }
             .sheet(isPresented: $showInviteView) {
                 InviteView()
+            }
+            .sheet(isPresented: $showCaughtUp) {
+                CaughtUpListView(viewModel: caughtUpViewModel)
             }
             .sheet(isPresented: $showCallHistory) {
                 CallHistoryView()
@@ -106,11 +113,13 @@ struct MainView: View {
             }
             .task {
                 await viewModel.fetchQueue()
+                await caughtUpViewModel.fetch()
                 await refreshLiveStatus()
             }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                 Task {
                     await viewModel.fetchQueue()
+                    await caughtUpViewModel.fetch()
                     await refreshLiveStatus()
                 }
             }
@@ -121,7 +130,21 @@ struct MainView: View {
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: .queueUpdated)) { _ in
-                Task { await viewModel.fetchQueue() }
+                Task {
+                    await viewModel.fetchQueue()
+                    await caughtUpViewModel.fetch()
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .recatchRequest)) { _ in
+                // Someone wants to catch up again — refresh so the badge + list update.
+                Task { await caughtUpViewModel.fetch() }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .recatchAccepted)) { _ in
+                // They're back in your queue.
+                Task {
+                    await viewModel.fetchQueue()
+                    await caughtUpViewModel.fetch()
+                }
             }
         }
     }
@@ -334,8 +357,34 @@ struct MainView: View {
                 }
             }
             .padding(.horizontal, 16)
+        }
+    }
 
-            // MARK: - Call History Link
+    // MARK: - Bottom Links (Caught Up + Call History)
+
+    private var bottomLinks: some View {
+        HStack(spacing: 24) {
+            Button {
+                showCaughtUp = true
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "checkmark.circle")
+                        .font(.system(size: 12, weight: .regular))
+                    Text("Caught Up")
+                        .font(.inter(13, weight: .medium))
+                    if caughtUpViewModel.incomingCount > 0 {
+                        Text("\(caughtUpViewModel.incomingCount)")
+                            .font(.inter(11, weight: .semiBold))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Constants.Colors.primary)
+                            .clipShape(Capsule())
+                    }
+                }
+                .foregroundColor(Constants.Colors.textSecondary)
+            }
+
             Button {
                 showCallHistory = true
             } label: {
@@ -346,9 +395,9 @@ struct MainView: View {
                         .font(.inter(13, weight: .medium))
                 }
                 .foregroundColor(Constants.Colors.textSecondary)
-                .padding(.vertical, 16)
             }
         }
+        .padding(.vertical, 16)
     }
 
     // MARK: - Sign Out

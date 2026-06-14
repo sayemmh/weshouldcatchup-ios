@@ -66,7 +66,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         // the notification, the state is already set so the UI doesn't present.
         if let type = PushNotificationService.shared.handleNotification(userInfo: userInfo) {
             switch type {
-            case .rotationUpdate, .queueUpdated, .pingExpired, .callEnded:
+            case .rotationUpdate, .queueUpdated, .pingExpired, .callEnded, .recatchAccepted:
                 handlePushType(type)
                 completionHandler(.newData)
             default:
@@ -196,6 +196,28 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
         case .queueUpdated:
             NotificationCenter.default.post(name: .queueUpdated, object: nil)
+
+        case .recatchRequest(let fromUserId, let fromUserName, let catchupId):
+            NotificationCenter.default.post(
+                name: .recatchRequest,
+                object: nil,
+                userInfo: [
+                    "fromUserId": fromUserId,
+                    "fromUserName": fromUserName,
+                    "catchupId": catchupId
+                ]
+            )
+
+        case .recatchAccepted(let fromUserId, let fromUserName, let catchupId):
+            NotificationCenter.default.post(
+                name: .recatchAccepted,
+                object: nil,
+                userInfo: [
+                    "fromUserId": fromUserId,
+                    "fromUserName": fromUserName,
+                    "catchupId": catchupId
+                ]
+            )
         }
     }
 }
@@ -209,4 +231,6 @@ extension Notification.Name {
     static let catchUpInviteAccepted = Notification.Name("catchUpInviteAccepted")
     static let rotationUpdate = Notification.Name("rotationUpdate")
     static let queueUpdated = Notification.Name("queueUpdated")
+    static let recatchRequest = Notification.Name("recatchRequest")
+    static let recatchAccepted = Notification.Name("recatchAccepted")
 }

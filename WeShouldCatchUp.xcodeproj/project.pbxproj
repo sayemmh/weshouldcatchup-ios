@@ -30,11 +30,16 @@
 		7ACAA686B5D7BDA4F2CFBC9C /* IncomingPingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F55C6AA5503735F971DA41 /* IncomingPingView.swift */; };
 		8941758FF12F05E0F7AD84C7 /* InviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B25565ACCA5FF612AE9A341 /* InviteView.swift */; };
 		8D1BE946A5A6935C2D1841D8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500AF69205D4FF92F8F15495 /* Extensions.swift */; };
+		8EABDC94BFB3C2F60071E541 /* CaughtUpItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F8B3B1F2A7F4653C2390E6 /* CaughtUpItem.swift */; };
 		944B2EDC7926CE85BFC033C5 /* QueueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5947581024B982AB1BB63CAD /* QueueItem.swift */; };
 		94B8904B440322B5C1B98C22 /* Fraunces-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F21B3B18AA595B7988F10823 /* Fraunces-Bold.ttf */; };
 		96F4532DB5C77CB29A4EBF7C /* Fraunces-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 231D7B4EA7721ADED33DFF78 /* Fraunces-SemiBold.ttf */; };
+		9E1AA42380A4597A32ED2E2D /* CaughtUpListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608E9F205FB4D3BEB05B48A9 /* CaughtUpListView.swift */; };
 		AFE0ACFF143B659739645F95 /* DeepLinkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 984B2A1448C1D98CF85AE86D /* DeepLinkService.swift */; };
+		B07C92A696950806DFED8475 /* CaughtUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 083E2EE9B1BCE58B74DCEA9F /* CaughtUpViewModel.swift */; };
 		B74699600401045C75CD1C89 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D3EE8BF441DBB0B366D44BF3 /* Inter-Medium.ttf */; };
+		BF07FE89F31909F430510409 /* TermsAgreementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46AD6AE3F11DDF71494D6E41 /* TermsAgreementView.swift */; };
+		C0AE912B1223AB8A1F77752A /* InviteFriendsOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E65213815B486A3AF4AEBBD /* InviteFriendsOnboardingView.swift */; };
 		C1E8B191A70AFCEAAAB3EAF4 /* CallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5308925642CA7E36F4D3A7A /* CallViewModel.swift */; };
 		C2F20FA9CEFF23AE7771512D /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37782C39D09EC088FDD2E7A /* APIService.swift */; };
 		C7D7E2D2C8F5A0323A3873F9 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3762CFB74EC496F2D8998245 /* FirebaseAuth */; };
@@ -44,8 +49,6 @@
 		E3ADB96843AB50483FB75785 /* VoiceCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4383711F8E65DB06B4CA627E /* VoiceCallView.swift */; };
 		E6EECC9BD5C8DC7F66277BCC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD1D8BAFD8BF7297F2E623A /* AppDelegate.swift */; };
 		E7E8C646FE8362562433EEF7 /* NotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2C12C36928E8A3D030FBDE /* NotificationPermissionView.swift */; };
-		A1B2C3D4E5F60002 /* InviteFriendsOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001 /* InviteFriendsOnboardingView.swift */; };
-		A1B2C3D4E5F60004 /* TermsAgreementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60003 /* TermsAgreementView.swift */; };
 		EEC4D73D68FD248F7B0EE228 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 4E899B9DBDB2B89EF6EC5FEB /* FirebaseFirestore */; };
 		EF75722CCFAD1C62BE720BC4 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6487B63AB8A88F20E3A8617D /* AuthService.swift */; };
 		F34B3502088443B73C7A5FAF /* PhoneAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078E5F490917D585444D24B7 /* PhoneAuthView.swift */; };
@@ -56,6 +59,7 @@
 /* Begin PBXFileReference section */
 		078E5F490917D585444D24B7 /* PhoneAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAuthView.swift; sourceTree = "<group>"; };
 		081959D79FE203126DE86285 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular.ttf"; sourceTree = "<group>"; };
+		083E2EE9B1BCE58B74DCEA9F /* CaughtUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaughtUpViewModel.swift; sourceTree = "<group>"; };
 		093AD18CEB3BA1A6EF62912F /* AgoraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgoraService.swift; sourceTree = "<group>"; };
 		12F55C6AA5503735F971DA41 /* IncomingPingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomingPingView.swift; sourceTree = "<group>"; };
 		1B25565ACCA5FF612AE9A341 /* InviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteView.swift; sourceTree = "<group>"; };
@@ -63,6 +67,7 @@
 		1E378A9E910A6A16D03E8EE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		231D7B4EA7721ADED33DFF78 /* Fraunces-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Fraunces-SemiBold.ttf"; sourceTree = "<group>"; };
 		278EBFD7CC9A9AB3F0BF73F9 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		29F8B3B1F2A7F4653C2390E6 /* CaughtUpItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaughtUpItem.swift; sourceTree = "<group>"; };
 		2EEF4763E244B37C3852A2F3 /* CallHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryView.swift; sourceTree = "<group>"; };
 		330FADD78836560C111D4967 /* WeShouldCatchUpApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeShouldCatchUpApp.swift; sourceTree = "<group>"; };
 		3632581E07B3174D39A9AE3B /* Fraunces-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Fraunces-Medium.ttf"; sourceTree = "<group>"; };
@@ -70,10 +75,12 @@
 		3CBA06743134AE7819B38A4A /* CatchUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchUp.swift; sourceTree = "<group>"; };
 		3DEFDDE9709D7B17667727DF /* QueueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueViewModel.swift; sourceTree = "<group>"; };
 		4383711F8E65DB06B4CA627E /* VoiceCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCallView.swift; sourceTree = "<group>"; };
+		46AD6AE3F11DDF71494D6E41 /* TermsAgreementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAgreementView.swift; sourceTree = "<group>"; };
 		4CF4ABC2A413676F0990AED0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		500AF69205D4FF92F8F15495 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		5947581024B982AB1BB63CAD /* QueueItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueItem.swift; sourceTree = "<group>"; };
 		5CD1D8BAFD8BF7297F2E623A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		608E9F205FB4D3BEB05B48A9 /* CaughtUpListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaughtUpListView.swift; sourceTree = "<group>"; };
 		61CE4D6A1D6FA93FF4ECDCC9 /* LiveWaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveWaitingView.swift; sourceTree = "<group>"; };
 		6487B63AB8A88F20E3A8617D /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		70354D7E0CB5EED321C46008 /* WeShouldCatchUp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = WeShouldCatchUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,11 +91,10 @@
 		91ED872DA9749F6D8531A847 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		984B2A1448C1D98CF85AE86D /* DeepLinkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkService.swift; sourceTree = "<group>"; };
 		9E110D204A21DDA1897E9F86 /* Fraunces-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Fraunces-Regular.ttf"; sourceTree = "<group>"; };
+		9E65213815B486A3AF4AEBBD /* InviteFriendsOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteFriendsOnboardingView.swift; sourceTree = "<group>"; };
 		BDDCA8970EA09BE9B68FE9AA /* QueueRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueRowView.swift; sourceTree = "<group>"; };
 		C5308925642CA7E36F4D3A7A /* CallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallViewModel.swift; sourceTree = "<group>"; };
 		CA2C12C36928E8A3D030FBDE /* NotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionView.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F60001 /* InviteFriendsOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteFriendsOnboardingView.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F60003 /* TermsAgreementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAgreementView.swift; sourceTree = "<group>"; };
 		D3EE8BF441DBB0B366D44BF3 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Medium.ttf"; sourceTree = "<group>"; };
 		D99EA62A6C1A4FA4A824E0A5 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		F21B3B18AA595B7988F10823 /* Fraunces-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Fraunces-Bold.ttf"; sourceTree = "<group>"; };
@@ -136,6 +142,7 @@
 			children = (
 				816AA934C31185F3D18D3333 /* Call.swift */,
 				3CBA06743134AE7819B38A4A /* CatchUp.swift */,
+				29F8B3B1F2A7F4653C2390E6 /* CaughtUpItem.swift */,
 				5947581024B982AB1BB63CAD /* QueueItem.swift */,
 				F8FAF8549328948DC16B4811 /* User.swift */,
 			);
@@ -163,10 +170,10 @@
 			isa = PBXGroup;
 			children = (
 				75DDA3E7205AD614ABC2B786 /* DisplayNameView.swift */,
+				9E65213815B486A3AF4AEBBD /* InviteFriendsOnboardingView.swift */,
 				CA2C12C36928E8A3D030FBDE /* NotificationPermissionView.swift */,
-				A1B2C3D4E5F60001 /* InviteFriendsOnboardingView.swift */,
-				A1B2C3D4E5F60003 /* TermsAgreementView.swift */,
 				078E5F490917D585444D24B7 /* PhoneAuthView.swift */,
+				46AD6AE3F11DDF71494D6E41 /* TermsAgreementView.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -243,6 +250,7 @@
 		C30425F1C4A1C38A86A0BED5 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				608E9F205FB4D3BEB05B48A9 /* CaughtUpListView.swift */,
 				D99EA62A6C1A4FA4A824E0A5 /* MainView.swift */,
 				BDDCA8970EA09BE9B68FE9AA /* QueueRowView.swift */,
 			);
@@ -285,6 +293,7 @@
 			children = (
 				278EBFD7CC9A9AB3F0BF73F9 /* AuthViewModel.swift */,
 				C5308925642CA7E36F4D3A7A /* CallViewModel.swift */,
+				083E2EE9B1BCE58B74DCEA9F /* CaughtUpViewModel.swift */,
 				1CAFFDB3676CA68DF22FBAA3 /* LiveViewModel.swift */,
 				3DEFDDE9709D7B17667727DF /* QueueViewModel.swift */,
 			);
@@ -390,23 +399,26 @@
 				D1DF3EBA5197FA604E491F75 /* CallHistoryView.swift in Sources */,
 				C1E8B191A70AFCEAAAB3EAF4 /* CallViewModel.swift in Sources */,
 				20863627CC5DC1E8DE029B23 /* CatchUp.swift in Sources */,
+				8EABDC94BFB3C2F60071E541 /* CaughtUpItem.swift in Sources */,
+				9E1AA42380A4597A32ED2E2D /* CaughtUpListView.swift in Sources */,
+				B07C92A696950806DFED8475 /* CaughtUpViewModel.swift in Sources */,
 				7553DBDC5744AB63CB6056AC /* Constants.swift in Sources */,
 				AFE0ACFF143B659739645F95 /* DeepLinkService.swift in Sources */,
 				5AFBFE58BCBC92369C6D2321 /* DisplayNameView.swift in Sources */,
 				8D1BE946A5A6935C2D1841D8 /* Extensions.swift in Sources */,
 				7ACAA686B5D7BDA4F2CFBC9C /* IncomingPingView.swift in Sources */,
+				C0AE912B1223AB8A1F77752A /* InviteFriendsOnboardingView.swift in Sources */,
 				8941758FF12F05E0F7AD84C7 /* InviteView.swift in Sources */,
 				5E5CBD407BD0A975EF6FF254 /* LiveViewModel.swift in Sources */,
 				00F2B9BB0947674DE25A2404 /* LiveWaitingView.swift in Sources */,
 				0388D8B72DA8017F18B5ECC8 /* MainView.swift in Sources */,
 				E7E8C646FE8362562433EEF7 /* NotificationPermissionView.swift in Sources */,
-				A1B2C3D4E5F60002 /* InviteFriendsOnboardingView.swift in Sources */,
-				A1B2C3D4E5F60004 /* TermsAgreementView.swift in Sources */,
 				F34B3502088443B73C7A5FAF /* PhoneAuthView.swift in Sources */,
 				DC16085F7FD21F70FF7A19AA /* PushNotificationService.swift in Sources */,
 				944B2EDC7926CE85BFC033C5 /* QueueItem.swift in Sources */,
 				D7C5AC14F0182FE9D276D574 /* QueueRowView.swift in Sources */,
 				3A9B9BBC469A89A6CE6BAB4F /* QueueViewModel.swift in Sources */,
+				BF07FE89F31909F430510409 /* TermsAgreementView.swift in Sources */,
 				2E03FAE205F451AD07A2C20D /* User.swift in Sources */,
 				E3ADB96843AB50483FB75785 /* VoiceCallView.swift in Sources */,
 				F8EA4F4BF6A87AF6D2FBE592 /* WeShouldCatchUpApp.swift in Sources */,
@@ -486,11 +498,11 @@
 				CODE_SIGN_ENTITLEMENTS = WeShouldCatchUp/WeShouldCatchUp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 54;
+				CURRENT_PROJECT_VERSION = 55;
 				DEVELOPMENT_TEAM = 345UAJF999;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeShouldCatchUp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = CatchUp;
+				INFOPLIST_KEY_CFBundleDisplayName = WSCU;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -514,11 +526,11 @@
 				CODE_SIGN_ENTITLEMENTS = WeShouldCatchUp/WeShouldCatchUp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 54;
+				CURRENT_PROJECT_VERSION = 55;
 				DEVELOPMENT_TEAM = 345UAJF999;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeShouldCatchUp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = CatchUp;
+				INFOPLIST_KEY_CFBundleDisplayName = WSCU;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

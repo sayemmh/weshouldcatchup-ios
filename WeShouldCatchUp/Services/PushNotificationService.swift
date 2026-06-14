@@ -28,6 +28,12 @@ enum PushNotificationType {
 
     /// Queue changed remotely — refresh the queue.
     case queueUpdated
+
+    /// Someone you've caught up with wants to catch up again.
+    case recatchRequest(fromUserId: String, fromUserName: String, catchupId: String)
+
+    /// Someone accepted your "catch up again" request — they're back in your queue.
+    case recatchAccepted(fromUserId: String, fromUserName: String, catchupId: String)
 }
 
 // MARK: - Push Notification Service
@@ -176,6 +182,28 @@ final class PushNotificationService: NSObject {
 
         case "queue_updated":
             return .queueUpdated
+
+        case "recatch_request":
+            guard
+                let fromUserId = userInfo["fromUserId"] as? String,
+                let catchupId = userInfo["catchupId"] as? String
+            else {
+                print("[PushNotificationService] recatch_request payload missing required fields.")
+                return nil
+            }
+            let fromUserName = userInfo["fromUserName"] as? String ?? "Someone"
+            return .recatchRequest(fromUserId: fromUserId, fromUserName: fromUserName, catchupId: catchupId)
+
+        case "recatch_accepted":
+            guard
+                let fromUserId = userInfo["fromUserId"] as? String,
+                let catchupId = userInfo["catchupId"] as? String
+            else {
+                print("[PushNotificationService] recatch_accepted payload missing required fields.")
+                return nil
+            }
+            let fromUserName = userInfo["fromUserName"] as? String ?? "Someone"
+            return .recatchAccepted(fromUserId: fromUserId, fromUserName: fromUserName, catchupId: catchupId)
 
         default:
             print("[PushNotificationService] Unknown notification type: \(type)")

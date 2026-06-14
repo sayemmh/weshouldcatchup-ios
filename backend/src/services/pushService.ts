@@ -286,6 +286,98 @@ export async function sendCallEnded(
 }
 
 /**
+ * Send a "{name} wants to catch up again" push to the OTHER person when someone
+ * taps "Catch up again" on a caught-up pair. Tapping it opens the Caught Up list
+ * where they can Accept.
+ */
+export async function sendRecatchRequest(
+  fcmToken: string,
+  fromUserName: string,
+  fromUserId: string,
+  catchupId: string,
+): Promise<void> {
+  const message: admin.messaging.Message = {
+    token: fcmToken,
+    notification: {
+      title: "We Should Catch Up",
+      body: `${fromUserName} wants to catch up again \u{1F44B}`,
+    },
+    data: {
+      type: "recatch_request",
+      fromUserId,
+      fromUserName,
+      catchupId,
+    },
+    android: { priority: "high" },
+    apns: {
+      payload: {
+        aps: {
+          sound: "default",
+        },
+      },
+    },
+  };
+
+  try {
+    await admin.messaging().send(message);
+  } catch (err: any) {
+    if (
+      err?.code === "messaging/invalid-registration-token" ||
+      err?.code === "messaging/registration-token-not-registered"
+    ) {
+      console.warn(`Stale FCM token for recatch_request catchup=${catchupId}.`);
+    }
+    // Non-fatal — the request is also visible in the Caught Up list on refresh.
+  }
+}
+
+/**
+ * Send a "{name} is back in your queue" push to the requester when the other
+ * person accepts their re-catch request. Carries a queue refresh hint.
+ */
+export async function sendRecatchAccepted(
+  fcmToken: string,
+  fromUserName: string,
+  fromUserId: string,
+  catchupId: string,
+): Promise<void> {
+  const message: admin.messaging.Message = {
+    token: fcmToken,
+    notification: {
+      title: "We Should Catch Up",
+      body: `${fromUserName} is back in your queue`,
+    },
+    data: {
+      type: "recatch_accepted",
+      fromUserId,
+      fromUserName,
+      catchupId,
+    },
+    android: { priority: "high" },
+    apns: {
+      payload: {
+        aps: {
+          sound: "default",
+          contentAvailable: true,
+        },
+      },
+    },
+  };
+
+  try {
+    await admin.messaging().send(message);
+  } catch (err: any) {
+    if (
+      err?.code === "messaging/invalid-registration-token" ||
+      err?.code === "messaging/registration-token-not-registered"
+    ) {
+      console.warn(`Stale FCM token for recatch_accepted catchup=${catchupId}.`);
+    }
+    // Non-fatal.
+  }
+}
+
+/**
  * Send a notification when someone accepts a catch-up invite.
  *
  * @param fcmToken - The recipient's (invite creator's) FCM device token.

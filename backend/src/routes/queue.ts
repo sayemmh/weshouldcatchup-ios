@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { authMiddleware } from "../middleware/auth.js";
-import { getVisibleCatchUpsForUser, getUser, updateUser } from "../services/firestoreService.js";
+import { getVisibleCatchUpsForUser, getUser, updateUser, isCaughtUp } from "../services/firestoreService.js";
 import type { QueueItemResponse, CatchUpDoc } from "../types/index.js";
 
 /**
@@ -18,7 +18,11 @@ export default async function queueRoutes(fastify: FastifyInstance): Promise<voi
     async (request, _reply) => {
       const { userId } = request;
 
-      const catchups = await getVisibleCatchUpsForUser(userId);
+      // Caught-up pairs (a call already happened) move to the "Caught Up" list and
+      // are excluded from the active queue. Pending invites are always kept.
+      const catchups = (await getVisibleCatchUpsForUser(userId)).filter(
+        (c) => c.status === "pending" || !isCaughtUp(c),
+      );
 
       // Build response items with other-user details.
       const items: (QueueItemResponse & { _sortLastCallAt: string | null; _sortCreatedAt: string })[] = [];

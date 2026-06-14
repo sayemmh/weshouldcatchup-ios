@@ -1,7 +1,7 @@
 import {
   getUser,
   updateUser,
-  getActiveCatchUpsForUser,
+  getPingableCatchUpsForUser,
   createCall,
 } from "./firestoreService.js";
 import { sendCatchUpPing, sendRotationUpdate, sendPingExpired } from "./pushService.js";
@@ -143,7 +143,7 @@ async function runRotationLoop(userId: string, state: RotationState): Promise<vo
     return;
   }
 
-  const catchups = await getActiveCatchUpsForUser(userId);
+  const catchups = await getPingableCatchUpsForUser(userId);
   const customOrder = user.queueOrder ?? null;
   const sorted = customOrder && customOrder.length > 0
     ? sortByCustomOrder(catchups as (CatchUpDoc & { id: string })[], customOrder)

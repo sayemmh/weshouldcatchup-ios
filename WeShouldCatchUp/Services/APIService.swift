@@ -316,4 +316,33 @@ final class APIService {
         let request = try await authorizedRequest(path: "/call-history", method: "GET")
         return try await execute(request)
     }
+
+    // MARK: - Caught Up / Re-catch
+
+    /// GET /caught-up -- People the user has already caught up with.
+    func fetchCaughtUp() async throws -> [CaughtUpItem] {
+        let request = try await authorizedRequest(path: "/caught-up", method: "GET")
+        return try await execute(request)
+    }
+
+    /// POST /request-recatch -- Ask to catch up again with a caught-up person.
+    func requestRecatch(catchupId: String) async throws {
+        let body: [String: Any] = ["catchupId": catchupId]
+        let request = try await authorizedRequest(path: "/request-recatch", method: "POST", body: body)
+        let _: [String: String] = try await execute(request)
+    }
+
+    /// POST /accept-recatch -- Accept someone's "catch up again" request.
+    func acceptRecatch(catchupId: String) async throws {
+        let body: [String: Any] = ["catchupId": catchupId]
+        let request = try await authorizedRequest(path: "/accept-recatch", method: "POST", body: body)
+        let _: [String: String] = try await execute(request)
+    }
+
+    /// POST /decline-recatch -- Dismiss a "catch up again" request.
+    func declineRecatch(catchupId: String) async throws {
+        let body: [String: Any] = ["catchupId": catchupId]
+        let request = try await authorizedRequest(path: "/decline-recatch", method: "POST", body: body)
+        let _: [String: String] = try await execute(request)
+    }
 }

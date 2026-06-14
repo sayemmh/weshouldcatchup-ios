@@ -33,6 +33,12 @@ export interface CatchUpDoc {
   removedBy: string | null;      // userId who removed the catch-up
   lastCallAt: string | null;     // ISO-8601 timestamp of most recent call
   callCount: number;
+  // True once the pair has caught up (a call completed). Caught-up pairs move to
+  // the "Caught Up" list and are excluded from the active queue + rotation.
+  // May be absent on pre-feature docs — treat absent as (callCount > 0) via isCaughtUp().
+  caughtUp?: boolean;
+  // userId who tapped "Catch up again", awaiting the other person's acceptance. null otherwise.
+  recatchRequestedBy?: string | null;
 }
 
 export interface CallDoc {
@@ -112,6 +118,20 @@ export interface QueueItemResponse {
   lastCallAt: string | null;
   callCount: number;
   status: CatchUpStatus;
+}
+
+// GET /caught-up item
+export type RecatchState = "idle" | "requested_by_me" | "incoming";
+
+export interface CaughtUpItemResponse {
+  catchupId: string;
+  otherUser: {
+    name: string;
+    userId: string;
+  };
+  lastCallAt: string | null;
+  callCount: number;
+  state: RecatchState;           // computed per-viewer so the client never re-derives it
 }
 
 // GET /call-history item
